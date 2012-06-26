@@ -1,0 +1,3 @@
+[submodule "SecureShare/Content/bootstrap"]
+	path = SecureShare/Content/bootstrap
+	url = git://github.com/twitter/bootstrap.git
