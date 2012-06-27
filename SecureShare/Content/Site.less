@@ -1,0 +1,54 @@
+@import url('bootstrap/less/bootstrap.less');
+@import url('http://fonts.googleapis.com/css?family=Ubuntu:400,500,700&subset=latin,cyrillic');
+@linkColor: @green;
+
+@grayMoreLighter: #fafafa;
+@sansFontFamily: 'Ubuntu', sans-serif;
+
+.noselect
+{
+    cursor: default;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+body
+{
+    padding: 10px;
+    background-color: @grayMoreLighter;
+}
+
+.color
+{
+    color: @linkColor;
+}
+
+#header h1
+{
+    font-family: @sansFontFamily;
+}
+
+h1, h2, h3, h4, h5, .nav, .btn, .modal-body p, .modal-body label
+{
+    .noselect;
+}
+.btn
+{
+    cursor: pointer;
+}
+form
+{
+    margin: 0;
+}
+.help-block .field-validation-error
+{
+    color: @red;
+}
+
+#login
+{
+    width: 500px;
+}

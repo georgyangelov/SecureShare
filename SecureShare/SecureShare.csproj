@@ -63,9 +63,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Login.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -83,25 +85,6 @@
     <Content Include="Content\bootstrap\js\bootstrap-tooltip.js" />
     <Content Include="Content\bootstrap\js\bootstrap-transition.js" />
     <Content Include="Content\bootstrap\js\bootstrap-typeahead.js" />
-    <Content Include="Content\bootstrap\js\tests\index.html" />
-    <Content Include="Content\bootstrap\js\tests\phantom.js" />
-    <Content Include="Content\bootstrap\js\tests\server.js" />
-    <Content Include="Content\bootstrap\js\tests\unit\bootstrap-alert.js" />
-    <Content Include="Content\bootstrap\js\tests\unit\bootstrap-button.js" />
-    <Content Include="Content\bootstrap\js\tests\unit\bootstrap-carousel.js" />
-    <Content Include="Content\bootstrap\js\tests\unit\bootstrap-collapse.js" />
-    <Content Include="Content\bootstrap\js\tests\unit\bootstrap-dropdown.js" />
-    <Content Include="Content\bootstrap\js\tests\unit\bootstrap-modal.js" />
-    <Content Include="Content\bootstrap\js\tests\unit\bootstrap-phantom.js" />
-    <Content Include="Content\bootstrap\js\tests\unit\bootstrap-popover.js" />
-    <Content Include="Content\bootstrap\js\tests\unit\bootstrap-scrollspy.js" />
-    <Content Include="Content\bootstrap\js\tests\unit\bootstrap-tab.js" />
-    <Content Include="Content\bootstrap\js\tests\unit\bootstrap-tooltip.js" />
-    <Content Include="Content\bootstrap\js\tests\unit\bootstrap-transition.js" />
-    <Content Include="Content\bootstrap\js\tests\unit\bootstrap-typeahead.js" />
-    <Content Include="Content\bootstrap\js\tests\vendor\jquery.js" />
-    <Content Include="Content\bootstrap\js\tests\vendor\qunit.css" />
-    <Content Include="Content\bootstrap\js\tests\vendor\qunit.js" />
     <Content Include="Content\bootstrap\less\tests\css-tests.css" />
     <Content Include="Content\bootstrap\less\tests\css-tests.html" />
     <Content Include="Content\bootstrap\less\tests\forms.html" />
@@ -141,16 +124,13 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\User\LoginPartial.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\bootstrap\js\.jshintrc" />
-    <None Include="Content\bootstrap\js\README.md" />
     <None Include="Content\bootstrap\less\accordion.less" />
     <None Include="Content\bootstrap\less\alerts.less" />
     <None Include="Content\bootstrap\less\bootstrap.less" />
