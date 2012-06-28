@@ -101,9 +101,19 @@ body
     font-family: @sansFontFamily;
 }
 
-h1, h2, h3, h4, h5, .nav, .btn, .modal-body p, .modal-body label
+h1, h2, h3, h4, .nav, .btn, .modal-body p, .modal-body label
 {
     .noselect;
+}
+.thumbnail
+{
+    .noselect;
+    cursor: pointer;
+    
+    &:hover
+    {
+        text-decoration: none;
+    }
 }
 .btn
 {
