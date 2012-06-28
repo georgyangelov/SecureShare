@@ -5,6 +5,7 @@
 
 @grayMoreLighter: #fafafa;
 @sansFontFamily: 'Ubuntu', sans-serif;
+@bigHeadingSize: 40px;
 
 .noselect
 {
@@ -43,6 +44,51 @@ nav
         {
             .icon-white;
         }
+    }
+}
+
+.subhead
+{
+    h1
+    {
+        font-size: @bigHeadingSize;
+    }
+    
+    blockquote p
+    {
+        margin: 10px;
+    }
+}
+
+/**** Transitions ****/
+.transition-duration(@time)
+{
+      -webkit-transition-duration: @time;
+         -moz-transition-duration: @time;
+          -ms-transition-duration: @time;
+           -o-transition-duration: @time;
+              transition-duration: @time;
+}
+
+.masonry
+{
+    -webkit-transition-property: height, width;
+       -moz-transition-property: height, width;
+        -ms-transition-property: height, width;
+         -o-transition-property: height, width;
+            transition-property: height, width;
+    
+    .transition-duration(0.7s);
+            
+    .masonry-brick
+    {
+        .transition-duration(0.7s);
+        
+        -webkit-transition-property: left, right, top;
+        -moz-transition-property: left, right, top;
+         -ms-transition-property: left, right, top;
+          -o-transition-property: left, right, top;
+             transition-property: left, right, top;
     }
 }
 
