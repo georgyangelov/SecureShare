@@ -125,6 +125,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\User\LoginPartial.cshtml" />
+    <Content Include="Views\User\RegisterPartial.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
