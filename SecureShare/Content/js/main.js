@@ -5,6 +5,7 @@ function updateGrid() {
 function initGrid($) {
 	$('.thumbnails').masonry({
 		itemSelector: '.span',
+		isAnimated: true,
 		columnWidth: function (containerWidth) {
 			return containerWidth / 6;
 		}

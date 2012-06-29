@@ -37,13 +37,10 @@
 			<nav class="span8" id="menu">
 				
 				<ul class="nav nav-pills pull-right">
-				@if (false)
-				{
+				
 					<li><a href="#login" data-toggle="modal">Login</a></li>
 					<li><a href="#register" data-toggle="modal">Register</a></li>
-				}
-				else
-				{
+				
 					<!-- Channels dropdown -->
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -52,8 +49,8 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li><a href="@Url.Action("Index", "Channels")">Channel 1</a></li>
-							<li><a href="#">Channel 2</a></li>
-							<li><a href="#">Channel 3</a></li>
+							<li><a href="@Url.Action("Index", "Channels")">Channel 2</a></li>
+							<li><a href="@Url.Action("Index", "Channels")">Channel 3</a></li>
 
 							<li class="divider"></li>
 
@@ -73,7 +70,7 @@
 							<li><a href="#userPassword" data-toggle="modal"><i class="icon-user"></i> Change password</a></li>
 						</ul>
 					</li>
-				}
+				
 				</ul>
 			
 			</nav>
