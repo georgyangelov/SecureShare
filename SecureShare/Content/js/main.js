@@ -58,8 +58,8 @@ $('.message.active').live('click', function () {
 
 		$thumbnail.animate({ width: span4Width, height: newHeight }, 700, function () {
 			$msg.addClass('span4').removeClass('span8');
-			$msg.css('height', $thumbnail.outerHeight() + 'px');
 			$(this).find('p').text(text);
+			$msg.css('height', $thumbnail.outerHeight() + 'px');
 
 			updateGrid();
 		});
