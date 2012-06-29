@@ -1,3 +1,6 @@
 [submodule "SecureShare/Content/bootstrap"]
 	path = SecureShare/Content/bootstrap
 	url = git://github.com/twitter/bootstrap.git
+[submodule "SecureShare/Content/fontawesome"]
+	path = SecureShare/Content/fontawesome
+	url = https://github.com/FortAwesome/Font-Awesome.git
