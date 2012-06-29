@@ -16,7 +16,7 @@ String.prototype.cutToWord = function (length, dots) {
 		return this;
 
 	for (var i = length; i > 0; i--)
-		if (this.charAt(i).match('[\.,\(\)\-\_\&\!\?\;]') != null)
+		if (this.charAt(i).match(/[\s\.,\(\)\-\_\&\!\?\;]/) != null)
 			return this.substr(0, i) + dots;
 
 	return this.substr(0, length) + dots;

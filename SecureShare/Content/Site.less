@@ -1,11 +1,19 @@
 @import url('bootstrap/less/bootstrap.less');
 @import url('bootstrap/less/responsive.less');
+@import url('fontawesome/less/font-awesome.less');
 @import url('http://fonts.googleapis.com/css?family=Ubuntu:400,500,700&subset=latin,cyrillic');
 @linkColor: @green;
 
 @grayMoreLighter: #fafafa;
 @sansFontFamily: 'Ubuntu', sans-serif;
 @bigHeadingSize: 40px;
+
+[class^="icon-"],
+[class*=" icon-"],
+.icon-white
+{
+    background: none !important;
+}
 
 .noselect
 {
@@ -38,6 +46,11 @@
 
 nav
 {
+    i
+    {
+        font-size: 16px;
+    }
+    
     .dropdown-menu a:hover
     {
         i
@@ -120,19 +133,56 @@ a.thumbnail
         }
     }
 }
-.message.active, .message.active h4
+
+.message
 {
-    cursor: pointer;
+    &.active:not(.expanded),
+    &.active:not(.expanded) h4
+    {
+        cursor: pointer;
+    }
+    
+    &.active
+    {
+        [class^="icon-"],
+        [class*=" icon-"]
+        {
+            color: @black;
+            text-decoration: none;
+        }
+        
+        &:not(.expanded):hover .collapseBtn
+        {
+            color: @green;
+        }
+    }
+    &.active.expanded
+    {
+        a[class^="icon-"]:hover,
+        a[class*=" icon-"]:hover
+        {
+            color: @green;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    }
 }
 .thumbnail
 {
     overflow: hidden;
     background: white;
-}
-.thumbnail:hover
-{
-    border-color: #46A546;
-    .box-shadow(0 1px 4px rgba(0, 105, 214, 0.25));
+    
+    &:hover
+    {
+        border-color: #46A546;
+        .box-shadow(0 1px 4px rgba(0, 105, 214, 0.25));
+    }
+    
+    [class^="icon-"],
+    [class*=" icon-"]
+    {
+        font-size: 16px;
+    }
 }
 .btn
 {
