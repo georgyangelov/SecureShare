@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SecureShare")]
+[assembly: AssemblyTitle("ShareGrid")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SecureShare")]
+[assembly: AssemblyProduct("ShareGrid")]
 [assembly: AssemblyCopyright("Copyright ©  2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("8c75b421-f9dc-442c-8b6b-3acd10e1eef1")]
+[assembly: Guid("8138e598-2735-4f72-86ff-a2116520309b")]
 
 // Version information for an assembly consists of the following four values:
 //
