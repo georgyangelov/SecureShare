@@ -10,6 +10,7 @@ using ShareGrid.Helpers;
 namespace ShareGrid.Models
 {
 	public class User
+		: ICanBeValidated
 	{
 		[BsonId]
 		public ObjectId Id { get; set; }

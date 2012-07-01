@@ -3,9 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Text.RegularExpressions;
+using System.Net.Http;
+using System.Net;
+using ShareGrid.Models.Errors;
+using System.Web.Http;
 
 namespace ShareGrid.Helpers
 {
+	public interface ICanBeValidated
+	{
+		ValidationProperty[] Validate();
+	}
+
 	public class ValidationHelper
 	{
 		public static ValidationProperty[] Validate(params ValidationProperty[] list)
@@ -21,6 +30,15 @@ namespace ShareGrid.Helpers
 			}
 
 			return invalid.ToArray();
+		}
+
+		public static void EnsureValidity(HttpRequestMessage request, ICanBeValidated obj)
+		{
+			var invalid = obj.Validate();
+			if (invalid.Length > 0)
+			{
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, new InvalidParameters(invalid)));
+			}
 		}
 	}
 

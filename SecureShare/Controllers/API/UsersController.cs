@@ -9,6 +9,7 @@ using MongoDB.Driver.Builders;
 using System.Net;
 using System.Net.Http;
 using ShareGrid.Models.Errors;
+using ShareGrid.Helpers;
 
 namespace SecureShare.Controllers
 {
@@ -23,11 +24,7 @@ namespace SecureShare.Controllers
 		// POST api/users
 		public HttpResponseMessage Post(HttpRequestMessage request, User user)
 		{
-			var invalid = user.Validate();
-			if (invalid.Length > 0)
-			{
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, new InvalidParameters(invalid)));
-			}
+			ValidationHelper.EnsureValidity(request, user);
 
 			var users = MongoDBHelper.database.GetCollection<User>("users");
 
