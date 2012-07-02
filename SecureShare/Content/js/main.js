@@ -25,6 +25,10 @@ function RegisterPanel() {
 		message: "The two password fields do not match"
 	}});
 
+	this.isFormValid = ko.computed(function () {
+		return this.FirstName.isValid() && this.LastName.isValid() && this.Email.isValid() && this.Password.isValid() && this.repeatPassword.isValid();
+	}, this);
+
 	this.error = ko.observable();
 
 	self.register = function () {
