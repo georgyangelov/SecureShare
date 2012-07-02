@@ -1,3 +1,68 @@
+function RegisterPanel() {
+	var self = this;
+
+	this.FirstName = ko.observable("");
+	this.LastName = ko.observable("");
+	this.Email = ko.observable("");
+	this.Password = ko.observable("");
+	this.repeatPassword = ko.observable("");
+
+	this.error = ko.observable();
+
+	this.passwordsMatch = ko.computed(function () {
+		return this.repeatPassword() == this.Password();
+	}, this);
+
+	self.register = function () {
+
+		amplify.request({
+			resourceId: "register",
+			data: {
+				FirstName: self.FirstName(),
+				LastName: self.LastName(),
+				Email: self.Email(),
+				Password: self.Password()
+			},
+			success: function (data) {
+				self.error(null);
+
+				console.log("Register success");
+			},
+			error: function (data) {
+				self.error(ko.mapping.fromJS(data, self.error));
+				console.log("Error", data);
+			}
+		});
+
+		return false;
+	}
+}
+
+function ViewModel() {
+	var self = this;
+
+	self.isLoggedIn = ko.observable(false);
+	self.user = ko.observable();
+
+	/* Components */
+	self.registerPanel = ko.observable(new RegisterPanel());
+}
+
+$(function () {
+	ko.applyBindings(new ViewModel());
+});
+
+
+
+
+
+
+
+
+
+
+
+
 function updateGrid() {
 	$('.thumbnails').trigger('resize');
 }

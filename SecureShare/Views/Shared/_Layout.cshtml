@@ -25,6 +25,7 @@
 	<script src="@Url.Content("~/Content/js/knockout-2.1.0.js")"></script>
 	<script src="@Url.Content("~/Content/js/knockout-mapping-2.2.0.js")"></script>
 
+	<script src="@Url.Content("~/Content/js/apiroutes.js")"></script>
 	<script src="@Url.Content("~/Content/js/main.js")"></script>
 </head>
 
@@ -82,7 +83,7 @@
 		<div id="login" class="modal fade hide">
 			@Html.Partial("../Users/LoginPartial")
 		</div>
-		<div id="register" class="modal fade hide">
+		<div id="register" class="modal fade hide" data-bind="with: registerPanel">
 			@Html.Partial("../Users/RegisterPartial")
 		</div>
 

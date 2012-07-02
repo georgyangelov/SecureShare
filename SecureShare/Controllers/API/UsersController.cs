@@ -15,18 +15,14 @@ namespace SecureShare.Controllers
 {
 	public class UsersController : ApiController
 	{
-		// GET api/values/5
-		/*public string Get(int id)
-		{
-			return "value";
-		}*/
-
 		// POST api/users
 		public HttpResponseMessage Post(HttpRequestMessage request, User user)
 		{
 			ValidationHelper.EnsureValidity(request, user);
 
 			var users = MongoDBHelper.database.GetCollection<User>("users");
+
+			user.Email = user.Email.ToLower();
 
 			if (users.FindOne(Query.EQ("Email", user.Email)) != null)
 			{

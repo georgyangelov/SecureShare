@@ -6,6 +6,8 @@ using MongoDB.Driver;
 using System.Configuration;
 using System.Security.Cryptography;
 using System.Text;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.IdGenerators;
 
 namespace ShareGrid.Models
 {
@@ -36,7 +38,7 @@ namespace ShareGrid.Models
 		{
 			var sha256 = new SHA256CryptoServiceProvider();
 
-			return BitConverter.ToString(sha256.ComputeHash(Encoding.UTF8.GetBytes(salt + "_!@#$_" + str + "_" + salt + "@#$$%"))).Replace("-", "").ToLower();
+			return BitConverter.ToString(sha256.ComputeHash(Encoding.UTF8.GetBytes(salt + "_!@#$_" + Hash(str) + "_" + salt + "@#$$%"))).Replace("-", "").ToLower();
 		}
 	}
 }
