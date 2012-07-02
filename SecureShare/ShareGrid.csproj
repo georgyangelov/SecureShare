@@ -200,6 +200,7 @@
     </Content>
     <Content Include="Content\js\knockout-2.1.0.js" />
     <Content Include="Content\js\knockout-mapping-2.2.0.js" />
+    <Content Include="Content\js\knockoutExtenders.js" />
     <Content Include="Content\js\less-1.3.0.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

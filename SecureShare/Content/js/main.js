@@ -1,17 +1,31 @@
 function RegisterPanel() {
 	var self = this;
 
-	this.FirstName = ko.observable("");
-	this.LastName = ko.observable("");
-	this.Email = ko.observable("");
-	this.Password = ko.observable("");
-	this.repeatPassword = ko.observable("");
+	this.FirstName = ko.observable("").extend({ validation: {
+		required: true,
+		message: "Please enter your first name"
+	} });
+	this.LastName = ko.observable("").extend({ validation: {
+		required: true,
+		message: "Please enter your last name"
+	} });
+	this.Email = ko.observable("").extend({ validation: {
+		required: true,
+		regex: /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/,
+		message: "Please input a valid email" 
+	} });
+	this.Password = ko.observable("").extend({ validation: {
+		required: true,
+		message: "Please enter a password"
+	} }); ;
+	this.repeatPassword = ko.observable("").extend({ validation: {
+		func: function (value) {
+			return value == self.Password();
+		},
+		message: "The two password fields do not match"
+	}});
 
 	this.error = ko.observable();
-
-	this.passwordsMatch = ko.computed(function () {
-		return this.repeatPassword() == this.Password();
-	}, this);
 
 	self.register = function () {
 

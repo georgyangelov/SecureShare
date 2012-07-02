@@ -1,6 +1,6 @@
 ﻿
 
-amplify.request.decoders.appEnvelope =
+amplify.request.decoders.errorDecoder =
     function (data, status, xhr, success, error) {
     	if (status == "success") {
     		success(data, status);
@@ -16,6 +16,6 @@ amplify.request.define(
 		type: "POST",
 		dataType: "json",
 		cache: false,
-		decoder: "appEnvelope"
+		decoder: "errorDecoder"
 	}
 );
