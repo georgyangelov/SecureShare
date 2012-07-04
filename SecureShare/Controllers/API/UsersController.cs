@@ -16,7 +16,8 @@ namespace SecureShare.Controllers
 	public class UsersController : ApiController
 	{
 		// POST api/users
-		public HttpResponseMessage Post(HttpRequestMessage request, User user)
+		[System.Web.Http.HttpPost]
+		public HttpResponseMessage index(HttpRequestMessage request, User user)
 		{
 			ValidationHelper.EnsureValidity(request, user);
 
@@ -36,6 +37,38 @@ namespace SecureShare.Controllers
 
 			return new HttpResponseMessage(HttpStatusCode.Created);
 		}
+
+		// POST api/users/login
+		[Route(Uri = "login")]
+		public User login(HttpRequestMessage request, UserLogin loginData)
+        {
+			var users = MongoDBHelper.database.GetCollection<User>("users");
+			var query = Query.EQ("Email", loginData.Email);
+			var user  = users.FindOne(query);
+
+			if (user == null || user.Password != MongoDBHelper.Hash(loginData.Password, user.Salt))
+			{
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Conflict, new APIError("invalidEmailOrPassword", "Invalid email or password")));
+			}
+
+			if (user.SessionKeys == null)
+				user.SessionKeys = new List<SessionKey>();
+
+			var key = new SessionKey(user, DateTime.Now.AddDays(7));
+			user.SessionKeys.Add(key);
+
+			users.Save(user);
+
+			user.SessionKey = key;
+			
+			return user;
+        }
+
+		// GET api/users/checkEmail
+		/*public HttpResponseMessage checkEmail(string email)
+		{
+
+		}*/
 
 		// PUT api/values/5
 		/*public void Put(int id, string value)
