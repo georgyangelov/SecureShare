@@ -19,3 +19,25 @@ amplify.request.define(
 		decoder: "errorDecoder"
 	}
 );
+
+amplify.request.define(
+    "login", "ajax",
+    {
+        url: "api/users/login",
+        type: "POST",
+        dataType: "json",
+        cache: false,
+        decoder: "errorDecoder"
+    }
+);
+
+amplify.request.define(
+    "checkEmail", "ajax",
+    {
+        url: "api/users/checkEmail/{email}",
+        type: "GET",
+        dataType: "json",
+        cache: false,
+        decoder: "errorDecoder"
+    }
+);

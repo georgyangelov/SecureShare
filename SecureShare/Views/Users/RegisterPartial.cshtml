@@ -4,11 +4,6 @@
 			<h3>Register</h3>
 		</div>
 		<div class="modal-body">
-			<div data-bind="with: error">
-				<ul data-bind="foreach: parameters">
-					<li><span data-bind="text: name"></span> - <span data-bind="text: message"></span></li>
-				</ul>
-			</div>
 
 			<div class="control-group" data-bind="css: {error: FirstName.hasModError}">
 				<label class="control-label" for="firstname">First name</label>
@@ -47,6 +42,8 @@
 			</div>
 		</div>
 		<div class="modal-footer">
+			<h4 data-bind="optionalText: error" class="error pull-left"></h4>
+
 			<a href="#" class="btn" data-dismiss="modal">Close</a>
 			<input type="submit" class="btn btn-primary" value="Register" data-bind="click: register, enable: isFormValid" />
 		</div>

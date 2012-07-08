@@ -1,73 +1,25 @@
-function RegisterPanel() {
-	var self = this;
-
-	this.FirstName = ko.observable("").extend({ validation: {
-		required: true,
-		message: "Please enter your first name"
-	} });
-	this.LastName = ko.observable("").extend({ validation: {
-		required: true,
-		message: "Please enter your last name"
-	} });
-	this.Email = ko.observable("").extend({ validation: {
-		required: true,
-		regex: /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/,
-		message: "Please input a valid email" 
-	} });
-	this.Password = ko.observable("").extend({ validation: {
-		required: true,
-		message: "Please enter a password"
-	} }); ;
-	this.repeatPassword = ko.observable("").extend({ validation: {
-		func: function (value) {
-			return value == self.Password();
-		},
-		message: "The two password fields do not match"
-	}});
-
-	this.isFormValid = ko.computed(function () {
-		return this.FirstName.isValid() && this.LastName.isValid() && this.Email.isValid() && this.Password.isValid() && this.repeatPassword.isValid();
-	}, this);
-
-	this.error = ko.observable();
-
-	self.register = function () {
-
-		amplify.request({
-			resourceId: "register",
-			data: {
-				FirstName: self.FirstName(),
-				LastName: self.LastName(),
-				Email: self.Email(),
-				Password: self.Password()
-			},
-			success: function (data) {
-				self.error(null);
-
-				console.log("Register success");
-			},
-			error: function (data) {
-				self.error(ko.mapping.fromJS(data, self.error));
-				console.log("Error", data);
-			}
-		});
-
-		return false;
-	}
-}
-
 function ViewModel() {
 	var self = this;
 
 	self.isLoggedIn = ko.observable(false);
 	self.user = ko.observable();
 
+    /* Globals */
+	self.alerts = ko.observableArray([]).extend({ defaultItem: { title: "", text: "", type: "info" } });
+
 	/* Components */
 	self.registerPanel = ko.observable(new RegisterPanel());
+	self.loginPanel = ko.observable(new LoginPanel());
 }
 
+Application = new ViewModel();
 $(function () {
-	ko.applyBindings(new ViewModel());
+	ko.applyBindings(Application);
+
+	// Remove closed alerts from the Application.alerts array
+	$('#alertsContainer .alert').live('closed', function () {
+		Application.alerts.remove(ko.dataFor(this));
+	});
 });
 
 

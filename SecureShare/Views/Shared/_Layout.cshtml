@@ -7,28 +7,31 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<link rel="stylesheet/less" href="@Url.Content("~/Content/Site.less")" />
-	<script src="@Url.Content("~/Content/js/less-1.3.0.min.js")"></script>
+	<script src="@Url.Content("~/Content/js/libs/less-1.3.0.min.js")"></script>
 
 	<!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script-->
-	<script src="@Url.Content("~/Content/js/jquery-1.7.2.min.js")"></script>
+	<script src="@Url.Content("~/Content/js/libs/jquery-1.7.2.min.js")"></script>
 
 	<script src="@Url.Content("~/Content/bootstrap/js/bootstrap-button.js")"></script>
 	<script src="@Url.Content("~/Content/bootstrap/js/bootstrap-modal.js")"></script>
 	<script src="@Url.Content("~/Content/bootstrap/js/bootstrap-transition.js")"></script>
 	<script src="@Url.Content("~/Content/bootstrap/js/bootstrap-dropdown.js")"></script>
+	<script src="@Url.Content("~/Content/bootstrap/js/bootstrap-alert.js")"></script>
 
-	<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
-	<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
-	<script src="@Url.Content("~/Content/js/jquery.masonry.js")"></script>
+	<script src="@Url.Content("~/Content/js/libs/jquery.masonry.js")"></script>
 	<script src="@Url.Content("~/Content/js/textHelpers.js")"></script>
-	<script src="@Url.Content("~/Content/js/amplify.min.js")"></script>
-	<script src="@Url.Content("~/Content/js/knockout-2.1.0.js")"></script>
-	<script src="@Url.Content("~/Content/js/knockout-mapping-2.2.0.js")"></script>
-
+	<script src="@Url.Content("~/Content/js/libs/amplify.min.js")"></script>
+	<script src="@Url.Content("~/Content/js/libs/knockout-2.1.0.js")"></script>
+	<script src="@Url.Content("~/Content/js/libs/knockout-mapping-2.2.0.js")"></script>
+	
 	<script src="@Url.Content("~/Content/js/knockoutExtenders.js")"></script>
+	<script src="@Url.Content("~/Content/js/knockoutBindings.js")"></script>
 
 	<script src="@Url.Content("~/Content/js/apiroutes.js")"></script>
-	<script src="@Url.Content("~/Content/js/main.js")"></script>
+	
+	<script src="@Url.Content("~/Content/js/viewmodels/RegisterPanel.js")"></script>
+	<script src="@Url.Content("~/Content/js/viewmodels/LoginPanel.js")"></script>
+	<script src="@Url.Content("~/Content/js/viewmodels/main.js")"></script>
 </head>
 
 <body>
@@ -40,8 +43,15 @@
 		<header class="row-fluid">
 			<div class="span4" id="header"><h1><span class="color">Share</span>Grid</h1></div>
 			
-			<nav class="span8" id="menu">
-				
+			<div class="span4" id="alertsContainer" data-bind="foreach: alerts">
+				<div class="alert fade in" data-bind="css: {'alert-success': type == 'success', 'alert-info': type == 'info', 'alert-error': type == 'error'}">
+					<a class="close" data-dismiss="alert" href="#">×</a>
+					<strong data-bind="optionalText: title"></strong>
+					<span data-bind="optionalText: text" />
+				</div>
+			</div>
+
+			<nav class="span4" id="menu">
 				<ul class="nav nav-pills pull-right">
 				
 					<li><a href="#login" data-toggle="modal">Login</a></li>
@@ -82,7 +92,7 @@
 			</nav>
 		</header>
 		
-		<div id="login" class="modal fade hide">
+		<div id="login" class="modal fade hide" data-bind="with: loginPanel">
 			@Html.Partial("../Users/LoginPartial")
 		</div>
 		<div id="register" class="modal fade hide" data-bind="with: registerPanel">

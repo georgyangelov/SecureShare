@@ -5,16 +5,18 @@
 		</div>
 		<div class="modal-body">
 						
-			<div class="control-group">
+			<div class="control-group" data-bind="css: {error: Email.hasModError}">
 			<label class="control-label" for="email">Email</label>
 				<div class="controls">
-					<input type="text" id="email" class="input-xlarge" name="email" />
+					<input type="text" id="email" class="input-xlarge" name="email" data-bind="value: Email" />
+					<p class="help-block" data-bind="visible: Email.hasModError, text: Email.errorMessage"></p>
 				</div>
 			</div>
-			<div class="control-group">
+			<div class="control-group" data-bind="css: {error: Password.hasModError}">
 				<label class="control-label" for="password">Password</label>
 				<div class="controls">
-					<input type="password" id="password" class="input-xlarge" name="password" />
+					<input type="password" id="password" class="input-xlarge" name="password" data-bind="value: Email" />
+					<p class="help-block" data-bind="visible: Email.hasModError, text: Email.errorMessage"></p>
 				</div>
 			</div>
 			<div class="control-group">
@@ -24,7 +26,9 @@
 			</div>
 		</div>
 		<div class="modal-footer">
+			<h4 data-bind="optionalText: error" class="error pull-left"></h4>
+
 			<a href="#" class="btn" data-dismiss="modal">Close</a>
-			<input type="submit" class="btn btn-primary" value="Login" />
+			<input type="submit" class="btn btn-primary" value="Login" data-bind="click: submit, enable: isFormValid" />
 		</div>
 }

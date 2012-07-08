@@ -39,6 +39,7 @@ namespace SecureShare.Controllers
 		}
 
 		// POST api/users/login
+		[System.Web.Http.HttpGet]
 		[Route(Uri = "login")]
 		public User login(HttpRequestMessage request, UserLogin loginData)
         {
@@ -64,20 +65,18 @@ namespace SecureShare.Controllers
 			return user;
         }
 
-		// GET api/users/checkEmail
-		/*public HttpResponseMessage checkEmail(string email)
+		[System.Web.Http.HttpGet]
+		[Route(Uri = "checkEmail/{Email}")]
+		public object checkEmail(string Email)
 		{
+			var users = MongoDBHelper.database.GetCollection<User>("users");
+			var query = Query.EQ("Email", Email);
+			var user = users.FindOne(query);
 
-		}*/
-
-		// PUT api/values/5
-		/*public void Put(int id, string value)
-		{
-		}*/
-
-		// DELETE api/values/5
-		/*public void Delete(int id)
-		{
-		}*/
+			if (user == null)
+				return new { available = true };
+			else
+				return new { available = false };
+		}
 	}
 }
