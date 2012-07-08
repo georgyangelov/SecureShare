@@ -39,7 +39,7 @@ namespace SecureShare.Controllers
 		}
 
 		// POST api/users/login
-		[System.Web.Http.HttpGet]
+		[System.Web.Http.HttpPost]
 		[Route(Uri = "login")]
 		public User login(HttpRequestMessage request, UserLogin loginData)
         {

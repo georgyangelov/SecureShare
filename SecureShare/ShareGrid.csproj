@@ -196,6 +196,7 @@
     <Content Include="Content\js\libs\jquery-1.7.2.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\js\libs\jquery.cookie.js" />
     <Content Include="Content\js\libs\jquery.masonry.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -208,6 +209,7 @@
     <Content Include="Content\js\libs\less-1.3.0.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\js\viewmodels\LoginPanel.js" />
     <Content Include="Content\js\viewmodels\main.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

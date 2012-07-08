@@ -2,7 +2,7 @@ function ViewModel() {
 	var self = this;
 
 	self.isLoggedIn = ko.observable(false);
-	self.user = ko.observable();
+	self.user = ko.observable({});
 
     /* Globals */
 	self.alerts = ko.observableArray([]).extend({ defaultItem: { title: "", text: "", type: "info" } });
@@ -10,11 +10,27 @@ function ViewModel() {
 	/* Components */
 	self.registerPanel = ko.observable(new RegisterPanel());
 	self.loginPanel = ko.observable(new LoginPanel());
+
+	/* Methods */
+	self.LogOut = function () {
+		Application.isLoggedIn(false);
+		Application.user({});
+		$.cookie('userdata', null);
+
+		return false;
+	};
 }
 
 Application = new ViewModel();
 $(function () {
 	ko.applyBindings(Application);
+
+	// Fetch logged in user
+	var cookie = $.cookie('userdata');
+	if (cookie != null) {
+		Application.isLoggedIn(true);
+		Application.user(ko.mapping.fromJSON(cookie));
+	}
 
 	// Remove closed alerts from the Application.alerts array
 	$('#alertsContainer .alert').live('closed', function () {

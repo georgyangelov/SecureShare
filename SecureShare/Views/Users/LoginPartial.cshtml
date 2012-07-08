@@ -15,13 +15,13 @@
 			<div class="control-group" data-bind="css: {error: Password.hasModError}">
 				<label class="control-label" for="password">Password</label>
 				<div class="controls">
-					<input type="password" id="password" class="input-xlarge" name="password" data-bind="value: Email" />
-					<p class="help-block" data-bind="visible: Email.hasModError, text: Email.errorMessage"></p>
+					<input type="password" id="password" class="input-xlarge" name="password" data-bind="value: Password, valueUpdate: 'afterkeydown'" />
+					<p class="help-block" data-bind="visible: Password.hasModError, text: Password.errorMessage"></p>
 				</div>
 			</div>
 			<div class="control-group">
 				<div class="controls">
-					<label><input type="checkbox" id="rememberme" name="rememberme" class="input-xlarge" /> Remember me next time</label>
+					<label><input type="checkbox" id="rememberme" name="rememberme" class="input-xlarge" data-bind="checked: RememberMe" /> Remember me next time</label>
 				</div>
 			</div>
 		</div>
