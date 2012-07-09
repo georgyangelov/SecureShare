@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.IdGenerators;
+using MongoDB.Driver.Builders;
 
 namespace ShareGrid.Models
 {
@@ -21,6 +22,14 @@ namespace ShareGrid.Models
 			var url = new MongoUrl(ConfigurationManager.AppSettings["MONGOLAB_URI"]);
 			server = MongoServer.Create(url);
 			database = server.GetDatabase(url.DatabaseName, new SafeMode(true));
+
+			EnsureIndexes();
+		}
+
+		private static void EnsureIndexes()
+		{
+			database.GetCollection("users")
+				.EnsureIndex(IndexKeys.Ascending("Email", "SessionKey.Key"), IndexOptions.SetUnique(true));
 		}
 
 		public static string GetRandomSalt()
