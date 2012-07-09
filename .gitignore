@@ -13,7 +13,8 @@
 # Build results
 [Dd]ebug/
 [Rr]elease/
-bin/Content/
+SecureShare/bin/Content/
+ShareGrid.dll
 *_i.c
 *_p.c
 *.ilk

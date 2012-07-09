@@ -18,8 +18,9 @@ namespace ShareGrid.Models
 
 		public static void Initialize()
 		{
-			server = MongoServer.Create(ConfigurationManager.AppSettings["MongoDBConnectionString"]);
-			database = server.GetDatabase(ConfigurationManager.AppSettings["MongoDBDatabase"]);
+			var url = new MongoUrl(ConfigurationManager.AppSettings["MONGOLAB_URI"]);
+			server = MongoServer.Create(url);
+			database = server.GetDatabase(url.DatabaseName, new SafeMode(true));
 		}
 
 		public static string GetRandomSalt()
