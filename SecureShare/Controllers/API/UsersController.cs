@@ -85,7 +85,7 @@ namespace SecureShare.Controllers
 			User user = userInfo.VerifySessionKey(); 
 			if (user == null)
 			{
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Conflict, new APIError("invalidSessionKey", "Invalid, expired or non-existant session key. Please login properly")));
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, new APIError("invalidSessionKey", "Invalid, expired or non-existant session key. Please login properly")));
 			}
 
 			if (userInfo.Data.Email != null)
@@ -102,6 +102,21 @@ namespace SecureShare.Controllers
 			MongoDBHelper.database.GetCollection<User>("users").Save(user);
 
 			return new SuccessReport(true);
+		}
+
+		[System.Web.Http.HttpGet]
+		[Route(Uri = "{userId}")]
+		public User GetUser(HttpRequestMessage request, string userId)
+		{
+			var users = MongoDBHelper.database.GetCollection<User>("users");
+			var user = users.FindOne(Query.EQ("_id", userId));
+
+			if (user == null)
+			{
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidUserId", "Invalid or non-existant user id")));
+			}
+
+			return user;
 		}
 	}
 }
