@@ -80,9 +80,28 @@ namespace SecureShare.Controllers
 		}
 
 		[System.Web.Http.HttpPut]
-		public void updateUser(AuthenticatedRequest<User> user)
+		public SuccessReport updateUser(HttpRequestMessage request, AuthenticatedRequest<User> userInfo)
 		{
+			User user = userInfo.VerifySessionKey(); 
+			if (user == null)
+			{
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Conflict, new APIError("invalidSessionKey", "Invalid, expired or non-existant session key. Please login properly")));
+			}
 
+			if (userInfo.Data.Email != null)
+				user.Email = userInfo.Data.Email;
+			if (userInfo.Data.FirstName != null)
+				user.FirstName = userInfo.Data.FirstName;
+			if (userInfo.Data.LastName != null)
+				user.LastName = userInfo.Data.LastName;
+			if (userInfo.Data.Password != null)
+				user.Password = MongoDBHelper.Hash(userInfo.Data.Password, user.Salt);
+
+			ValidationHelper.EnsureValidity(request, user);
+
+			MongoDBHelper.database.GetCollection<User>("users").Save(user);
+
+			return new SuccessReport(true);
 		}
 	}
 }
