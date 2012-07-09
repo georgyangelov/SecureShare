@@ -78,5 +78,11 @@ namespace SecureShare.Controllers
 			else
 				return new { available = false };
 		}
+
+		[System.Web.Http.HttpPut]
+		public void updateUser(AuthenticatedRequest<User> user)
+		{
+
+		}
 	}
 }

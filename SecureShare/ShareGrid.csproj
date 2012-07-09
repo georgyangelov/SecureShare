@@ -137,8 +137,11 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="Helpers\ModelBinders\AuthenticatedRequest.cs" />
+    <Compile Include="Helpers\ModelBinders\AuthenticatedRequestProvider.cs" />
     <Compile Include="Helpers\Route.cs" />
     <Compile Include="Helpers\ValidationHelper.cs" />
+    <Compile Include="Models\AuthenticatedRequest.cs" />
     <Compile Include="Models\Errors\APIError.cs" />
     <Compile Include="Models\Errors\InvalidParameters.cs" />
     <Compile Include="Models\MongoDBHelper.cs" />
