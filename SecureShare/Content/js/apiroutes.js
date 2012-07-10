@@ -32,6 +32,28 @@ amplify.request.define(
 );
 
 amplify.request.define(
+	"userInfo", "ajax",
+	{
+		url: "api/users/{userId}",
+		type: "GET",
+		datatype: "json",
+		cache: false,
+		decoder: "errorDecoder"
+	}
+);
+
+amplify.request.define(
+	"userLoginInfo", "ajax",
+	{
+		url: "api/users/{userId}/{sessionKey}",
+		type: "GET",
+		datatype: "json",
+		cache: false,
+		decoder: "errorDecoder"
+	}
+);
+
+amplify.request.define(
     "checkEmail", "ajax",
     {
         url: "api/users/checkEmail/{email}",
@@ -40,4 +62,15 @@ amplify.request.define(
         cache: false,
         decoder: "errorDecoder"
     }
+);
+
+amplify.request.define(
+	"updateUser", "ajax",
+	{
+		url: "api/users/",
+		type: "PUT",
+		dataType: "json",
+		cache: false,
+		decoder: "errorDecoder"
+	}
 );

@@ -32,6 +32,7 @@
 	
 	<script src="@Url.Content("~/Content/js/viewmodels/RegisterPanel.js")"></script>
 	<script src="@Url.Content("~/Content/js/viewmodels/LoginPanel.js")"></script>
+	<script src="@Url.Content("~/Content/js/viewmodels/UserEmailPanel.js")"></script>
 	<script src="@Url.Content("~/Content/js/viewmodels/main.js")"></script>
 </head>
 
@@ -114,7 +115,7 @@
 			@Html.Partial("../Channels/SubscribePartial")
 		</div>
 
-		<div id="userEmail" class="modal fade hide">
+		<div id="userEmail" class="modal fade hide" data-bind="with: userEmailPanel">
 			@Html.Partial("../Users/EmailPartial")
 		</div>
 

@@ -15,45 +15,65 @@
 	    target.isValid(false);
 	    target.errorMessage(message);
 	}
-
-	if (typeof options.func === "function") {
-		var computedFunc = ko.computed(options.func);
+	
+	target.reset = function () {
+		target("");
+		target.isModified(false);
 	}
 
-	function validate(v, modify) {
+	if (typeof options.func === "function" && typeof options.computed !== "undefined" && options.computed === true) {
+		var computedFunc = ko.computed(function () {
+			var value = target();
+			return options.func(value);
+		});
+	}
+
+	function validate(modify) {
 		var value = target();
 		var messages = [];
 
 		if (typeof modify === "undefined" || modify)
 			target.isModified(true);
 
-		var message = options.message;
-		if (
-            (options.required && value == "")
-				||
-		    (typeof options.regex !== "undefined" && !options.regex.test(value))
-			    ||
-            (typeof options.func === "function" && !(message = options.func(value)) && typeof message !== "undefined")
-		   )
-		{
-			if (message === false)
-				message = options.message;
-
-		    target.invalidate(message);
+		if (options.required && value == "") {
+			target.invalidate(options.message);
 		}
-        else
-		    target.isValid(true);
+		else if (typeof options.regex !== "undefined" && !options.regex.test(value)) {
+			target.invalidate(options.message);
+		}
+		else if (typeof options.func === "function") {
+			handleFuncValidationResult(options.func(value));
+		}
+		else {
+			target.isValid(true);
+			target.errorMessage("");
+		}
+	}
+
+	function handleFuncValidationResult(value){
+		if (typeof value === "undefined")
+			return;
+
+		var message = options.message;
+		if (value === false) {
+			target.invalidate(options.message);
+		}
+		else if (value === true) {
+			target.isValid(true);
+			target.errorMessage("");
+		}
+		else {
+			target.invalidate(value);
+		}
 	}
 
 	validate(target());
 	target.isModified(false);
 
 	target.subscribe(validate);
-
-	if (typeof computedFunc === "function")
-		computedFunc.subscribe(function (v) {
-			validate(v, false);
-		});
+	if (typeof computedFunc !== "undefined") {
+		computedFunc.subscribe(handleFuncValidationResult);
+	}
 
 	return target;
 };

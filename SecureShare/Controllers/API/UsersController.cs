@@ -118,5 +118,31 @@ namespace SecureShare.Controllers
 
 			return user;
 		}
+
+		[System.Web.Http.HttpGet]
+		[Route(Uri = "{userId}/{sessionKey}")]
+		public User GetUser(HttpRequestMessage request, string userId, string sessionKey)
+		{
+			var users = MongoDBHelper.database.GetCollection<User>("users");
+			var user = users.FindOne(Query.EQ("_id", userId));
+
+			if (user == null)
+			{
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidUserId", "Invalid or non-existant user id")));
+			}
+
+			var key = from k in user.SessionKeys
+					  where k.Key == sessionKey && k.Expires > DateTime.Now
+					  select k;
+
+			if (key.Count() == 0)
+			{
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, new APIError("invalidSessionKey", "Invalid, expired or non-existant session key")));
+			}
+
+			user.SessionKey = key.First();
+
+			return user;
+		}
 	}
 }

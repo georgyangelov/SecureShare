@@ -20,7 +20,7 @@
             message: "Please input a valid email",
             func: function (value) {
                 if (value == "")
-                    return true;
+                	return true;
 
                 // Verify that the email is available
                 amplify.request({
@@ -48,6 +48,7 @@
             func: function (value) {
                 return value == self.Password();
             },
+            computed: true,
             message: "The two password fields do not match"
         }
     });
