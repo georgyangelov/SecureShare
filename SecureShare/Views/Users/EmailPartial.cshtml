@@ -4,22 +4,25 @@
 			<h3>Change profile email</h3>
 		</div>
 		<div class="modal-body">
-			<div class="control-group">
+			<div class="control-group" data-bind="css: {error: Email.hasModError}">
 				<label class="control-label" for="email">Valid email</label>
 				<div class="controls">
-					<input type="text" id="email" class="input-xlarge" name="email" />
+					<input type="text" id="email" class="input-xlarge" name="email" data-bind="value: Email" />
+					<p class="help-block" data-bind="visible: Email.hasModError, text: Email.errorMessage"></p>
 				</div>
 			</div>
-			<div class="control-group">
+			<div class="control-group" data-bind="css: {error: EmailRepeat.hasModError}">
 				<label class="control-label" for="email2">Confirm email</label>
 				<div class="controls">
-					<input type="text" id="email2" class="input-xlarge" name="email2" />
-					<p class="help-block">Please repeat the email</p>
+					<input type="text" id="email2" class="input-xlarge" name="email2" data-bind="value: EmailRepeat, valueUpdate: 'afterkeydown'" />
+					<p class="help-block" data-bind="visible: EmailRepeat.hasModError, text: EmailRepeat.errorMessage"></p>
 				</div>
 			</div>
 		</div>
 		<div class="modal-footer">
+			<h4 data-bind="optionalText: error" class="error pull-left"></h4>
+
 			<a href="#" class="btn" data-dismiss="modal">Close</a>
-			<input type="submit" class="btn btn-primary" value="Update changes" />
+			<input type="submit" class="btn btn-primary" value="Update changes" data-bind="click: submit, enable: isFormValid" />
 		</div>
 }

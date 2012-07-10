@@ -51,16 +51,15 @@
 	}
 
 	function handleFuncValidationResult(value){
-		if (typeof value === "undefined")
+		if (typeof value === "undefined" || value == true) {
+			target.isValid(true);
+			target.errorMessage("");
 			return;
+		}
 
 		var message = options.message;
 		if (value === false) {
 			target.invalidate(options.message);
-		}
-		else if (value === true) {
-			target.isValid(true);
-			target.errorMessage("");
 		}
 		else {
 			target.invalidate(value);

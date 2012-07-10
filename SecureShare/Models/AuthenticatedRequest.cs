@@ -22,7 +22,7 @@ namespace ShareGrid.Models
 
 		public User VerifySessionKey()
 		{
-			if (AuthType != Models.AuthType.SessionKey && Key != null)
+			if (AuthType != Models.AuthType.SessionKey || Key == null)
 				return null;
 
 			var users = MongoDBHelper.database.GetCollection<User>("users");

@@ -1,16 +1,17 @@
 function ViewModel() {
 	var self = this;
 
+    /* Globals */
 	self.isLoggedIn = ko.observable(false);
 	self.user = ko.observable({});
 
-    /* Globals */
 	self.alerts = ko.observableArray([]).extend({ defaultItem: { title: "", text: "", type: "info" } });
 
 	/* Components */
 	self.registerPanel = ko.observable(new RegisterPanel());
 	self.loginPanel = ko.observable(new LoginPanel());
 	self.userEmailPanel = ko.observable(new UserEmailPanel());
+	self.userPasswordPanel = ko.observable(new UserPasswordPanel());
 
 	/* Methods */
 	self.LogOut = function () {
@@ -33,7 +34,7 @@ function ViewModel() {
 		}
 
 		amplify.request({
-			resourceId: "userInfo",
+			resourceId: "userLoginInfo",
 			data: {
 				userId: userId,
 				sessionKey: sessionKey

@@ -1,27 +1,26 @@
-﻿function UserEmailPanel() {
+﻿function UserPasswordPanel() {
 	var self = this;
 
-	this.Email = ko.observable("").extend({
+	this.Password = ko.observable("").extend({
 		validation: {
 			required: true,
-			regex: /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/,
-			message: "Please enter a valid email"
+			message: "Please enter your new password"
 		}
 	});
-	this.EmailRepeat = ko.observable("").extend({
+	this.PasswordRepeat = ko.observable("").extend({
 		validation: {
 			required: true,
-			message: "Please repeat your new email",
+			message: "Please repeat your new password",
 			computed: true,
 			func: function (value) {
-				if (value != self.Email())
-					return "The two emails don't match";
+				if (value != self.Password())
+					return "The passwords don't match";
 			}
 		}
 	});
 
 	this.isFormValid = ko.computed(function () {
-		return this.Email.isValid() && this.EmailRepeat.isValid();
+		return this.Password.isValid() && this.PasswordRepeat.isValid();
 	}, this);
 
 	this.error = ko.observable();
@@ -30,16 +29,16 @@
 		amplify.request({
 			resourceId: "updateUser",
 			data: {
-				Email: self.Email(),
+				Password: self.Password(),
 				SessionKey: Application.user().SessionKey.Key()
 			},
 			success: function (data) {
 				self.error(null);
-				self.Email.reset();
-				self.EmailRepeat.reset();
+				self.Password.reset();
+				self.PasswordRepeat.reset();
 
-				$('#userEmail').modal('hide');
-				Application.alerts.push({ type: "success", text: "Your email was successfully changed." });
+				$('#userPassword').modal('hide');
+				Application.alerts.push({ type: "success", text: "Your password was successfully changed." });
 
 				Application.UpdateUserInfo();
 			},
