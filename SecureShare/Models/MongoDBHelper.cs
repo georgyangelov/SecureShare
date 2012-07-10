@@ -29,9 +29,11 @@ namespace ShareGrid.Models
 		private static void EnsureIndexes()
 		{
 			var users = database.GetCollection("users");
-			
 			users.EnsureIndex(IndexKeys.Ascending("Email"), IndexOptions.SetUnique(true));
 			users.EnsureIndex("SessionKeys.Key");
+
+			var channels = database.GetCollection("channels");
+			channels.EnsureIndex(IndexKeys.Ascending("Name"), IndexOptions.SetUnique(true));
 		}
 
 		public static string GetRandomSalt()
