@@ -54,6 +54,17 @@ amplify.request.define(
 );
 
 amplify.request.define(
+	"logout", "ajax",
+	{
+		url: "api/users/logout/{sessionKey}",
+		type: "DELETE",
+		datatype: "json",
+		cache: false,
+		decoder: "errorDecoder"
+	}
+);
+
+amplify.request.define(
     "checkEmail", "ajax",
     {
         url: "api/users/checkEmail/{email}",

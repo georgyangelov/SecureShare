@@ -49,7 +49,7 @@ namespace SecureShare.Controllers
 
 			if (user == null || user.Password != MongoDBHelper.Hash(loginData.Password, user.Salt))
 			{
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Conflict, new APIError("invalidEmailOrPassword", "Invalid email or password")));
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, new APIError("invalidEmailOrPassword", "Invalid email or password")));
 			}
 
 			if (user.SessionKeys == null)
@@ -64,6 +64,26 @@ namespace SecureShare.Controllers
 			
 			return user;
         }
+
+		[System.Web.Http.HttpDelete]
+		[Route(Uri = "logout/{sessionKey}")]
+		public SuccessReport logout(string userId, string sessionKey)
+		{
+			var users = MongoDBHelper.database.GetCollection<User>("users");
+			var query = Query.EQ("SessionKeys.Key", sessionKey);
+			var user = users.FindOne(query);
+
+			if (user != null)
+			{
+				user.SessionKeys.Remove((from k in user.SessionKeys
+										where k.Key == sessionKey
+										select k).First());
+
+				users.Save(user);
+			}
+
+			return new SuccessReport(true);
+		}
 
 		[System.Web.Http.HttpGet]
 		[Route(Uri = "checkEmail/{Email}")]

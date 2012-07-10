@@ -233,6 +233,7 @@
     </Content>
     <Content Include="Content\js\viewmodels\RegisterPanel.js" />
     <Content Include="Content\js\viewmodels\UserEmailPanel.js" />
+    <Content Include="Content\js\viewmodels\UserPasswordPanel.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />

@@ -15,8 +15,15 @@ function ViewModel() {
 
 	/* Methods */
 	self.LogOut = function () {
-		Application.isLoggedIn(false);
-		Application.user({});
+		amplify.request({
+			resourceId: "logout",
+			data: {
+				sessionKey: self.user().SessionKey.Key()
+			}
+		});
+
+		self.isLoggedIn(false);
+		self.user({});
 		$.cookie('userId', null);
 		$.cookie('sessionKey', null);
 

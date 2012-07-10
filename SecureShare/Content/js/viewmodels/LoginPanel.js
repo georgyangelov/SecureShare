@@ -45,7 +45,7 @@
 
 				$.cookie('userId', data.Id, options);
 				$.cookie('sessionKey', data.SessionKey.Key, options);
-				Application.user(data);
+				Application.UpdateUserInfo(data.Id, data.SessionKey.Key);
 			},
 			error: function (data) {
 				if (typeof data.error !== "undefined" && typeof data.message !== "undefined") {
