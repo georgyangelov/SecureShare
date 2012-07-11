@@ -13,8 +13,7 @@ namespace ShareGrid.Controllers.API
 {
     public class ChannelsController : ApiController
     {
-        // GET api/channels
-		[HttpGet]
+        [HttpGet]
         public IEnumerable<Channel> GetAllChannels()
         {
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
@@ -22,8 +21,7 @@ namespace ShareGrid.Controllers.API
 			return channels.FindAll();
         }
 
-        // GET api/channels/{id}
-		[HttpGet]
+        [HttpGet]
 		[Route(Uri = "{channelName}")]
 		public Channel GetChannel(HttpRequestMessage request, string channelName)
         {
@@ -39,8 +37,7 @@ namespace ShareGrid.Controllers.API
 			return channels.FindOne(query);
         }
 
-        // POST api/channels
-		[HttpPost]
+        [HttpPost]
 		public HttpStatusCode RegisterChannel(HttpRequestMessage request, Channel channel)
 		{
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
@@ -61,8 +58,7 @@ namespace ShareGrid.Controllers.API
 			return HttpStatusCode.Created;
         }
 
-        // PUT api/channels/5
-		[HttpPut]
+        [HttpPut]
 		[Route(Uri = "{channelName}")]
         public HttpStatusCode Put(string channelName, AuthenticatedRequest<ChannelUpdate> channelUpdateRequest)
         {
@@ -90,11 +86,22 @@ namespace ShareGrid.Controllers.API
 			return HttpStatusCode.OK;
         }
 
-        // DELETE api/channels/5
-		[HttpDelete]
-        public SuccessReport Delete(int id)
+        [HttpDelete]
+		[Route(Uri = "{channelName}")]
+        public HttpStatusCode Delete(string channelName, AuthenticatedRequest<object> request)
         {
-			throw new NotImplementedException();
+			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
+			var channel = channels.FindOne(Query.EQ("UniqueName", Channel.GetUniqueName(channelName)));
+
+			if (channel == null)
+				return HttpStatusCode.NotFound;
+
+			if (!request.Verify(channel, UserAccess.Admin))
+				return HttpStatusCode.Unauthorized;
+
+			channels.Remove(Query.EQ("_id", channel.Id));
+
+			return HttpStatusCode.OK;
         }
     }
 }
