@@ -43,17 +43,49 @@ namespace ShareGrid.Models
 			return user;
 		}
 
-		public bool VerifyChannelPassword()
+		public User VerifySessionKey(Channel channel, UserAccess accessLevel = UserAccess.Admin)
 		{
-			if (AuthType != Models.AuthType.SessionKey && Key != null)
-				return false;
+			var user = VerifySessionKey();
 
-			throw new NotImplementedException();
+			if (user != null && VerifyUserAccess(user, channel, accessLevel))
+				return user;
+			else
+				return null;
 		}
 
-		public bool Verify()
+		private bool VerifyUserAccess(User user, Channel channel, UserAccess accessLevel)
 		{
-			return VerifySessionKey() != null || VerifyChannelPassword();
+			var userAccessLevels = from u in channel.Users
+								   where u.Id == user.Id
+								   select u;
+
+			if (!userAccessLevels.Any())
+				return false;
+
+			var userAccessLevel = userAccessLevels.First();
+
+			return userAccessLevel.HasAccess(accessLevel);
+		}
+
+		public bool VerifyChannelPassword(Channel channel, UserAccess accessLevel = UserAccess.Admin)
+		{
+			if (AuthType != Models.AuthType.ChannelPassword || Key != null)
+				return false;
+
+			if (accessLevel == UserAccess.Banned)
+				throw new ArgumentException("accessLevel cannot be Banned for this method", "accessLevel");
+
+			if (channel.AdminPassword == MongoDBHelper.Hash(Key, channel.Salt))
+				return true;
+			else if (channel.Password == MongoDBHelper.Hash(Key, channel.Salt))
+				return accessLevel == UserAccess.Normal;
+			else
+				return false;
+		}
+
+		public bool Verify(Channel channel, UserAccess accessLevel)
+		{
+			return VerifySessionKey(channel, accessLevel) != null || VerifyChannelPassword(channel);
 		}
 	}
 

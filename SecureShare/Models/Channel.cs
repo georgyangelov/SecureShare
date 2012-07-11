@@ -21,6 +21,7 @@ namespace ShareGrid.Models
 		[Required]
 		[BsonRequired]
 		public string Name { get; set; }
+		[BsonRequired]
 		public string UniqueName { get; set; }
 
 		public string Description { get; set; }
@@ -50,7 +51,7 @@ namespace ShareGrid.Models
 			return Regex.Replace(Name.ToLower(), @"[^a-z0-9\-]", "");
 		}
 
-		public string SetUniqueName()
+		public string UpdateUniqueName()
 		{
 			UniqueName = GetUniqueName();
 

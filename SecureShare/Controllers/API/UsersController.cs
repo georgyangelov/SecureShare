@@ -98,7 +98,7 @@ namespace SecureShare.Controllers
 		}
 
 		[System.Web.Http.HttpPut]
-		public SuccessReport updateUser(HttpRequestMessage request, AuthenticatedRequest<UserUpdate> userInfo)
+		public void updateUser(HttpRequestMessage request, AuthenticatedRequest<UserUpdate> userInfo)
 		{
 			User user = userInfo.VerifySessionKey(); 
 			if (user == null)
@@ -116,8 +116,6 @@ namespace SecureShare.Controllers
 				user.Password = MongoDBHelper.Hash(userInfo.Data.Password, user.Salt);
 
 			MongoDBHelper.database.GetCollection<User>("users").Save(user);
-
-			return new SuccessReport(true);
 		}
 
 		[System.Web.Http.HttpGet]

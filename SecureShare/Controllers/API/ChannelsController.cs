@@ -44,7 +44,7 @@ namespace ShareGrid.Controllers.API
         public HttpResponseMessage RegisterChannel(HttpRequestMessage request, Channel channel)
 		{
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
-			channel.SetUniqueName();
+			channel.UpdateUniqueName();
 
 			var query = Query.EQ("UniqueName", channel.UniqueName);
 			if (channels.FindOne(query) != null)
@@ -59,9 +59,10 @@ namespace ShareGrid.Controllers.API
 
         // PUT api/channels/5
 		[HttpPut]
-        public SuccessReport Put(int id, string value)
+		[Route(Uri = "{channelName}")]
+        public void Put(string channelName, AuthenticatedRequest<ChannelUpdate> channelUpdateRequest)
         {
-			throw new NotImplementedException();
+			
         }
 
         // DELETE api/channels/5

@@ -34,6 +34,7 @@ namespace ShareGrid.Models
 
 			var channels = database.GetCollection("channels");
 			channels.EnsureIndex(IndexKeys.Ascending("UniqueName"), IndexOptions.SetUnique(true));
+			channels.EnsureIndex("Users.Id");
 		}
 
 		public static string GetRandomSalt()
