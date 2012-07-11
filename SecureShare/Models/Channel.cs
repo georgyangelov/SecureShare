@@ -31,5 +31,8 @@ namespace ShareGrid.Models
 		[JsonIgnore]
 		public string CreatorId { get; set; }
 		public string CreationDate { get; set; }
+
+		[BsonIgnoreIfNull]
+		public IList<ChannelUserAccess> Users { get; set; }
 	}
 }

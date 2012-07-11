@@ -19,8 +19,6 @@ namespace SecureShare.Controllers
 		[System.Web.Http.HttpPost]
 		public HttpResponseMessage index(HttpRequestMessage request, User user)
 		{
-			ValidationHelper.EnsureValidity(request, user);
-
 			var users = MongoDBHelper.database.GetCollection<User>("users");
 
 			user.Email = user.Email.ToLower();
@@ -100,7 +98,7 @@ namespace SecureShare.Controllers
 		}
 
 		[System.Web.Http.HttpPut]
-		public SuccessReport updateUser(HttpRequestMessage request, AuthenticatedRequest<User> userInfo)
+		public SuccessReport updateUser(HttpRequestMessage request, AuthenticatedRequest<UserUpdate> userInfo)
 		{
 			User user = userInfo.VerifySessionKey(); 
 			if (user == null)
@@ -116,8 +114,6 @@ namespace SecureShare.Controllers
 				user.LastName = userInfo.Data.LastName;
 			if (userInfo.Data.Password != null)
 				user.Password = MongoDBHelper.Hash(userInfo.Data.Password, user.Salt);
-
-			ValidationHelper.EnsureValidity(request, user);
 
 			MongoDBHelper.database.GetCollection<User>("users").Save(user);
 

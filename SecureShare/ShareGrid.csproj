@@ -137,16 +137,18 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="Helpers\ValidationFilterAttribute.cs" />
+    <Compile Include="Controllers\API\ChannelsController.cs" />
     <Compile Include="Helpers\ModelBinders\AuthenticatedRequest.cs" />
     <Compile Include="Helpers\ModelBinders\AuthenticatedRequestProvider.cs" />
     <Compile Include="Helpers\Route.cs" />
-    <Compile Include="Helpers\ValidationHelper.cs" />
     <Compile Include="Models\AuthenticatedRequest.cs" />
+    <Compile Include="Models\Channel.cs" />
+    <Compile Include="Models\ChannelUserAccess.cs" />
     <Compile Include="Models\Errors\APIError.cs" />
     <Compile Include="Models\Errors\InvalidParameters.cs" />
     <Compile Include="Models\MongoDBHelper.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\ChannelsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\API\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -156,6 +158,7 @@
     <Compile Include="Models\SuccessReport.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserLogin.cs" />
+    <Compile Include="Models\UserUpdate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

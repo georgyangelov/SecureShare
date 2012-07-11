@@ -14,7 +14,7 @@ namespace ShareGrid.Controllers.API
     {
         // GET api/channels
 		[HttpGet]
-        public IEnumerable<Channel> Get()
+        public IEnumerable<Channel> GetAllChannels()
         {
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
 			
@@ -24,7 +24,7 @@ namespace ShareGrid.Controllers.API
         // GET api/channels/{id}
 		[HttpGet]
 		[Route(Uri = "{channelName}")]
-        public Channel Get(string channelName)
+        public Channel GetChannel(string channelName)
         {
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
 			var query = Query.EQ("Name", channelName);
@@ -34,7 +34,7 @@ namespace ShareGrid.Controllers.API
 
         // POST api/channels
 		[HttpPost]
-        public Channel Post(string value)
+        public Channel RegisterChannel(HttpRequestMessage request, Channel channel)
         {
 			throw new NotImplementedException();
         }

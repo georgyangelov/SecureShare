@@ -7,6 +7,8 @@ using System.Web.Http.Controllers;
 using System.Threading.Tasks;
 using System.Collections.Specialized;
 using ShareGrid.Models;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace ShareGrid.Helpers.ModelBinders
 {
@@ -56,6 +58,21 @@ namespace ShareGrid.Helpers.ModelBinders
 			bindingContext.ModelType.GetProperty("Data").SetValue(wrapperModel, model, null);
 
 			bindingContext.Model = wrapperModel;
+
+
+			/* Validate */
+			// DataAnnotation Validation
+			var validationResult = from prop in TypeDescriptor.GetProperties(model).Cast<PropertyDescriptor>()
+								   from attribute in prop.Attributes.OfType<ValidationAttribute>()
+								   where !attribute.IsValid(prop.GetValue(model))
+								   select new { Property = prop.Name, ErrorMessage = attribute.FormatErrorMessage(string.Empty) };
+
+			// Add the ValidationResult's to the ModelState
+			foreach (var validationResultItem in validationResult)
+				bindingContext.ModelState.AddModelError(validationResultItem.Property, validationResultItem.ErrorMessage);
+
+
+
 
 			return true;
 		}

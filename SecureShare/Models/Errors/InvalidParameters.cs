@@ -17,4 +17,10 @@ namespace ShareGrid.Models.Errors
 			this.parameters = parameters;
 		}
 	}
+
+	public class ValidationProperty
+	{
+		public string name { get; set; }
+		public string message { get; set; }
+	}
 }

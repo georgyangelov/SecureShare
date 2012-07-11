@@ -8,26 +8,37 @@ using System.ComponentModel.DataAnnotations;
 using ShareGrid.Helpers;
 using Newtonsoft.Json;
 using MongoDB.Bson.Serialization.IdGenerators;
+using System.Web.Mvc;
 
 namespace ShareGrid.Models
 {
+	[Bind(Exclude="Id,Salt,SessionKey,SessionKeys")]
 	public class User
-		: ICanBeValidated
 	{
 		[BsonId(IdGenerator=typeof(StringObjectIdGenerator))]
 		public string Id { get; set; }
 
 		[BsonRequired]
+		[Required(ErrorMessage = "Cannot be empty or null")]
+		[StringLength(30, MinimumLength = 2, ErrorMessage = "Must be between 2 and 30 symbols")]
 		public string FirstName { get; set; }
+
 		[BsonRequired]
+		[Required(ErrorMessage = "Cannot be empty or null")]
+		[StringLength(30, MinimumLength = 2, ErrorMessage = "Must be between 2 and 30 symbols")]
 		public string LastName { get; set; }
 
 		[BsonRequired]
+		[Required(ErrorMessage = "Cannot be empty or null")]
+		[RegularExpression(@"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*", ErrorMessage = "The email has invalid format")]
 		public string Email { get; set; }
 	
 		[BsonRequired]
 		[JsonIgnore]
+		[Required(ErrorMessage = "Cannot be empty or null")]
+		[StringLength(50, MinimumLength = 4, ErrorMessage = "Must be between 4 and 30 symbols")]
 		public string Password { get; set; }
+
 		[BsonRequired]
 		[JsonIgnore]
 		public string Salt { get; set; }
@@ -38,16 +49,5 @@ namespace ShareGrid.Models
 
 		[BsonIgnore]
 		public SessionKey SessionKey { get; set; }
-
-		public ValidationProperty[] Validate()
-		{
-			return ValidationHelper.Validate(
-				new NotNullValidation("FirstName", FirstName),
-				new NotNullValidation("LastName", LastName),
-				new NotNullValidation("Email", Email),
-				new EmailValidation  ("Email", Email),
-				new NotNullValidation("Password", Password)
-			);
-		}
 	}
 }
