@@ -7,6 +7,7 @@ using System.Web.Http;
 using MongoDB.Driver.Builders;
 using ShareGrid.Helpers;
 using ShareGrid.Models;
+using ShareGrid.Models.Errors;
 
 namespace ShareGrid.Controllers.API
 {
@@ -24,19 +25,36 @@ namespace ShareGrid.Controllers.API
         // GET api/channels/{id}
 		[HttpGet]
 		[Route(Uri = "{channelName}")]
-        public Channel GetChannel(string channelName)
+		public Channel GetChannel(HttpRequestMessage request, string channelName)
         {
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
 			var query = Query.EQ("Name", channelName);
+			var channel = channels.FindOne(query);
+
+			if (channel == null)
+			{
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidChannelName", "Invalid or non-existant channel")));
+			}
 
 			return channels.FindOne(query);
         }
 
         // POST api/channels
 		[HttpPost]
-        public Channel RegisterChannel(HttpRequestMessage request, Channel channel)
-        {
-			throw new NotImplementedException();
+        public HttpResponseMessage RegisterChannel(HttpRequestMessage request, Channel channel)
+		{
+			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
+			channel.SetUniqueName();
+
+			var query = Query.EQ("UniqueName", channel.UniqueName);
+			if (channels.FindOne(query) != null)
+			{
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Conflict, new APIError("duplicateName", "There is already a channel with this name")));
+			}
+
+			channels.Save(channel);
+
+			return new HttpResponseMessage(HttpStatusCode.Created);
         }
 
         // PUT api/channels/5
