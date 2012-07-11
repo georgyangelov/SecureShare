@@ -41,7 +41,7 @@ namespace ShareGrid.Controllers.API
 
         // POST api/channels
 		[HttpPost]
-        public HttpResponseMessage RegisterChannel(HttpRequestMessage request, Channel channel)
+		public HttpStatusCode RegisterChannel(HttpRequestMessage request, Channel channel)
 		{
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
 			channel.UpdateUniqueName();
@@ -58,15 +58,36 @@ namespace ShareGrid.Controllers.API
 
 			channels.Save(channel);
 
-			return new HttpResponseMessage(HttpStatusCode.Created);
+			return HttpStatusCode.Created;
         }
 
         // PUT api/channels/5
 		[HttpPut]
 		[Route(Uri = "{channelName}")]
-        public void Put(string channelName, AuthenticatedRequest<ChannelUpdate> channelUpdateRequest)
+        public HttpStatusCode Put(string channelName, AuthenticatedRequest<ChannelUpdate> channelUpdateRequest)
         {
-			
+			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
+			var channel = channels.FindOne(Query.EQ("UniqueName", Channel.GetUniqueName(channelName)));
+
+			if (channel == null)
+				return HttpStatusCode.NotFound;
+
+			if (!channelUpdateRequest.Verify(channel, UserAccess.Admin))
+				return HttpStatusCode.Forbidden;
+
+			var newData = channelUpdateRequest.Data;
+			if (newData.AdminPassword != null)
+				channel.AdminPassword = MongoDBHelper.Hash(newData.AdminPassword, channel.Salt);
+			if (newData.Password != null)
+				channel.Password = MongoDBHelper.Hash(newData.Password, channel.Salt);
+			if (newData.Name != null)
+				channel.Name = newData.Name;
+			if (newData.Description != null)
+				channel.Description = newData.Description;
+
+			channels.Save(channel);
+
+			return HttpStatusCode.OK;
         }
 
         // DELETE api/channels/5

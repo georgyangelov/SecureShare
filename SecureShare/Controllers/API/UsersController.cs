@@ -103,7 +103,7 @@ namespace SecureShare.Controllers
 			User user = userInfo.VerifySessionKey(); 
 			if (user == null)
 			{
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, new APIError("invalidSessionKey", "Invalid, expired or non-existant session key. Please login properly")));
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidSessionKey", "Invalid, expired or non-existant session key. Please login properly")));
 			}
 
 			if (userInfo.Data.Email != null)
