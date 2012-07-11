@@ -20,6 +20,7 @@ namespace ShareGrid.Models
 
 		[Required]
 		[BsonRequired]
+		[StringLength(40, MinimumLength = 5, ErrorMessage = "Must be between 5 and 40 symbols")]
 		public string Name { get; set; }
 		[BsonRequired]
 		public string UniqueName { get; set; }
@@ -29,10 +30,12 @@ namespace ShareGrid.Models
 		[Required]
 		[JsonIgnore]
 		[BsonRequired]
+		[StringLength(50, MinimumLength = 5, ErrorMessage = "Must be between 5 and 50 symbols")]
 		public string Password { get; set; }
 		[Required]
 		[JsonIgnore]
 		[BsonRequired]
+		[StringLength(50, MinimumLength = 5, ErrorMessage = "Must be between 5 and 50 symbols")]
 		public string AdminPassword { get; set; }
 
 		[JsonIgnore]

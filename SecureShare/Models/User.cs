@@ -36,7 +36,7 @@ namespace ShareGrid.Models
 		[BsonRequired]
 		[JsonIgnore]
 		[Required(ErrorMessage = "Cannot be empty or null")]
-		[StringLength(50, MinimumLength = 4, ErrorMessage = "Must be between 4 and 30 symbols")]
+		[StringLength(50, MinimumLength = 5, ErrorMessage = "Must be between 5 and 30 symbols")]
 		public string Password { get; set; }
 
 		[BsonRequired]
