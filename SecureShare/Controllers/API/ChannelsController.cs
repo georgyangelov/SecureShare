@@ -52,6 +52,10 @@ namespace ShareGrid.Controllers.API
 				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Conflict, new APIError("duplicateName", "There is already a channel with this name")));
 			}
 
+			channel.Salt = MongoDBHelper.GetRandomSalt();
+			channel.Password = MongoDBHelper.Hash(channel.Password, channel.Salt);
+			channel.AdminPassword = MongoDBHelper.Hash(channel.AdminPassword, channel.Salt);
+
 			channels.Save(channel);
 
 			return new HttpResponseMessage(HttpStatusCode.Created);
