@@ -228,6 +228,7 @@
     <Content Include="Content\js\libs\less-1.3.0.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\js\viewmodels\RegisterChannelPanel.js" />
     <Content Include="Content\js\viewmodels\LoginPanel.js" />
     <Content Include="Content\js\viewmodels\main.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using SecureShare.Controllers;
+using ShareGrid.Controllers.API;
 using ShareGrid.Helpers;
 
 namespace ShareGrid
@@ -22,6 +23,7 @@ namespace ShareGrid
 				defaults: new { action = "index" }
 			);*/
 			routes.MapHttpRoute<UsersController>("api/users");
+			routes.MapHttpRoute<ChannelsController>("api/channels");
 
 			routes.MapRoute(
 				name: "Default",

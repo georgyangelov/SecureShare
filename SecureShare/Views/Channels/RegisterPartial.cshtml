@@ -4,42 +4,45 @@
 			<h3>Register new channel</h3>
 		</div>
 		<div class="modal-body">
-			<div class="control-group">
+			<div class="control-group" data-bind="css: {error: Name.hasModError}">
 				<label class="control-label" for="channel">Channel name</label>
 				<div class="controls">
-					<input type="text" id="channel" class="input-xlarge" name="channel" />
+					<input type="text" id="channel" class="input-xlarge" name="channel" data-bind="value: Name" />
+					<p class="help-block" data-bind="visible: Name.hasModError, text: Name.errorMessage"></p>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="description">Channel description</label>
 				<div class="controls">
-					<textarea id="description" class="input-xlarge" name="description" rows="3"></textarea>
+					<textarea id="description" class="input-xlarge" name="description" rows="3" data-bind="value: Description"></textarea>
 				</div>
 			</div>
-			<div class="control-group">
+			<div class="control-group" data-bind="css: {error: Password.hasModError}">
 				<label class="control-label" for="password">Channel password</label>
 				<div class="controls">
-					<input type="password" id="password" class="input-xlarge" name="password" />
-					<p class="help-block">Password for the users</p>
+					<input type="password" id="password" class="input-xlarge" name="password" data-bind="value: Password" />
+					<p class="help-block" data-bind="visible: Password.hasModError, text: Password.errorMessage"></p>
 				</div>
 			</div>
-			<div class="control-group">
+			<div class="control-group" data-bind="css: {error: AdminPassword.hasModError}">
 				<label class="control-label" for="adminPassword">Channel admin password</label>
 				<div class="controls">
-					<input type="password" id="adminPassword" class="input-xlarge" name="adminPassword" />
-					<p class="help-block">Password for the channel administrators</p>
+					<input type="password" id="adminPassword" class="input-xlarge" name="adminPassword" data-bind="value: AdminPassword" />
+					<p class="help-block" data-bind="visible: AdminPassword.hasModError, text: AdminPassword.errorMessage"></p>
 				</div>
 			</div>
-			<div class="control-group">
+			<div class="control-group" data-bind="css: {error: AdminPasswordRepeat.hasModError}">
 				<label class="control-label" for="adminPassword2">Confirm admin password</label>
 				<div class="controls">
-					<input type="password" id="adminPassword2" class="input-xlarge" name="adminPassword2" />
-					<p class="help-block">Repeat the administrator password here</p>
+					<input type="password" id="adminPassword2" class="input-xlarge" name="adminPassword2" data-bind="value: AdminPasswordRepeat, valueUpdate: 'afterkeydown'" />
+					<p class="help-block" data-bind="visible: AdminPasswordRepeat.hasModError, text: AdminPasswordRepeat.errorMessage"></p>
 				</div>
 			</div>
 		</div>
 		<div class="modal-footer">
+			<h4 data-bind="optionalText: error" class="error pull-left"></h4>
+
 			<a href="#" class="btn" data-dismiss="modal">Close</a>
-			<input type="submit" class="btn btn-primary" value="Register channel" />
+			<input type="submit" class="btn btn-primary" value="Register channel" data-bind="click: submit, enable: isFormValid" />
 		</div>
 }

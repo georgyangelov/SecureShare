@@ -21,12 +21,26 @@ namespace ShareGrid.Controllers.API
 			return channels.FindAll();
         }
 
+		[HttpGet]
+		[Route(Uri = "check/{channelName}")]
+		public object CheckChannelName(string channelName)
+		{
+			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
+			var query = Query.EQ("UniqueName", Channel.GetUniqueName(channelName));
+			var channel = channels.FindOne(query);
+
+			if (channel == null)
+				return new { available = true };
+			else
+				return new { available = false };
+		}
+
         [HttpGet]
 		[Route(Uri = "{channelName}")]
 		public Channel GetChannel(HttpRequestMessage request, string channelName)
         {
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
-			var query = Query.EQ("Name", channelName);
+			var query = Query.EQ("UniqueName", Channel.GetUniqueName(channelName));
 			var channel = channels.FindOne(query);
 
 			if (channel == null)
@@ -52,6 +66,8 @@ namespace ShareGrid.Controllers.API
 			channel.Salt = MongoDBHelper.GetRandomSalt();
 			channel.Password = MongoDBHelper.Hash(channel.Password, channel.Salt);
 			channel.AdminPassword = MongoDBHelper.Hash(channel.AdminPassword, channel.Salt);
+
+			channel.CreationDate = DateTime.Now;
 
 			channels.Save(channel);
 

@@ -85,3 +85,25 @@ amplify.request.define(
 		decoder: "errorDecoder"
 	}
 );
+
+amplify.request.define(
+    "checkChannelName", "ajax",
+    {
+    	url: "api/channels/check/{channelName}",
+    	type: "GET",
+    	dataType: "json",
+    	cache: false,
+    	decoder: "errorDecoder"
+    }
+);
+
+amplify.request.define(
+	"registerChannel", "ajax",
+	{
+		url: "api/channels",
+		type: "POST",
+		dataType: "json",
+		cache: false,
+		decoder: "errorDecoder"
+	}
+);

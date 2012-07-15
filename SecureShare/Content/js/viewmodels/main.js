@@ -12,6 +12,7 @@ function ViewModel() {
 	self.loginPanel = ko.observable(new LoginPanel());
 	self.userEmailPanel = ko.observable(new UserEmailPanel());
 	self.userPasswordPanel = ko.observable(new UserPasswordPanel());
+	self.registerChannelPanel = ko.observable(new RegisterChannelPanel());
 
 	/* Methods */
 	self.LogOut = function () {

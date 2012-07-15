@@ -66,7 +66,7 @@ namespace ShareGrid.Helpers
 					httpMethodConstraint = new { };
 
 				// More unique route name
-				string routeName = method.Name;
+				string routeName = controllerName + "-" + prefix + "-" + method.Name;
 				foreach (var param in method.GetParameters())
 				{
 					routeName += ";" + param.Name + "," + (param.IsOptional ? '1' : '0');
