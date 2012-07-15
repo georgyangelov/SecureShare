@@ -62,11 +62,11 @@
 	this.error = ko.observable();
 
 	this.clear = function () {
-		this.Name.reset();
-		this.Description.reset();
-		this.Password.reset();
-		this.AdminPassword.reset();
-		this.AdminPasswordRepeat.reset();
+		self.Name.reset();
+		self.Description.reset();
+		self.Password.reset();
+		self.AdminPassword.reset();
+		self.AdminPasswordRepeat.reset();
 	};
 
 	self.submit = function () {
