@@ -15,7 +15,16 @@ function ViewModel() {
 	self.registerChannelPanel = ko.observable(new RegisterChannelPanel());
 	self.subscribeChannelPanel = ko.observable(new SubscribeChannelPanel());
 
+	/* Pages */
+	self.homePage = ko.observable(null);
+	self.channelViewPage = ko.observable(null);
+
 	/* Methods */
+	self.ClearPageData = function () {
+		self.homePage(null);
+		self.channelViewPage(null);
+	};
+
 	self.LogOut = function () {
 		amplify.request({
 			resourceId: "logout",
@@ -54,6 +63,24 @@ function ViewModel() {
 			}
 		});
 	};
+
+	Sammy(function () {
+		this.get('#home', function () {
+			self.ClearPageData();
+			// Home page
+			self.homePage({});
+		});
+
+		this.get('#:channel', function () {
+			self.ClearPageData();
+			// Channel page view for this.params.channel
+			self.channelViewPage({});
+		});
+
+		this.get('', function () {
+			this.app.runRoute('get', '#home');
+		});
+	}).run();
 }
 
 Application = new ViewModel();
@@ -72,6 +99,7 @@ $(function () {
 		Application.alerts.remove(ko.dataFor(this));
 	});
 });
+
 
 
 

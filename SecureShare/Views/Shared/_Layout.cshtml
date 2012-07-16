@@ -24,6 +24,7 @@
 	<script src="@Url.Content("~/Content/js/libs/amplify.min.js")"></script>
 	<script src="@Url.Content("~/Content/js/libs/knockout-2.1.0.js")"></script>
 	<script src="@Url.Content("~/Content/js/libs/knockout-mapping-2.2.0.js")"></script>
+	<script src="@Url.Content("~/Content/js/libs/sammy-0.7.1.min.js")"></script>
 	
 	<script src="@Url.Content("~/Content/js/knockoutExtenders.js")"></script>
 	<script src="@Url.Content("~/Content/js/knockoutBindings.js")"></script>
@@ -131,7 +132,13 @@
 		</div>
 
 		<div id="content">
-		@RenderBody()
+			<div data-bind="with: homePage">
+				<h1>Hi!</h1>
+				@RenderBody()
+			</div>
+			<div data-bind="with: channelViewPage">
+				<h2>Channel here</h2>
+			</div>
 		</div>
 	</div>
 </body>
