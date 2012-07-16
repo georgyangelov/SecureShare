@@ -12,8 +12,22 @@ namespace ShareGrid.Models
 	{
 		public TData Data { get; set; }
 
-		public AuthType AuthType { get; set; }
-		public string Key { get; set; }
+		public AuthType AuthType
+		{
+			get
+			{
+				if (SessionKey != null && ChannelKey != null)
+					return Models.AuthType.Both;
+				else if (SessionKey != null)
+					return Models.AuthType.SessionKey;
+				else if (ChannelKey != null)
+					return Models.AuthType.ChannelPassword;
+				else
+					return Models.AuthType.NotAuthenticated;
+			}
+		}
+		public string SessionKey { get; set; }
+		public string ChannelKey { get; set; }
 
 		public AuthenticatedRequest()
 		{
@@ -22,11 +36,11 @@ namespace ShareGrid.Models
 
 		public User VerifySessionKey()
 		{
-			if (AuthType != Models.AuthType.SessionKey || Key == null)
+			if ((AuthType != Models.AuthType.SessionKey && AuthType != Models.AuthType.Both) || SessionKey == null)
 				return null;
 
 			var users = MongoDBHelper.database.GetCollection<User>("users");
-			var query = Query.EQ("SessionKeys.Key", Key);
+			var query = Query.EQ("SessionKeys.Key", SessionKey);
 
 			var user = users.FindOne(query);
 
@@ -34,7 +48,7 @@ namespace ShareGrid.Models
 				return null;
 
 			var key = (from k in user.SessionKeys
-					  where k.Key == Key
+					   where k.Key == SessionKey
 					  select k).First();
 
 			if (key.Expires < DateTime.Now)
@@ -43,7 +57,7 @@ namespace ShareGrid.Models
 			return user;
 		}
 
-		public User VerifySessionKey(Channel channel, UserAccess accessLevel = UserAccess.Admin)
+		public User VerifySessionKey(Channel channel, AccessLevel accessLevel = AccessLevel.Admin)
 		{
 			var user = VerifySessionKey();
 
@@ -53,7 +67,7 @@ namespace ShareGrid.Models
 				return null;
 		}
 
-		private bool VerifyUserAccess(User user, Channel channel, UserAccess accessLevel)
+		private bool VerifyUserAccess(User user, Channel channel, AccessLevel accessLevel)
 		{
 			var userAccessLevels = from u in channel.Users
 								   where u.Id == user.Id
@@ -67,30 +81,40 @@ namespace ShareGrid.Models
 			return userAccessLevel.HasAccess(accessLevel);
 		}
 
-		public bool VerifyChannelPassword(Channel channel, UserAccess accessLevel = UserAccess.Admin)
+		public bool VerifyChannelPassword(Channel channel, AccessLevel accessLevel)
 		{
-			if (AuthType != Models.AuthType.ChannelPassword || Key != null)
-				return false;
+			AccessLevel access = VerifyChannelPassword(channel);
 
-			if (accessLevel == UserAccess.Banned)
-				throw new ArgumentException("accessLevel cannot be Banned for this method", "accessLevel");
-
-			if (channel.AdminPassword == MongoDBHelper.Hash(Key, channel.Salt))
+			if (access == AccessLevel.Normal && accessLevel == AccessLevel.Normal)
 				return true;
-			else if (channel.Password == MongoDBHelper.Hash(Key, channel.Salt))
-				return accessLevel == UserAccess.Normal;
-			else
-				return false;
+			else if (access == AccessLevel.Admin)
+				return true;
+
+			return false;
 		}
 
-		public bool Verify(Channel channel, UserAccess accessLevel)
+		public AccessLevel VerifyChannelPassword(Channel channel)
 		{
-			return VerifySessionKey(channel, accessLevel) != null || VerifyChannelPassword(channel);
+			if ((AuthType != Models.AuthType.ChannelPassword && AuthType != Models.AuthType.Both) || ChannelKey == null)
+				return AccessLevel.None;
+
+			if (channel.AdminPassword == MongoDBHelper.Hash(ChannelKey, channel.Salt))
+				return AccessLevel.Admin;
+			else if (channel.Password == MongoDBHelper.Hash(ChannelKey, channel.Salt))
+				return AccessLevel.Normal;
+			else
+				return AccessLevel.None;
+		}
+
+		public bool Verify(Channel channel, AccessLevel accessLevel)
+		{
+			return VerifySessionKey(channel, accessLevel) != null || VerifyChannelPassword(channel, accessLevel);
 		}
 	}
 
 	public enum AuthType
 	{
+		Both,
 		SessionKey,
 		ChannelPassword,
 		NotAuthenticated

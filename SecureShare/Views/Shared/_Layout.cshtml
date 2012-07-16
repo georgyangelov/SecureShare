@@ -35,6 +35,7 @@
 	<script src="@Url.Content("~/Content/js/viewmodels/UserEmailPanel.js")"></script>
 	<script src="@Url.Content("~/Content/js/viewmodels/UserPasswordPanel.js")"></script>
 	<script src="@Url.Content("~/Content/js/viewmodels/RegisterChannelPanel.js")"></script>
+	<script src="@Url.Content("~/Content/js/viewmodels/SubscribeChannelPanel.js")"></script>
 	<script src="@Url.Content("~/Content/js/viewmodels/main.js")"></script>
 </head>
 
@@ -71,11 +72,15 @@
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a href="@Url.Action("Index", "Channels")">Channel 1</a></li>
-							<li><a href="@Url.Action("Index", "Channels")">Channel 2</a></li>
-							<li><a href="@Url.Action("Index", "Channels")">Channel 3</a></li>
+							<!-- ko with: user() -->
+								<!-- ko if: Channels().length > 0 -->
+									<!-- ko foreach: Channels -->
+										<li><a href="@Url.Action("Index", "Channels")" data-bind="text: Id"></a></li>
+									<!-- /ko -->
 
-							<li class="divider"></li>
+									<li class="divider"></li>
+								<!-- /ko -->
+							<!-- /ko -->
 
 							<li><a href="#subscribetochannel" data-toggle="modal"><i class="icon-eye-open"></i> Subscribe to channel</a></li>
 							<li><a href="#registerchannel" data-toggle="modal"><i class="icon-plus-sign"></i> Register new channel</a></li>
@@ -113,7 +118,7 @@
 			@Html.Partial("../Channels/RegisterPartial")
 		</div>
 
-		<div id="subscribetochannel" class="modal fade hide">
+		<div id="subscribetochannel" class="modal fade hide" data-bind="with: subscribeChannelPanel">
 			@Html.Partial("../Channels/SubscribePartial")
 		</div>
 

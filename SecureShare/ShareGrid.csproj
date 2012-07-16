@@ -237,6 +237,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\js\viewmodels\RegisterPanel.js" />
+    <Content Include="Content\js\viewmodels\SubscribeChannelPanel.js" />
     <Content Include="Content\js\viewmodels\UserEmailPanel.js" />
     <Content Include="Content\js\viewmodels\UserPasswordPanel.js" />
     <Content Include="favicon.ico" />

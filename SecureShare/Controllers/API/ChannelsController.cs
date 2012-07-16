@@ -52,7 +52,7 @@ namespace ShareGrid.Controllers.API
         }
 
         [HttpPost]
-		public HttpStatusCode RegisterChannel(HttpRequestMessage request, Channel channel)
+		public SuccessReport RegisterChannel(HttpRequestMessage request, Channel channel)
 		{
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
 			channel.UpdateUniqueName();
@@ -71,21 +71,21 @@ namespace ShareGrid.Controllers.API
 
 			channels.Save(channel);
 
-			return HttpStatusCode.Created;
+			return new SuccessReport(true);
         }
 
         [HttpPut]
 		[Route(Uri = "{channelName}")]
-        public HttpStatusCode Put(string channelName, AuthenticatedRequest<ChannelUpdate> channelUpdateRequest)
+		public SuccessReport Put(HttpRequestMessage request, string channelName, AuthenticatedRequest<ChannelUpdate> channelUpdateRequest)
         {
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
 			var channel = channels.FindOne(Query.EQ("UniqueName", Channel.GetUniqueName(channelName)));
 
 			if (channel == null)
-				return HttpStatusCode.NotFound;
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidChannelName", "There's no channel with this name")));
 
-			if (!channelUpdateRequest.Verify(channel, UserAccess.Admin))
-				return HttpStatusCode.Forbidden;
+			if (!channelUpdateRequest.Verify(channel, AccessLevel.Admin))
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelKey", "The channel password is invalid")));
 
 			var newData = channelUpdateRequest.Data;
 			if (newData.AdminPassword != null)
@@ -99,25 +99,57 @@ namespace ShareGrid.Controllers.API
 
 			channels.Save(channel);
 
-			return HttpStatusCode.OK;
+			return new SuccessReport(true);
         }
 
         [HttpDelete]
 		[Route(Uri = "{channelName}")]
-        public HttpStatusCode Delete(string channelName, AuthenticatedRequest<object> request)
+		public SuccessReport Delete(HttpRequestMessage request, string channelName, AuthenticatedRequest<object> auth)
         {
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
 			var channel = channels.FindOne(Query.EQ("UniqueName", Channel.GetUniqueName(channelName)));
 
 			if (channel == null)
-				return HttpStatusCode.NotFound;
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidChannelName", "There's no channel with this name")));
 
-			if (!request.Verify(channel, UserAccess.Admin))
-				return HttpStatusCode.Unauthorized;
+			if (!auth.Verify(channel, AccessLevel.Admin))
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelKey", "The channel password is invalid")));
 
 			channels.Remove(Query.EQ("_id", channel.Id));
 
-			return HttpStatusCode.OK;
+			return new SuccessReport(true);
         }
+
+		[HttpPost]
+		[Route(Uri = "{channelName}/users")]
+		public SuccessReport SubscribeUser(HttpRequestMessage request, string channelName, AuthenticatedRequest<object> auth)
+		{
+			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
+
+			var channel = channels.FindOne(Query.EQ("UniqueName", Channel.GetUniqueName(channelName)));
+			if (channel == null)
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidChannelName", "There's no channel with this name")));
+
+			var accessLevel = auth.VerifyChannelPassword(channel);
+			if (accessLevel == AccessLevel.None)
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelKey", "The channel password is invalid")));
+			
+			var user = auth.VerifySessionKey();
+			if (user == null)
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidSessionKey", "Your session key is invalid or expired")));
+
+			if (channel.Users == null)
+				channel.Users = new List<ChannelUserAccess>();
+
+			var accessInChannel = channel.Users.FirstOrDefault(x => x.Id == user.Id);
+			if (accessInChannel != null)
+				channel.Users.Remove(accessInChannel);
+
+			channel.Users.Add(new ChannelUserAccess() { Id = user.Id, Access = accessLevel });
+
+			channels.Save(channel);
+
+			return new SuccessReport(true);
+		}
     }
 }

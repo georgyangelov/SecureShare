@@ -10,6 +10,7 @@ using System.Net;
 using System.Net.Http;
 using ShareGrid.Models.Errors;
 using ShareGrid.Helpers;
+using MongoDB.Driver.Linq;
 
 namespace SecureShare.Controllers
 {
@@ -155,6 +156,12 @@ namespace SecureShare.Controllers
 			}
 
 			user.SessionKey = key.First();
+
+			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
+			user.Channels = (
+								from c in channels.Find(Query.EQ("Users._id", user.Id))
+								select new ChannelUserAccess() { Id = c.Name, Access = c.Users.First(x => x.Id == user.Id).Access }
+							).ToList();
 
 			return user;
 		}

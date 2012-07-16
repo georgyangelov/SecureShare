@@ -63,7 +63,6 @@
 
 	this.clear = function () {
 		self.Name.reset();
-		self.Description.reset();
 		self.Password.reset();
 		self.AdminPassword.reset();
 		self.AdminPasswordRepeat.reset();
@@ -82,15 +81,25 @@
 			success: function (data) {
 				self.error(null);
 
-				$('#registerchannel').modal('hide');
 				Application.alerts.push({ type: "success", title: "Great!", text: "You have successfully registered a channel." });
 
-				self.clear();
+				amplify.request({
+					resourceId: "subscribeToChannel",
+					data: {
+						channelName: self.Name(),
+						ChannelKey: self.AdminPassword(),
+						SessionKey: Application.user().SessionKey.Key()
+					},
+					success: function (data) {
+						$('#registerchannel').modal('hide');
+						self.clear();
 
-				Application.UpdateUserInfo();
+						Application.UpdateUserInfo();
+					}
+				});
 			},
 			error: function (data) {
-				if (typeof data.error !== "undefined" && typeof data.message !== "undefined") {
+				if (data != null && typeof data.error !== "undefined" && typeof data.message !== "undefined") {
 					self.error(data.message);
 				} else {
 					self.error("Something went completely wrong. Did you just divide by zero?");

@@ -11,23 +11,23 @@ namespace ShareGrid.Models
 		[BsonRequired]
 		public string Id { get; set; }
 		[BsonRequired]
-		public UserAccess Access { get; set; }
+		public AccessLevel Access { get; set; }
 
-		public bool HasAccess(UserAccess level)
+		public bool HasAccess(AccessLevel level)
 		{
-			if (level == UserAccess.Banned)
-				return Access == UserAccess.Banned;
-			else if (level == UserAccess.Normal)
-				return Access == UserAccess.Normal || Access == UserAccess.Admin;
+			if (level == AccessLevel.None)
+				return Access == AccessLevel.None;
+			else if (level == AccessLevel.Normal)
+				return Access == AccessLevel.Normal || Access == AccessLevel.Admin;
 			else
-				return Access == UserAccess.Admin;
+				return Access == AccessLevel.Admin;
 		}
 	}
 
-	public enum UserAccess
+	public enum AccessLevel
 	{
-		Admin,
-		Normal,
-		Banned
+		Admin = 0,
+		Normal = 1,
+		None = 2
 	}
 }

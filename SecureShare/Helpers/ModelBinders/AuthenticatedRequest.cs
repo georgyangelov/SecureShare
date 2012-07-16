@@ -32,19 +32,14 @@ namespace ShareGrid.Helpers.ModelBinders
 
 			if (query.AllKeys.Contains("SessionKey"))
 			{
-				bindingContext.ModelType.GetProperty("AuthType").SetValue(wrapperModel, AuthType.SessionKey, null);
-				bindingContext.ModelType.GetProperty("Key").SetValue(wrapperModel, query.Get("SessionKey"), null);
+				bindingContext.ModelType.GetProperty("SessionKey").SetValue(wrapperModel, query.Get("SessionKey"), null);
 				query.Remove("SessionKey");
 			}
-			else if (query.AllKeys.Contains("ChannelKey"))
+			
+			if (query.AllKeys.Contains("ChannelKey"))
 			{
-				bindingContext.ModelType.GetProperty("AuthType").SetValue(wrapperModel, AuthType.ChannelPassword, null);
-				bindingContext.ModelType.GetProperty("Key").SetValue(wrapperModel, query.Get("ChannelKey"), null);
+				bindingContext.ModelType.GetProperty("ChannelKey").SetValue(wrapperModel, query.Get("ChannelKey"), null);
 				query.Remove("ChannelKey");
-			}
-			else
-			{
-				bindingContext.ModelType.GetProperty("AuthType").SetValue(wrapperModel, AuthType.NotAuthenticated, null);
 			}
 
 			object model = Activator.CreateInstance(modelType);

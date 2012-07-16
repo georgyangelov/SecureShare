@@ -49,5 +49,8 @@ namespace ShareGrid.Models
 
 		[BsonIgnore]
 		public SessionKey SessionKey { get; set; }
+
+		[BsonIgnore]
+		public IList<ChannelUserAccess> Channels { get; set; }
 	}
 }

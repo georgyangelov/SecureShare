@@ -3,7 +3,7 @@ function ViewModel() {
 
     /* Globals */
 	self.isLoggedIn = ko.observable(false);
-	self.user = ko.observable({});
+	self.user = ko.observable(null);
 
 	self.alerts = ko.observableArray([]).extend({ defaultItem: { title: "", text: "", type: "info" } });
 
@@ -13,6 +13,7 @@ function ViewModel() {
 	self.userEmailPanel = ko.observable(new UserEmailPanel());
 	self.userPasswordPanel = ko.observable(new UserPasswordPanel());
 	self.registerChannelPanel = ko.observable(new RegisterChannelPanel());
+	self.subscribeChannelPanel = ko.observable(new SubscribeChannelPanel());
 
 	/* Methods */
 	self.LogOut = function () {

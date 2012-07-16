@@ -5,7 +5,7 @@ amplify.request.decoders.errorDecoder =
     	if (status == "success") {
     		success(data, status);
     	} else {
-    		error($.parseJSON(xhr.responseText), status);
+    		error($.parseJSON(xhr.responseText), xhr.status);
     	}
     };
 
@@ -101,6 +101,17 @@ amplify.request.define(
 	"registerChannel", "ajax",
 	{
 		url: "api/channels",
+		type: "POST",
+		dataType: "json",
+		cache: false,
+		decoder: "errorDecoder"
+	}
+);
+
+amplify.request.define(
+	"subscribeToChannel", "ajax",
+	{
+		url: "api/channels/{channelName}/users",
 		type: "POST",
 		dataType: "json",
 		cache: false,

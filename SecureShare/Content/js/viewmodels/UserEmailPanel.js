@@ -44,7 +44,7 @@
 				Application.UpdateUserInfo();
 			},
 			error: function (data) {
-				if (typeof data.error !== "undefined" && typeof data.message !== "undefined") {
+				if (data != null && typeof data.error !== "undefined" && typeof data.message !== "undefined") {
 					self.error(data.message);
 				} else {
 					self.error("Something went completely wrong. Did you just divide by zero?");
