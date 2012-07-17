@@ -180,6 +180,7 @@ a.thumbnail
 }
 .thumbnail
 {
+	position: relative;
     overflow: hidden;
     background: white;
     
@@ -200,10 +201,34 @@ a.thumbnail
 		line-height: 16px;
 		padding: 5px;
 
-		textarea
+		input, textarea
 		{
 			width: 97%;
+
+			resize: none;
+		}
+		textarea
+		{
 			min-height: 100px;
+		}
+	}
+
+	.controlBox
+	{
+		position: absolute;
+		right: 5px;
+		top: 5px;
+
+		a, i
+		{
+			text-decoration: none;
+			color: @black;
+			cursor: pointer;
+
+			&:hover
+			{
+				color: @green;
+			}
 		}
 	}
 }

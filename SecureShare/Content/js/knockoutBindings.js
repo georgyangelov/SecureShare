@@ -26,3 +26,12 @@ ko.bindingHandlers.autosize = {
 		});
 	}
 };
+
+ko.bindingHandlers.fileUpload = {
+	init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+		var $element = $(element);
+		var options = ko.utils.unwrapObservable(valueAccessor());
+		console.log($element);
+		$element.fileupload(options);
+	}
+};

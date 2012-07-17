@@ -129,11 +129,11 @@ function initGrid($) {
 jQuery(initGrid);
 
 var testText = 'Message text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about here';
-$('.message.active:not(.expanded)').live('click', function () {
+$('.message.active:not(.expanded)').live('click', function (e) {
 	var text = '';
 	var $msg = $(this);
 	var $thumbnail = $msg.find('.thumbnail');
-
+	
 	if ($msg.hasClass('span4')) {
 		text = testText;
 
@@ -150,7 +150,7 @@ $('.message.active:not(.expanded)').live('click', function () {
 		setTimeout(function () {
 			$msg.addClass('expanded');
 			$thumbnail.find('p').text(text);
-			$thumbnail.find('h4 .icon-resize-full').removeClass('icon-resize-full').addClass('icon-resize-small');
+			$thumbnail.find('.icon-resize-full').removeClass('icon-resize-full').addClass('icon-resize-small');
 			$thumbnail.animate({ width: $msg.width() - 10, height: newHeight }, 700, function () {
 				updateGrid();
 			});
@@ -158,11 +158,13 @@ $('.message.active:not(.expanded)').live('click', function () {
 
 		updateGrid();
 	}
+
+	return false;
 	//else {
 	//	Handled by the icon click event
 	//}
 });
-$('.message.expanded a.collapseBtn').live('click', function () {
+$('.message.expanded .collapseBtn').live('click', function () {
 	var text = '';
 	$msg = $(this).parents('.message');
 	var $thumbnail = $msg.find('.thumbnail');
@@ -180,7 +182,7 @@ $('.message.expanded a.collapseBtn').live('click', function () {
 
 	var newHeight = $msg.find('p').parent().textHeight(text, span4Width) + $msg.find('h4').height();
 
-	$thumbnail.find('h4 .icon-resize-small').removeClass('icon-resize-small').addClass('icon-resize-full');
+	$thumbnail.find('.icon-resize-small').removeClass('icon-resize-small').addClass('icon-resize-full');
 	$thumbnail.animate({ width: span4Width, height: newHeight }, 700, function () {
 		$msg.addClass('span4').removeClass('span8');
 		$(this).find('p').text(text);
@@ -189,4 +191,6 @@ $('.message.expanded a.collapseBtn').live('click', function () {
 		updateGrid();
 	});
 	$msg.removeClass('expanded');
+
+	return false;
 });
