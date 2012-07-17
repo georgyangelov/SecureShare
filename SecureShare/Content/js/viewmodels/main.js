@@ -16,13 +16,13 @@ function ViewModel() {
 	self.subscribeChannelPanel = ko.observable(new SubscribeChannelPanel());
 
 	/* Pages */
-	self.homePage = ko.observable(null);
-	self.channelViewPage = ko.observable(null);
+	self.homeView = ko.observable(null);
+	self.channelView = ko.observable(null);
 
 	/* Methods */
 	self.ClearPageData = function () {
-		self.homePage(null);
-		self.channelViewPage(null);
+		self.homeView(null);
+		self.channelView(null);
 	};
 
 	self.LogOut = function () {
@@ -68,13 +68,13 @@ function ViewModel() {
 		this.get('#home', function () {
 			self.ClearPageData();
 			// Home page
-			self.homePage({});
+			self.homeView({});
 		});
 
 		this.get('#:channel', function () {
 			self.ClearPageData();
 			// Channel page view for this.params.channel
-			self.channelViewPage({});
+			self.channelView(new ChannelView());
 		});
 
 		this.get('', function () {
@@ -112,9 +112,6 @@ $(function () {
 
 
 
-function updateGrid() {
-	$('.thumbnails').trigger('resize');
-}
 
 function initGrid($) {
 	$('.thumbnails').masonry({

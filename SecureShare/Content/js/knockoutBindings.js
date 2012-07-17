@@ -11,3 +11,18 @@
 		}
 	}
 };
+
+ko.bindingHandlers.autosize = {
+	init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+		var $element = $(element);
+		var options = ko.utils.unwrapObservable(valueAccessor());
+		
+		if (typeof options.resize !== "undefined")
+			$element.autosize('autosize', options.resize);
+
+		//handle disposal
+		ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+			$('textarea.example').data('mirror').remove();
+		});
+	}
+};

@@ -215,6 +215,7 @@
     <Content Include="Content\js\libs\jquery-1.7.2.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\js\libs\jquery.autosize.js" />
     <Content Include="Content\js\libs\jquery.cookie.js" />
     <Content Include="Content\js\libs\jquery.masonry.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -229,6 +230,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\js\libs\sammy-0.7.1.min.js" />
+    <Content Include="Content\js\viewmodels\ChannelView.js" />
     <Content Include="Content\js\viewmodels\RegisterChannelPanel.js" />
     <Content Include="Content\js\viewmodels\LoginPanel.js" />
     <Content Include="Content\js\viewmodels\main.js">
@@ -402,7 +404,7 @@
     <Content Include="Content\Site.less">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\Channels\Channel.cshtml" />
+    <Content Include="Views\Channels\ChannelPartial.cshtml" />
     <Content Include="Views\Channels\RegisterPartial.cshtml" />
     <Content Include="Views\Channels\SubscribePartial.cshtml" />
     <Content Include="Views\Users\EmailPartial.cshtml" />
