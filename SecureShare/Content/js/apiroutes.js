@@ -129,3 +129,14 @@ amplify.request.define(
 		decoder: "errorDecoder"
 	}
 );
+
+amplify.request.define(
+	"getEntities", "ajax",
+	{
+		url: "api/channels/{channelName}/entities",
+		type: "GET",
+		dataType: "json",
+		cache: false,
+		decoder: "errorDecoder"
+	}
+);

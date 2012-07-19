@@ -422,6 +422,7 @@
     <Content Include="Views\Users\LoginPartial.cshtml" />
     <Content Include="Views\Users\PasswordPartial.cshtml" />
     <Content Include="Views\Users\RegisterPartial.cshtml" />
+    <Content Include="Views\Channels\UploadEntityPartial.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
