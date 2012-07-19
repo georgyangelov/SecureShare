@@ -92,7 +92,7 @@
 							<!-- ko with: user() -->
 								<!-- ko if: Channels().length > 0 -->
 									<!-- ko foreach: Channels -->
-										<li><a href="@Url.Action("Index", "Channels")" data-bind="text: Id"></a></li>
+										<li><a data-bind="text: Id, attr: {href: '#' + Id()}"></a></li>
 									<!-- /ko -->
 
 									<li class="divider"></li>

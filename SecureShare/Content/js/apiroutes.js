@@ -109,6 +109,17 @@ amplify.request.define(
 );
 
 amplify.request.define(
+	"getChannelInfo", "ajax",
+	{
+		url: "api/channels/{channelName}",
+		type: "GET",
+		dataType: "json",
+		cache: false,
+		decoder: "errorDecoder"
+	}
+);
+
+amplify.request.define(
 	"subscribeToChannel", "ajax",
 	{
 		url: "api/channels/{channelName}/users",

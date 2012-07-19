@@ -41,7 +41,7 @@ function ViewModel() {
 		return false;
 	};
 
-	self.UpdateUserInfo = function (userId, sessionKey) {
+	self.UpdateUserInfo = function (userId, sessionKey, callback) {
 		if (typeof userId === "undefined" || typeof sessionKey === "undefined") {
 			if (!self.isLoggedIn()) {
 				return;
@@ -60,27 +60,36 @@ function ViewModel() {
 			success: function (data) {
 				Application.isLoggedIn(true);
 				Application.user(ko.mapping.fromJS(data));
+
+				if (typeof callback !== "undefined") {
+					callback();
+				}
+			},
+			error: function (data) {
+				Application.alerts.push({ type: "error", text: "We couldn't log you in. Please try logging in again" });
 			}
 		});
 	};
 
-	Sammy(function () {
-		this.get('#home', function () {
-			self.ClearPageData();
-			// Home page
-			self.homeView({});
-		});
+	this.init = function () {
+		Sammy(function () {
+			this.get('#home', function () {
+				self.ClearPageData();
+				// Home page
+				self.homeView({});
+			});
 
-		this.get('#:channel', function () {
-			self.ClearPageData();
-			// Channel page view for this.params.channel
-			self.channelView(new ChannelView());
-		});
+			this.get('#:channel', function () {
+				self.ClearPageData();
+				// Channel page view for this.params.channel
+				self.channelView(new ChannelView(this.params.channel));
+			});
 
-		this.get('', function () {
-			this.app.runRoute('get', '#home');
-		});
-	}).run();
+			this.get('', function () {
+				this.app.runRoute('get', '#home');
+			});
+		}).run();
+	};
 }
 
 Application = new ViewModel();
@@ -91,7 +100,10 @@ $(function () {
 	var userId = $.cookie('userId');
 	var sessionKey = $.cookie('sessionKey');
 	if (sessionKey != null && userId != null) {
-		Application.UpdateUserInfo(userId, sessionKey);
+		Application.UpdateUserInfo(userId, sessionKey, Application.init);
+	}
+	else {
+		Application.init();
 	}
 
 	// Remove closed alerts from the Application.alerts array

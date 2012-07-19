@@ -22,7 +22,20 @@
 			</li>
 			<!-- /ko -->
 
-			<li class="span2 span">
+			<!-- ko foreach: Entities -->
+			<li class="span4 span message active">
+				<div class="thumbnail">
+					<div class="controlBox">
+						<i class="icon-resize-full pull-right collapseBtn" href="#"></i>
+					</div>
+
+					<h4 data-bind="text: Title"></h4>
+					<p data-bind="text: Message"></p>
+				</div>
+			</li>
+			<!-- /ko -->
+
+			<!--li class="span2 span">
 				<a href="#" class="thumbnail"><img src="http://placehold.it/160x120" width="160" height="120" />
 					<h4>Thumbnail label</h4>
 					<p>Thumbnail caption right here...</p>
@@ -131,7 +144,7 @@
 			</li>
 			<li class="span2 span">
 				<a href="#" class="thumbnail"><img src="http://placehold.it/160x120" width="160" height="120" /></a>
-			</li>
+			</li-->
 		</ul>
 	</div>
 </div>
