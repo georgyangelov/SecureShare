@@ -113,7 +113,7 @@ namespace ShareGrid.Controllers.API
 				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidChannelName", "There's no channel with this name")));
 
 			if (!auth.Verify(channel, AccessLevel.Admin))
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelKey", "The channel password is invalid")));
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelAuth", "The channel authorization data is invalid")));
 
 			channels.Remove(Query.EQ("_id", channel.Id));
 
@@ -205,12 +205,15 @@ namespace ShareGrid.Controllers.API
 
 		[HttpGet]
 		[Route(Uri = "{channelName}/entities")]
-		public IEnumerable<ChannelEntity> ListEntities(HttpRequestMessage request, string channelName, 
+		public IEnumerable<ChannelEntity> ListEntities(HttpRequestMessage request, string channelName, AuthenticatedRequest<object> auth,
 			[FromUri] int start = 0,
 			[FromUri] int limit = 20
 		)
 		{
 			var channel = GetChannelByName(request, channelName);
+
+			if (auth.Verify(channel).Item2 == AccessLevel.None)
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelAuth", "The channel authorization data is invalid")));
 
 			var entities = MongoDBHelper.database.GetCollection<ChannelEntity>("entities");
 			var query = Query.EQ("ChannelId", channel.Id);

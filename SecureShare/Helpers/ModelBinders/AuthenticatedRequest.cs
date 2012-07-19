@@ -9,6 +9,7 @@ using System.Collections.Specialized;
 using ShareGrid.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Http;
 
 namespace ShareGrid.Helpers.ModelBinders
 {
@@ -17,13 +18,21 @@ namespace ShareGrid.Helpers.ModelBinders
 	{
 		public bool BindModel(HttpActionContext actionContext, ModelBindingContext bindingContext)
 		{
-			Task<string> queryStringTask = actionContext.Request.Content.ReadAsStringAsync();
-			queryStringTask.Wait();
+			NameValueCollection query;
+			if (actionContext.Request.Method == HttpMethod.Get)
+			{
+				query = HttpUtility.ParseQueryString(actionContext.Request.RequestUri.Query);
+			}
+			else
+			{
+				Task<string> queryStringTask = actionContext.Request.Content.ReadAsStringAsync();
+				queryStringTask.Wait();
 
-			if (!queryStringTask.IsCompleted)
-				return false;
-			
-			NameValueCollection query = HttpUtility.ParseQueryString(queryStringTask.Result);
+				if (!queryStringTask.IsCompleted)
+					return false;
+
+				query = HttpUtility.ParseQueryString(queryStringTask.Result);
+			}
 
 			var modelType = bindingContext.ModelType.GetGenericArguments()[0];
 			var properties = modelType.GetProperties();
@@ -65,9 +74,6 @@ namespace ShareGrid.Helpers.ModelBinders
 			// Add the ValidationResult's to the ModelState
 			foreach (var validationResultItem in validationResult)
 				bindingContext.ModelState.AddModelError(validationResultItem.Property, validationResultItem.ErrorMessage);
-
-
-
 
 			return true;
 		}
