@@ -151,5 +151,70 @@ namespace ShareGrid.Controllers.API
 
 			return new SuccessReport(true);
 		}
+
+		private Channel GetChannelByName(HttpRequestMessage request, string channelName)
+		{
+			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
+
+			var channel = channels.FindOne(Query.EQ("UniqueName", Channel.GetUniqueName(channelName)));
+			if (channel == null)
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidChannelName", "There's no channel with this name")));
+
+			return channel;
+		}
+
+		private Tuple<User, Channel, AccessLevel> GetRequestedChannel<T>(HttpRequestMessage request, string channelName, AuthenticatedRequest<T> entityRequest)
+		{
+			var channel = GetChannelByName(request, channelName);
+
+			var access = entityRequest.Verify(channel);
+			User user = access.Item1;
+			AccessLevel accessLevel = access.Item2;
+
+			if (accessLevel == AccessLevel.None)
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelKey", "The channel password is invalid")));
+		
+			return new Tuple<User, Channel, AccessLevel>(user, channel, accessLevel);
+		}
+
+		[HttpPost]
+		[Route(Uri = "{channelName}/entities")]
+		public SuccessReport UploadEntity(HttpRequestMessage request, string channelName, AuthenticatedRequest<ChannelEntity> entityRequest)
+		{
+			Tuple<User, Channel, AccessLevel> reqData = GetRequestedChannel<ChannelEntity>(request, channelName, entityRequest);
+			var user = reqData.Item1;
+			var channel = reqData.Item2;
+			var accessLevel = reqData.Item3;
+
+			var entity = entityRequest.Data;
+			if (user != null)
+				entity.UserId = user.Id;
+
+			entity.Importance = Importance.Normal;
+			if (accessLevel == AccessLevel.Admin)
+				entity.Importance = Importance.High;
+
+			entity.ChannelId = channel.Id;
+
+			var entities = MongoDBHelper.database.GetCollection<ChannelEntity>("entities");
+			entities.Insert(entity);
+
+			return new SuccessReport(true);
+		}
+
+		[HttpGet]
+		[Route(Uri = "{channelName}/entities")]
+		public IEnumerable<ChannelEntity> ListEntities(HttpRequestMessage request, string channelName, 
+			[FromUri] int start = 0,
+			[FromUri] int limit = 20
+		)
+		{
+			var channel = GetChannelByName(request, channelName);
+
+			var entities = MongoDBHelper.database.GetCollection<ChannelEntity>("entities");
+			var query = Query.EQ("ChannelId", channel.Id);
+
+			return entities.Find(query).SetSkip(start).SetLimit(limit);
+		}
     }
 }

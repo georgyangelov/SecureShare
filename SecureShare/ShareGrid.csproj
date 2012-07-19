@@ -144,6 +144,7 @@
     <Compile Include="Helpers\Route.cs" />
     <Compile Include="Models\AuthenticatedRequest.cs" />
     <Compile Include="Models\Channel.cs" />
+    <Compile Include="Models\ChannelEntity.cs" />
     <Compile Include="Models\ChannelUpdate.cs" />
     <Compile Include="Models\ChannelUserAccess.cs" />
     <Compile Include="Models\Errors\APIError.cs" />

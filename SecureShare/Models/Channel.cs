@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace ShareGrid.Models
 {
-	[Bind(Exclude = "Salt,CreatorId,CreationDate,Users")]
+	[Bind(Exclude = "Id,Salt,CreatorId,CreationDate,Users")]
 	public class Channel
 	{
 		[BsonRequired]

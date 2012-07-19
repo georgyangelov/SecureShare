@@ -61,24 +61,34 @@ namespace ShareGrid.Models
 		{
 			var user = VerifySessionKey();
 
-			if (user != null && VerifyUserAccess(user, channel, accessLevel))
+			if (user != null && ChannelUserAccess.HasAccess(GetUserAccess(user, channel), accessLevel))
 				return user;
 			else
 				return null;
 		}
 
-		private bool VerifyUserAccess(User user, Channel channel, AccessLevel accessLevel)
+		public Tuple<User, AccessLevel> VerifySessionKey(Channel channel)
+		{
+			var user = VerifySessionKey();
+
+			if (user != null)
+				return new Tuple<User, AccessLevel>(user, GetUserAccess(user, channel));
+			else
+				return new Tuple<User, AccessLevel>(null, AccessLevel.None);
+		}
+
+		private AccessLevel GetUserAccess(User user, Channel channel)
 		{
 			var userAccessLevels = from u in channel.Users
 								   where u.Id == user.Id
 								   select u;
 
 			if (!userAccessLevels.Any())
-				return false;
+				return AccessLevel.None;
 
 			var userAccessLevel = userAccessLevels.First();
 
-			return userAccessLevel.HasAccess(accessLevel);
+			return userAccessLevel.Access;
 		}
 
 		public bool VerifyChannelPassword(Channel channel, AccessLevel accessLevel)
@@ -109,6 +119,17 @@ namespace ShareGrid.Models
 		public bool Verify(Channel channel, AccessLevel accessLevel)
 		{
 			return VerifySessionKey(channel, accessLevel) != null || VerifyChannelPassword(channel, accessLevel);
+		}
+
+		public Tuple<User, AccessLevel> Verify(Channel channel)
+		{
+			if (AuthType == Models.AuthType.NotAuthenticated)
+				return new Tuple<User, AccessLevel>(null, AccessLevel.None);
+
+			if (AuthType == Models.AuthType.SessionKey)
+				return VerifySessionKey(channel);
+			else
+				return new Tuple<User, AccessLevel>(null, VerifyChannelPassword(channel));
 		}
 	}
 

@@ -15,12 +15,17 @@ namespace ShareGrid.Models
 
 		public bool HasAccess(AccessLevel level)
 		{
+			return HasAccess(Access, level);
+		}
+
+		public static bool HasAccess(AccessLevel channelAccess, AccessLevel level)
+		{
 			if (level == AccessLevel.None)
-				return Access == AccessLevel.None;
+				return channelAccess == AccessLevel.None;
 			else if (level == AccessLevel.Normal)
-				return Access == AccessLevel.Normal || Access == AccessLevel.Admin;
+				return channelAccess == AccessLevel.Normal || channelAccess == AccessLevel.Admin;
 			else
-				return Access == AccessLevel.Admin;
+				return channelAccess == AccessLevel.Admin;
 		}
 	}
 
