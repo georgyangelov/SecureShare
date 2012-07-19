@@ -179,7 +179,7 @@ namespace ShareGrid.Controllers.API
 
 		[HttpPost]
 		[Route(Uri = "{channelName}/entities")]
-		public SuccessReport UploadEntity(HttpRequestMessage request, string channelName, AuthenticatedRequest<ChannelEntity> entityRequest)
+		public ChannelEntity UploadEntity(HttpRequestMessage request, string channelName, AuthenticatedRequest<ChannelEntity> entityRequest)
 		{
 			Tuple<User, Channel, AccessLevel> reqData = GetRequestedChannel<ChannelEntity>(request, channelName, entityRequest);
 			var user = reqData.Item1;
@@ -195,11 +195,12 @@ namespace ShareGrid.Controllers.API
 				entity.Importance = Importance.High;
 
 			entity.ChannelId = channel.Id;
+			entity.ResetEmpty();
 
 			var entities = MongoDBHelper.database.GetCollection<ChannelEntity>("entities");
 			entities.Insert(entity);
 
-			return new SuccessReport(true);
+			return entity;
 		}
 
 		[HttpGet]

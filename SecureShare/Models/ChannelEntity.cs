@@ -22,10 +22,20 @@ namespace ShareGrid.Models
 		public string UserId { get; set; }
 
 		public string Title { get; set; }
-		public string Description { get; set; }
+		public string Message { get; set; }
 		public string Link { get; set; }
 
 		public Importance Importance { get; set; }
+
+		public void ResetEmpty()
+		{
+			if (Title == "")
+				Title = null;
+			if (Message == "")
+				Message = null;
+			if (Link == "")
+				Link = null;
+		}
 	}
 
 	public enum Importance

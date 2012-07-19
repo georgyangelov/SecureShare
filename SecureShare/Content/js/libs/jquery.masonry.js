@@ -215,7 +215,7 @@
 			this._processStyleQueue();
 
 			// provide $elems as context for the callback
-			if (callback) {
+			if (typeof callback === "function") {
 				callback.call($bricks);
 			}
 

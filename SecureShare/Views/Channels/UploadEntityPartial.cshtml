@@ -1,0 +1,54 @@
+﻿<div class="thumbnail">
+	<div class="controlBox">
+		<i class="icon-remove" data-bind="click: $parent.hideUploadEntityPanel"></i>
+	</div>
+
+
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#textTab" data-toggle="tab"><i class="icon-align-left"></i>Text</a></li>
+		<li><a href="#linkTab" data-toggle="tab"><i class="icon-link"></i>Link</a></li>
+		<li><a href="#fileTab" data-toggle="tab"><i class="icon-file"></i>File</a></li>
+	</ul>
+
+	<form>
+	<div class="tab-content">
+		<div class="tab-pane active" id="textTab">
+			<label>Message title</label>
+			<input type="text" />
+
+			<label>Enter your message below</label>
+			<textarea data-bind="autosize: {resize: updateGrid}"></textarea>
+
+			<button type="submit" class="btn btn-success pull-right"><i class="icon-upload-alt"></i>Submit</button>
+		</div>
+		<div class="tab-pane" id="linkTab">
+			<label>Link title</label>
+			<input type="text" />
+
+			<label>Paste your link below</label>
+			<input type="text" />
+
+			<label>Link description</label>
+			<textarea data-bind="autosize: {resize: updateGrid}"></textarea>
+
+			<button type="submit" class="btn btn-success pull-right"><i class="icon-upload-alt"></i>Submit</button>
+		</div>
+		<div class="tab-pane" id="fileTab">
+			<label>File title</label>
+			<input type="text" />
+
+			<label>File description</label>
+			<textarea data-bind="autosize: {resize: updateGrid}"></textarea>
+
+			<label>Choose the file</label>
+			<span class="btn fileinput-button">
+				<!-- data-bind="fileUpload: {}" -->
+				Choose file
+									<input type="file" name="files[]" />
+			</span>
+
+			<button type="submit" class="btn btn-success pull-right"><i class="icon-upload-alt"></i>Submit</button>
+		</div>
+	</div>
+	</form>
+</div>

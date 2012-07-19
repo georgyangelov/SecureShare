@@ -118,3 +118,14 @@ amplify.request.define(
 		decoder: "errorDecoder"
 	}
 );
+
+amplify.request.define(
+	"uploadEntity", "ajax",
+	{
+		url: "api/channels/{channelName}/entities",
+		type: "POST",
+		dataType: "json",
+		cache: false,
+		decoder: "errorDecoder"
+	}
+);

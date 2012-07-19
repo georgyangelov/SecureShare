@@ -22,7 +22,7 @@ ko.bindingHandlers.autosize = {
 
 		//handle disposal
 		ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-			$('textarea.example').data('mirror').remove();
+			$element.data('mirror').remove();
 		});
 	}
 };

@@ -1,6 +1,12 @@
 ﻿<header class="subhead row-fluid">
 	<div class="span6">
-		<h1 data-bind="text: Name">Channel name</h1>
+		<h1 data-bind="text: Name" class="pull-left">Channel name</h1>
+
+		<ul id="channelControls" class="nav nav-pills pull-left">
+			<li data-bind="css: {active: uploadEntityPanel() != null}">
+				<a href="#" data-bind="click: toggleUploadEntityPanel">Upload item</a>
+			</li>
+		</ul>
 	</div>
 	<div class="span6" data-bind="if: Description">
 		<blockquote class="pull-right"><p data-bind="text: Description">This is the channel's description which describes the undescribable</p></blockquote>
@@ -10,61 +16,11 @@
 <div class="row">
 	<div class="span12">
 		<ul class="thumbnails">
-			<li class="span4 span">
-				<div class="thumbnail">
-					<div class="controlBox">
-						<i class="icon-remove"></i>
-					</div>
-					
-					
-					<ul class="nav nav-tabs">
-						<li class="active"><a href="#textTab" data-toggle="tab"><i class="icon-align-left"></i> Text</a></li>
-						<li><a href="#linkTab" data-toggle="tab"><i class="icon-link"></i> Link</a></li>
-						<li><a href="#fileTab" data-toggle="tab"><i class="icon-file"></i> File</a></li>
-					</ul>
-
-					<form>
-						<div class="tab-content">
-							<div class="tab-pane active" id="textTab">
-								<label>Message title</label>
-								<input type="text" />
-
-								<label>Enter your message below</label>
-								<textarea data-bind="autosize: {resize: updateGrid}"></textarea>
-								
-								<button type="submit" class="btn btn-success pull-right"><i class="icon-upload-alt"></i> Submit</button>
-							</div>
-							<div class="tab-pane" id="linkTab">
-								<label>Link title</label>
-								<input type="text" />
-
-								<label>Paste your link below</label>
-								<input type="text" />
-
-								<label>Link description</label>
-								<textarea data-bind="autosize: {resize: updateGrid}"></textarea>
-
-								<button type="submit" class="btn btn-success pull-right"><i class="icon-upload-alt"></i> Submit</button>
-							</div>
-							<div class="tab-pane" id="fileTab">
-								<label>File title</label>
-								<input type="text" />
-								
-								<label>File description</label>
-								<textarea data-bind="autosize: {resize: updateGrid}"></textarea>
-
-								<label>Choose the file</label>
-								<span class="btn fileinput-button"> <!-- data-bind="fileUpload: {}" -->
-									Choose file
-									<input type="file" name="files[]" />
-								</span>
-								
-								<button type="submit" class="btn btn-success pull-right"><i class="icon-upload-alt"></i> Submit</button>
-							</div>
-						</div>
-					</form>
-				</div>
+			<!-- ko with: uploadEntityPanel -->
+			<li id="uploadItemPanel" class="span4 span">
+				@Html.Partial("../Channels/UploadEntityPartial")
 			</li>
+			<!-- /ko -->
 
 			<li class="span2 span">
 				<a href="#" class="thumbnail"><img src="http://placehold.it/160x120" width="160" height="120" />
