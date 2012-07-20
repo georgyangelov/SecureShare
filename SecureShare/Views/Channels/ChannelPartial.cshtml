@@ -29,14 +29,20 @@
 			<!-- /ko -->
 
 			<!-- ko foreach: Entities -->
-			<li class="span4 span message" data-bind="css: {active: isExpandable}">
+			<li class="span4 span message" data-bind="
+				attr: {'data-id': Id},
+				css: {active: isExpandable}, 
+				click: function() {
+					if (!isExpanded())
+						isExpanded(true)
+				}">
 				<div class="thumbnail">
 					<div class="controlBox" data-bind="if: isExpandable">
-						<i class="icon-resize-full pull-right collapseBtn" href="#"></i>
+						<i class="icon-resize-full pull-right collapseBtn" href="#" data-bind="click: toggleExpanded"></i>
 					</div>
 
 					<h4 data-bind="text: Title"></h4>
-					<p data-bind="text: Message"></p>
+					<p data-bind="optionalText: currentMessage"></p>
 				</div>
 			</li>
 			<!-- /ko -->
