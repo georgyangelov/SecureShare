@@ -25,6 +25,8 @@ namespace ShareGrid.Models
 		public string Message { get; set; }
 		public string Link { get; set; }
 
+		public DateTime Date { get; set; }
+
 		public Importance Importance { get; set; }
 
 		public void ResetEmpty()

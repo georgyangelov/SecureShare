@@ -194,6 +194,7 @@ namespace ShareGrid.Controllers.API
 			if (accessLevel == AccessLevel.Admin)
 				entity.Importance = Importance.High;
 
+			entity.Date = DateTime.Now;
 			entity.ChannelId = channel.Id;
 			entity.ResetEmpty();
 
@@ -218,7 +219,7 @@ namespace ShareGrid.Controllers.API
 			var entities = MongoDBHelper.database.GetCollection<ChannelEntity>("entities");
 			var query = Query.EQ("ChannelId", channel.Id);
 
-			return entities.Find(query).SetSkip(start).SetLimit(limit);
+			return entities.Find(query).SetSkip(start).SetLimit(limit).SetSortOrder(SortBy.Descending("Date"));
 		}
     }
 }

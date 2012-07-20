@@ -14,24 +14,28 @@
 	<div class="tab-content">
 		<div class="tab-pane active" id="textTab">
 			<label>Message title</label>
-			<input type="text" />
+			<input type="text" data-bind="value: Title" />
 
 			<label>Enter your message below</label>
-			<textarea data-bind="autosize: {resize: updateGrid}"></textarea>
+			<textarea data-bind="value: Message, autosize: {resize: updateGrid}"></textarea>
 
-			<button type="submit" class="btn btn-success pull-right"><i class="icon-upload-alt"></i>Submit</button>
+			<button class="btn btn-success pull-right" data-bind="click: Submit"><i class="icon-upload-alt"></i>Submit</button>
 		</div>
 		<div class="tab-pane" id="linkTab">
 			<label>Link title</label>
-			<input type="text" />
+			<input type="text" data-bind="value: Title" />
 
-			<label>Paste your link below</label>
-			<input type="text" />
+			<div class="control-group" data-bind="css: {error: Link.hasModError}">
+				<label>Paste your link below</label>
+				<input type="text" data-bind="value: Link" />
+				
+				<p class="help-block" data-bind="visible: Link.hasModError, text: Link.errorMessage"></p>
+			</div>
 
 			<label>Link description</label>
-			<textarea data-bind="autosize: {resize: updateGrid}"></textarea>
+			<textarea data-bind="value: Message, autosize: {resize: updateGrid}"></textarea>
 
-			<button type="submit" class="btn btn-success pull-right"><i class="icon-upload-alt"></i>Submit</button>
+			<button class="btn btn-success pull-right" data-bind="click: Submit, enable: !Link.hasError()"><i class="icon-upload-alt"></i>Submit</button>
 		</div>
 		<div class="tab-pane" id="fileTab">
 			<label>File title</label>

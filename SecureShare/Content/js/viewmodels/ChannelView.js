@@ -23,7 +23,7 @@ function ChannelEntity(data) {
 
 	/* Helper properties */
 	this.smallMessage = ko.computed(function () {
-		return self.Message().cutToWord(20, ' ...');
+		return self.Message().cutToWord(250, ' ...');
 	});
 	this.currentMessage = ko.observable(this.smallMessage());
 
@@ -52,7 +52,7 @@ function ChannelEntity(data) {
 
 					$msg.removeClass('span4').addClass('span8');
 
-					var newHeight = $thumbnail.find('p').parent().textHeight(self.Message(), $msg.width()) + $msg.find('h4').height() + 5;
+					var newHeight = $thumbnail.find('p').parent().textHeight(self.Message(), $msg.width()) + (self.Title().length ? $msg.find('h4').height() : 0) + 5;
 
 					$msg.height(newHeight + 10);
 
@@ -83,7 +83,7 @@ function ChannelEntity(data) {
 						.css('width', $thumbnail.width() + 'px')
 						.css('height', $thumbnail.height() + 'px');
 
-				var newHeight = $msg.find('p').parent().textHeight(self.smallMessage(), span4Width) + $msg.find('h4').height() + 5;
+				var newHeight = $msg.find('p').parent().textHeight(self.smallMessage(), span4Width) + (self.Title().length ? $msg.find('h4').height() : 0) + 5;
 
 				$thumbnail.find('.icon-resize-small').removeClass('icon-resize-small').addClass('icon-resize-full');
 				$thumbnail.animate({ width: span4Width, height: newHeight }, 700, function () {
@@ -223,7 +223,7 @@ function UploadEntityPanel(channel) {
 			resourceId: "uploadEntity",
 			data: {
 				channelName: channel.Name(),
-				sessionKey: Application.user().SessionKey.Key(),
+				SessionKey: Application.user().SessionKey.Key(),
 				Title: self.Title(),
 				Message: self.Message(),
 				Link: self.Link()
