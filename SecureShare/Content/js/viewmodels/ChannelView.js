@@ -3,11 +3,50 @@
 }
 
 function ChannelEntity(data) {
+	var self = this;
+
+	/* Data reset */
+	if (typeof data.Title === "undefined")
+		data.Title = "";
+	if (typeof data.Message === "undefined")
+		data.Message = "";
+	if (typeof data.Link === "undefined")
+		data.Link = "";
+
+	/* Properties */
 	this.Title = ko.observable(data.Title);
 	this.Message = ko.observable(data.Message);
 	this.Link = ko.observable(data.Link);
 
 	this.Importance = ko.observable(data.Importance);
+
+	/* Helper properties */
+	this.smallMessage = ko.computed(function () {
+		return self.Message().cutToWord(200, ' ...');
+	});
+
+	this.isExpandable = ko.computed(function () {
+		return self.smallMessage() != self.Message();
+	});
+
+	var expanded = ko.observable(false);
+	this.isExpanded = ko.computed({
+		read: function () {
+			return expanded();
+		},
+		write: function (value) {
+			if (value) {
+				//TODO: Expand the panel
+
+				expanded(true);
+			}
+			else {
+				//TODO: Contract the panel
+
+				expanded(false);
+			}
+		}
+	});
 }
 
 function ChannelView(channelName) {

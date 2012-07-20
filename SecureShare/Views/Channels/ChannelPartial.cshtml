@@ -15,7 +15,13 @@
 
 <div class="row">
 	<div class="span12">
-		<ul class="thumbnails">
+		<ul class="thumbnails" data-bind="masonry: {
+			itemSelector: '.span',
+			isAnimated: true,
+			columnWidth: function (containerWidth) {
+				return containerWidth / 6;
+			}
+		}">
 			<!-- ko with: uploadEntityPanel -->
 			<li id="uploadItemPanel" class="span4 span">
 				@Html.Partial("../Channels/UploadEntityPartial")
@@ -23,9 +29,9 @@
 			<!-- /ko -->
 
 			<!-- ko foreach: Entities -->
-			<li class="span4 span message active">
+			<li class="span4 span message" data-bind="css: {active: isExpandable}">
 				<div class="thumbnail">
-					<div class="controlBox">
+					<div class="controlBox" data-bind="if: isExpandable">
 						<i class="icon-resize-full pull-right collapseBtn" href="#"></i>
 					</div>
 

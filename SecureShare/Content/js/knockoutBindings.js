@@ -35,3 +35,12 @@ ko.bindingHandlers.fileUpload = {
 		$element.fileupload(options);
 	}
 };
+
+ko.bindingHandlers.masonry = {
+	init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+		var $element = $(element);
+		var options = ko.utils.unwrapObservable(valueAccessor());
+
+		$element.masonry(options);
+	}
+};
