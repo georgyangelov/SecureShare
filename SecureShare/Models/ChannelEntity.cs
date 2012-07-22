@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace ShareGrid.Models
 {
-	[Bind(Exclude = "Id,ChannelId,UserId,Importance")]
+	[Bind(Exclude = "Id,ChannelId,UserId,Date,Importance")]
 	public class ChannelEntity
 	{
 		[BsonRequired]

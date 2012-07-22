@@ -137,6 +137,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="Helpers\APIHelp.cs" />
     <Compile Include="Helpers\ValidationFilterAttribute.cs" />
     <Compile Include="Controllers\API\ChannelsController.cs" />
     <Compile Include="Helpers\ModelBinders\AuthenticatedRequest.cs" />
@@ -241,7 +242,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\js\libs\sammy-0.7.1.min.js" />
-    <Content Include="Content\js\viewmodels\ChannelView.js" />
+    <Content Include="Content\js\viewmodels\Channels\ChannelEntity.js" />
+    <Content Include="Content\js\viewmodels\Channels\ChannelView.js" />
+    <Content Include="Content\js\viewmodels\Channels\UploadEntityPanel.js" />
     <Content Include="Content\js\viewmodels\RegisterChannelPanel.js" />
     <Content Include="Content\js\viewmodels\LoginPanel.js" />
     <Content Include="Content\js\viewmodels\main.js">

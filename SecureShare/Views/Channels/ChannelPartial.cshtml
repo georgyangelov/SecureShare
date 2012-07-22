@@ -31,11 +31,27 @@
 			<!-- ko foreach: Entities -->
 			<li class="span4 span message" data-bind="
 				attr: {'data-id': Id},
-				css: {active: isExpandable}, 
+				css: {active: isExpandable, link: isLink}, 
 				click: function() {
-					if (!isExpanded())
-						isExpanded(true)
+					if (!isLink() && !isExpanded()) {
+						isExpanded(true);
+						return false;
+					}
+
+					return true;
 				}">
+				<!-- ko if: isLink -->
+				<a class="thumbnail" data-bind="attr: {href: Link}" target="_blank">
+					<div class="controlBox" data-bind="if: isExpandable">
+						<i class="icon-resize-full pull-right collapseBtn" href="#" data-bind="click: toggleExpanded"></i>
+					</div>
+
+					<i class="icon-link annotationIcon"></i>
+					<h4 data-bind="optionalText: Title"></h4>
+					<p data-bind="optionalText: currentMessage"></p>
+				</a>
+				<!-- /ko -->
+				<!-- ko ifnot: isLink -->
 				<div class="thumbnail">
 					<div class="controlBox" data-bind="if: isExpandable">
 						<i class="icon-resize-full pull-right collapseBtn" href="#" data-bind="click: toggleExpanded"></i>
@@ -44,6 +60,7 @@
 					<h4 data-bind="optionalText: Title"></h4>
 					<p data-bind="optionalText: currentMessage"></p>
 				</div>
+				<!-- /ko -->
 			</li>
 			<!-- /ko -->
 

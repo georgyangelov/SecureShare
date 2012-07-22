@@ -140,7 +140,7 @@ a.thumbnail
     }
 }
 
-.message
+.message:not(.link)
 {
     &.active:not(.expanded),
     &.active:not(.expanded) h4
@@ -173,6 +173,18 @@ a.thumbnail
         }
     }
 }
+a.thumbnail
+{
+	color: @black;
+
+	&:hover
+	{
+		.icon-link
+		{
+			color: @green;
+		}
+	}
+}
 .thumbnail
 {
 	position: relative;
@@ -184,7 +196,7 @@ a.thumbnail
         border-color: #46A546;
         .box-shadow(0 1px 4px rgba(0, 105, 214, 0.25));
     }
-    
+
     [class^="icon-"],
     [class*=" icon-"]
     {
@@ -213,11 +225,18 @@ a.thumbnail
 		}
 	}
 
+	.annotationIcon
+	{
+		float: left;
+		margin-right: 3px;
+	}
+
 	.controlBox
 	{
-		position: absolute;
-		right: 5px;
-		top: 5px;
+		float: right;
+		//position: absolute;
+		//right: 5px;
+		//top: 5px;
 
 		a, i
 		{

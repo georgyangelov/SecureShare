@@ -208,7 +208,8 @@ namespace ShareGrid.Controllers.API
 		[Route(Uri = "{channelName}/entities")]
 		public IEnumerable<ChannelEntity> ListEntities(HttpRequestMessage request, string channelName, AuthenticatedRequest<object> auth,
 			[FromUri] int start = 0,
-			[FromUri] int limit = 20
+			[FromUri] int limit = 20,
+			[FromUri] string sort = "Date_desc"
 		)
 		{
 			var channel = GetChannelByName(request, channelName);
@@ -219,7 +220,9 @@ namespace ShareGrid.Controllers.API
 			var entities = MongoDBHelper.database.GetCollection<ChannelEntity>("entities");
 			var query = Query.EQ("ChannelId", channel.Id);
 
-			return entities.Find(query).SetSkip(start).SetLimit(limit).SetSortOrder(SortBy.Descending("Date"));
+			return entities.Find(query).SetSkip(start).SetLimit(limit).SetSortOrder(
+				APIHelp.GetSortOrder(request, sort, new string[] { "UserId", "Title", "Message", "Link", "Date", "Importance" })
+			);
 		}
     }
 }
