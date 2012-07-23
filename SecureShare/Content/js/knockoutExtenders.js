@@ -23,8 +23,8 @@
 
 	if (typeof options.func === "function" && typeof options.computed !== "undefined" && options.computed === true) {
 		var computedFunc = ko.computed(function () {
-			var value = target();
-			return options.func(value);
+				var value = target();
+				return options.func(value);
 		});
 	}
 

@@ -190,13 +190,16 @@ namespace ShareGrid.Controllers.API
 			if (user != null)
 				entity.UserId = user.Id;
 
-			entity.Importance = Importance.Normal;
-			if (accessLevel == AccessLevel.Admin)
-				entity.Importance = Importance.High;
+			if (accessLevel != AccessLevel.Admin && entity.Importance == Importance.High)
+				entity.Importance = Importance.Normal;
+
+			entity.ResetEmpty();
+
+			if (entity.Title == null && entity.Message == null)
+				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, new APIError("emptyTitleAndMessage", "At least one of 'Title' and 'Message' must be present")));
 
 			entity.Date = DateTime.Now;
 			entity.ChannelId = channel.Id;
-			entity.ResetEmpty();
 
 			var entities = MongoDBHelper.database.GetCollection<ChannelEntity>("entities");
 			entities.Insert(entity);

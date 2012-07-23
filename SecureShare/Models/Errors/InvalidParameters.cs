@@ -16,6 +16,12 @@ namespace ShareGrid.Models.Errors
 		{
 			this.parameters = parameters;
 		}
+
+		public InvalidParameters(ValidationProperty parameters)
+			: base("invalidParameters", "Some of the request parameters are invalid. Check the 'parameters' property for a list")
+		{
+			this.parameters = new ValidationProperty[] {parameters};
+		}
 	}
 
 	public class ValidationProperty

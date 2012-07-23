@@ -13,17 +13,22 @@
 	<form>
 	<div class="tab-content">
 		<div class="tab-pane active" id="textTab">
-			<label>Message title</label>
-			<input type="text" data-bind="value: Title" />
+			<div class="control-group" data-bind="css: {error: Title.hasModError}">
+				<label>Message title</label>
+				<input type="text" data-bind="value: Title, valueUpdate: 'afterkeydown'" />
+			</div>
 
 			<label>Enter your message below</label>
-			<textarea data-bind="value: Message, autosize: {resize: updateGrid}"></textarea>
-
-			<button class="btn btn-success pull-right" data-bind="click: Submit"><i class="icon-upload-alt"></i>Submit</button>
+			<textarea data-bind="value: Message, valueUpdate: 'afterkeydown', autosize: {resize: updateGrid}"></textarea>
+			
+			<p class="help-block pull-left error clear-left" style="margin-top: 7px;" data-bind="visible: Title.hasError, text: Title.errorMessage"></p>
+			<button class="btn btn-success pull-right" data-bind="click: Submit, enable: hasTitleOrMessage"><i class="icon-upload-alt"></i> Submit</button>
 		</div>
 		<div class="tab-pane" id="linkTab">
-			<label>Link title</label>
-			<input type="text" data-bind="value: Title" />
+			<div class="control-group" data-bind="css: {error: Title.hasModError}">
+				<label>Link title</label>
+				<input type="text" data-bind="value: Title, valueUpdate: 'afterkeydown'" />
+			</div>
 
 			<div class="control-group" data-bind="css: {error: Link.hasModError}">
 				<label>Paste your link below</label>
@@ -33,16 +38,19 @@
 			</div>
 
 			<label>Link description</label>
-			<textarea data-bind="value: Message, autosize: {resize: updateGrid}"></textarea>
-
-			<button class="btn btn-success pull-right" data-bind="click: Submit, enable: !Link.hasError()"><i class="icon-upload-alt"></i>Submit</button>
+			<textarea data-bind="value: Message, valueUpdate: 'afterkeydown', autosize: {resize: updateGrid}"></textarea>
+			
+			<p class="help-block pull-left error clear-left" style="margin-top: 7px;" data-bind="visible: Title.hasError, text: Title.errorMessage"></p>
+			<button class="btn btn-success pull-right" data-bind="click: Submit, enable: !Link.hasError() && hasTitleOrMessage()"><i class="icon-upload-alt"></i> Submit</button>
 		</div>
 		<div class="tab-pane" id="fileTab">
-			<label>File title</label>
-			<input type="text" />
+			<div class="control-group" data-bind="css: {error: Title.hasModError}">
+				<label>File title</label>
+				<input type="text" data-bind="value: Title, valueUpdate: 'afterkeydown'" />
+			</div>
 
 			<label>File description</label>
-			<textarea data-bind="autosize: {resize: updateGrid}"></textarea>
+			<textarea data-bind="value: Message, valueUpdate: 'afterkeydown', autosize: {resize: updateGrid}"></textarea>
 
 			<label>Choose the file</label>
 			<span class="btn fileinput-button">
@@ -50,8 +58,9 @@
 				Choose file
 									<input type="file" name="files[]" />
 			</span>
-
-			<button type="submit" class="btn btn-success pull-right"><i class="icon-upload-alt"></i>Submit</button>
+			
+			<p class="help-block pull-left error clear-left" style="margin-top: 7px;" data-bind="visible: Title.hasError, text: Title.errorMessage"></p>
+			<button type="submit" class="btn btn-success pull-right" data-bind="click: Submit, enable: hasTitleOrMessage"><i class="icon-upload-alt"></i> Submit</button>
 		</div>
 	</div>
 	</form>

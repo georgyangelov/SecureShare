@@ -2,8 +2,17 @@
 	var self = this;
 
 	/* Properties */
-	this.Title = ko.observable("");
 	this.Message = ko.observable("");
+	this.Title = ko.observable("").extend({
+		validation: {
+			required: false,
+			message: "Please fill at least title or message",
+			func: function (value) {
+				return $.trim(self.Message()) != "" || $.trim(value) != "";
+			},
+			computed: true
+		}
+	});
 
 	this.Link = ko.observable("").extend({
 		validation: {
@@ -11,6 +20,11 @@
 			message: "The link is invalid",
 			regex: /^https?\:\/\/(.*?)\.(.*?)/i
 		}
+	});
+
+	/* Helpers */
+	this.hasTitleOrMessage = ko.computed(function () {
+		return $.trim(self.Title()) != "" || $.trim(self.Message()) != "";
 	});
 
 	/* Methods */

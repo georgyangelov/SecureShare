@@ -10,6 +10,9 @@ using ShareGrid.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
+using System.Web.Http;
+using System.Net;
+using ShareGrid.Models.Errors;
 
 namespace ShareGrid.Helpers.ModelBinders
 {
@@ -56,7 +59,32 @@ namespace ShareGrid.Helpers.ModelBinders
 			{
 				if (query.AllKeys.Contains(property.Name))
 				{
-					property.SetValue(model, query.Get(property.Name), null);
+					if (property.PropertyType.IsEnum)
+					{
+						try
+						{
+							property.SetValue(model, Convert.ChangeType(query.Get(property.Name), property.PropertyType.GetEnumUnderlyingType()), null);
+						}
+						catch (ArgumentException)
+						{
+							throw new HttpResponseException(actionContext.Request.CreateResponse(HttpStatusCode.BadRequest, new InvalidParameters(new ValidationProperty() { name = property.Name, message = "Invalid enum value" })));
+						}
+					}
+					else if (property.PropertyType == typeof(int))
+					{
+						try
+						{
+							property.SetValue(model, int.Parse(query.Get(property.Name)), null);
+						}
+						catch (FormatException)
+						{
+							throw new HttpResponseException(actionContext.Request.CreateResponse(HttpStatusCode.BadRequest, new InvalidParameters(new ValidationProperty() { name = property.Name, message = "Must be integer" })));
+						}
+					}
+					else if (property.PropertyType == typeof(string))
+					{
+						property.SetValue(model, query.Get(property.Name), null);
+					}
 				}
 			}
 			bindingContext.ModelType.GetProperty("Data").SetValue(wrapperModel, model, null);
