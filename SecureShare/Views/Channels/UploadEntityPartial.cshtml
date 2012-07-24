@@ -44,13 +44,11 @@
 			<button class="btn btn-success pull-right" data-bind="click: Submit, enable: !Link.hasError() && hasTitleOrMessage()"><i class="icon-upload-alt"></i> Submit</button>
 		</div>
 		<div class="tab-pane" id="fileTab">
-			<div class="control-group" data-bind="css: {error: Title.hasModError}">
-				<label>File title</label>
-				<input type="text" data-bind="value: Title, valueUpdate: 'afterkeydown'" />
-			</div>
+			<label>File title</label>
+			<input type="text" data-bind="value: Title" />
 
 			<label>File description</label>
-			<textarea data-bind="value: Message, valueUpdate: 'afterkeydown', autosize: {resize: updateGrid}"></textarea>
+			<textarea data-bind="value: Message, autosize: {resize: updateGrid}"></textarea>
 
 			<label>Choose the file</label>
 			<span class="btn fileinput-button">
@@ -59,8 +57,7 @@
 									<input type="file" name="files[]" />
 			</span>
 			
-			<p class="help-block pull-left error clear-left" style="margin-top: 7px;" data-bind="visible: Title.hasError, text: Title.errorMessage"></p>
-			<button type="submit" class="btn btn-success pull-right" data-bind="click: Submit, enable: hasTitleOrMessage"><i class="icon-upload-alt"></i> Submit</button>
+			<button type="submit" class="btn btn-success pull-right" data-bind="click: Submit"><i class="icon-upload-alt"></i> Submit</button>
 		</div>
 	</div>
 	</form>
