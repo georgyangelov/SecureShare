@@ -27,17 +27,16 @@
 	};
 
 	this.showUploadEntityPanel = function () {
+		if (self.uploadEntityPanel() != null)
+			return;
+
 		self.uploadEntityPanel(new UploadEntityPanel(self));
 		self.updateGrid();
-
-		return false;
 	};
 
 	this.hideUploadEntityPanel = function () {
 		self.uploadEntityPanel(null);
 		self.updateGrid();
-
-		return false;
 	};
 
 	this.toggleUploadEntityPanel = function () {

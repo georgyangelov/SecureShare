@@ -27,7 +27,20 @@
 		return $.trim(self.Title()) != "" || $.trim(self.Message()) != "";
 	});
 
+	this.selectedFile = ko.observable(null);
+	this.hasSelectedFile = ko.computed(function () {
+		return self.selectedFile() != null;
+	});
+
 	/* Methods */
+	this.fileSelected = function (e, data) {
+		var file = data.files[0];
+
+		file.formattedSize = toReadableFileSize(file.size);
+
+		self.selectedFile(file);
+	};
+
 	this.Submit = function () {
 		amplify.request({
 			resourceId: "uploadEntity",

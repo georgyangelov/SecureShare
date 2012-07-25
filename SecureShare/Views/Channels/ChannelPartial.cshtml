@@ -15,6 +15,13 @@
 
 <div class="row">
 	<div class="span12">
+		
+		<div id="fileDropZone" data-bind="fileDropZone: {
+			drop: showUploadEntityPanel	
+		}">
+			<h1>Drop files to upload</h1>
+		</div>
+
 		<ul class="thumbnails" data-bind="masonry: {
 			itemSelector: '.span',
 			isAnimated: true,

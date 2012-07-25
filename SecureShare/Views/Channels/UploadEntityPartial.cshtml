@@ -5,14 +5,16 @@
 
 
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="#textTab" data-toggle="tab"><i class="icon-align-left"></i>Text</a></li>
+		<li class="active"><a href="#fileTab" data-toggle="tab"><i class="icon-file"></i>File</a></li>
+		<li><a href="#textTab" data-toggle="tab"><i class="icon-align-left"></i>Text</a></li>
 		<li><a href="#linkTab" data-toggle="tab"><i class="icon-link"></i>Link</a></li>
-		<li><a href="#fileTab" data-toggle="tab"><i class="icon-file"></i>File</a></li>
 	</ul>
 
 	<form>
 	<div class="tab-content">
-		<div class="tab-pane active" id="textTab">
+		
+		<!-- Message upload panel -->
+		<div class="tab-pane" id="textTab">
 			<div class="control-group" data-bind="css: {error: Title.hasModError}">
 				<label>Message title</label>
 				<input type="text" data-bind="value: Title, valueUpdate: 'afterkeydown'" />
@@ -24,6 +26,8 @@
 			<p class="help-block pull-left error clear-left" style="margin-top: 7px;" data-bind="visible: Title.hasError, text: Title.errorMessage"></p>
 			<button class="btn btn-success pull-right" data-bind="click: Submit, enable: hasTitleOrMessage"><i class="icon-upload-alt"></i> Submit</button>
 		</div>
+
+		<!-- Link upload panel -->
 		<div class="tab-pane" id="linkTab">
 			<div class="control-group" data-bind="css: {error: Title.hasModError}">
 				<label>Link title</label>
@@ -43,22 +47,34 @@
 			<p class="help-block pull-left error clear-left" style="margin-top: 7px;" data-bind="visible: Title.hasError, text: Title.errorMessage"></p>
 			<button class="btn btn-success pull-right" data-bind="click: Submit, enable: !Link.hasError() && hasTitleOrMessage()"><i class="icon-upload-alt"></i> Submit</button>
 		</div>
-		<div class="tab-pane" id="fileTab">
+		
+		<!-- File upload panel -->
+		<div class="tab-pane active" id="fileTab">
+			<div data-bind="imagePreview: {file: selectedFile, loaded: updateGrid}" style="text-align:center;margin-bottom:5px;"></div>
+
 			<label>File title</label>
 			<input type="text" data-bind="value: Title" />
 
 			<label>File description</label>
 			<textarea data-bind="value: Message, autosize: {resize: updateGrid}"></textarea>
 
-			<label>Choose the file</label>
+			<label data-bind="visible: !hasSelectedFile()">Choose file</label>
+			
+			<div data-bind="with: selectedFile" style="margin-bottom: 5px;">
+				Selected file: <span class="label label-info" data-bind="text: name"></span> <span class="label" data-bind="text: formattedSize"></span>
+			</div>
+
 			<span class="btn fileinput-button">
-				<!-- data-bind="fileUpload: {}" -->
 				Choose file
-									<input type="file" name="files[]" />
+				<input type="file" name="files[]" data-bind="fileUpload: {
+					drop: fileSelected,
+					change: fileSelected
+				}" />
 			</span>
 			
-			<button type="submit" class="btn btn-success pull-right" data-bind="click: Submit"><i class="icon-upload-alt"></i> Submit</button>
+			<button type="submit" class="btn btn-success pull-right" data-bind="click: Submit, enable: hasSelectedFile"><i class="icon-upload-alt"></i> Submit</button>
 		</div>
+
 	</div>
 	</form>
 </div>
