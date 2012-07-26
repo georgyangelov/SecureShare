@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using MongoDB.Driver.Builders;
 using ShareGrid.Helpers;
@@ -37,7 +40,7 @@ namespace ShareGrid.Controllers.API
 
         [HttpGet]
 		[Route(Uri = "{channelName}")]
-		public Channel GetChannel(HttpRequestMessage request, string channelName)
+		public Channel GetChannel(string channelName)
         {
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
 			var query = Query.EQ("UniqueName", Channel.GetUniqueName(channelName));
@@ -45,14 +48,14 @@ namespace ShareGrid.Controllers.API
 
 			if (channel == null)
 			{
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidChannelName", "Invalid or non-existant channel")));
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidChannelName", "Invalid or non-existant channel")));
 			}
 
 			return channels.FindOne(query);
         }
 
         [HttpPost]
-		public SuccessReport RegisterChannel(HttpRequestMessage request, Channel channel)
+		public SuccessReport RegisterChannel(Channel channel)
 		{
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
 			channel.UpdateUniqueName();
@@ -60,7 +63,7 @@ namespace ShareGrid.Controllers.API
 			var query = Query.EQ("UniqueName", channel.UniqueName);
 			if (channels.FindOne(query) != null)
 			{
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Conflict, new APIError("duplicateName", "There is already a channel with this name")));
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.Conflict, new APIError("duplicateName", "There is already a channel with this name")));
 			}
 
 			channel.Salt = MongoDBHelper.GetRandomSalt();
@@ -76,16 +79,16 @@ namespace ShareGrid.Controllers.API
 
         [HttpPut]
 		[Route(Uri = "{channelName}")]
-		public SuccessReport Put(HttpRequestMessage request, string channelName, AuthenticatedRequest<ChannelUpdate> channelUpdateRequest)
+		public SuccessReport Put(string channelName, AuthenticatedRequest<ChannelUpdate> channelUpdateRequest)
         {
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
 			var channel = channels.FindOne(Query.EQ("UniqueName", Channel.GetUniqueName(channelName)));
 
 			if (channel == null)
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidChannelName", "There's no channel with this name")));
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidChannelName", "There's no channel with this name")));
 
 			if (!channelUpdateRequest.Verify(channel, AccessLevel.Admin))
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelKey", "The channel password is invalid")));
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelKey", "The channel password is invalid")));
 
 			var newData = channelUpdateRequest.Data;
 			if (newData.AdminPassword != null)
@@ -104,16 +107,16 @@ namespace ShareGrid.Controllers.API
 
         [HttpDelete]
 		[Route(Uri = "{channelName}")]
-		public SuccessReport Delete(HttpRequestMessage request, string channelName, AuthenticatedRequest<object> auth)
+		public SuccessReport Delete(string channelName, AuthenticatedRequest<object> auth)
         {
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
 			var channel = channels.FindOne(Query.EQ("UniqueName", Channel.GetUniqueName(channelName)));
 
 			if (channel == null)
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidChannelName", "There's no channel with this name")));
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidChannelName", "There's no channel with this name")));
 
 			if (!auth.Verify(channel, AccessLevel.Admin))
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelAuth", "The channel authorization data is invalid")));
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelAuth", "The channel authorization data is invalid")));
 
 			channels.Remove(Query.EQ("_id", channel.Id));
 
@@ -122,21 +125,21 @@ namespace ShareGrid.Controllers.API
 
 		[HttpPost]
 		[Route(Uri = "{channelName}/users")]
-		public SuccessReport SubscribeUser(HttpRequestMessage request, string channelName, AuthenticatedRequest<object> auth)
+		public SuccessReport SubscribeUser(string channelName, AuthenticatedRequest<object> auth)
 		{
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
 
 			var channel = channels.FindOne(Query.EQ("UniqueName", Channel.GetUniqueName(channelName)));
 			if (channel == null)
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidChannelName", "There's no channel with this name")));
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidChannelName", "There's no channel with this name")));
 
 			var accessLevel = auth.VerifyChannelPassword(channel);
 			if (accessLevel == AccessLevel.None)
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelKey", "The channel password is invalid")));
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelKey", "The channel password is invalid")));
 			
 			var user = auth.VerifySessionKey();
 			if (user == null)
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidSessionKey", "Your session key is invalid or expired")));
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidSessionKey", "Your session key is invalid or expired")));
 
 			if (channel.Users == null)
 				channel.Users = new List<ChannelUserAccess>();
@@ -152,79 +155,108 @@ namespace ShareGrid.Controllers.API
 			return new SuccessReport(true);
 		}
 
-		private Channel GetChannelByName(HttpRequestMessage request, string channelName)
+		private Channel GetChannelByName(string channelName)
 		{
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
 
 			var channel = channels.FindOne(Query.EQ("UniqueName", Channel.GetUniqueName(channelName)));
 			if (channel == null)
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidChannelName", "There's no channel with this name")));
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidChannelName", "There's no channel with this name")));
 
 			return channel;
 		}
 
-		private Tuple<User, Channel, AccessLevel> GetRequestedChannel<T>(HttpRequestMessage request, string channelName, AuthenticatedRequest<T> entityRequest)
+		private Tuple<User, Channel, AccessLevel> GetRequestedChannel<T>(string channelName, AuthenticatedRequest<T> entityRequest)
 		{
-			var channel = GetChannelByName(request, channelName);
+			var channel = GetChannelByName(channelName);
 
 			var access = entityRequest.Verify(channel);
 			User user = access.Item1;
 			AccessLevel accessLevel = access.Item2;
 
 			if (accessLevel == AccessLevel.None)
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelKey", "The channel password is invalid")));
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelKey", "The channel password is invalid")));
 		
 			return new Tuple<User, Channel, AccessLevel>(user, channel, accessLevel);
 		}
 
 		[HttpPost]
 		[Route(Uri = "{channelName}/entities")]
-		public ChannelEntity UploadEntity(HttpRequestMessage request, string channelName, AuthenticatedRequest<ChannelEntity> entityRequest)
+		public ChannelEntity UploadEntity([FromUri] string channelName, AuthenticatedRequest<ChannelEntity> entityRequest)
 		{
-			Tuple<User, Channel, AccessLevel> reqData = GetRequestedChannel<ChannelEntity>(request, channelName, entityRequest);
-			var user = reqData.Item1;
-			var channel = reqData.Item2;
-			var accessLevel = reqData.Item3;
+			try
+			{
+				Tuple<User, Channel, AccessLevel> reqData = GetRequestedChannel<ChannelEntity>(channelName, entityRequest);
+				var user = reqData.Item1;
+				var channel = reqData.Item2;
+				var accessLevel = reqData.Item3;
 
-			var entity = entityRequest.Data;
-			if (user != null)
-				entity.UserId = user.Id;
+				var entity = entityRequest.Data;
+				if (user != null)
+					entity.UserId = user.Id;
 
-			if (accessLevel != AccessLevel.Admin && entity.Importance == Importance.High)
-				entity.Importance = Importance.Normal;
+				if (accessLevel != AccessLevel.Admin && entity.Importance == Importance.High)
+					entity.Importance = Importance.Normal;
 
-			entity.ResetEmpty();
+				entity.ResetEmpty();
 
-			if (entity.Title == null && entity.Message == null)
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, new APIError("emptyTitleAndMessage", "At least one of 'Title' and 'Message' must be present")));
+				if (entity.Title == null && entity.Message == null)
+					throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.BadRequest, new APIError("emptyTitleAndMessage", "At least one of 'Title' and 'Message' must be present")));
 
-			entity.Date = DateTime.Now;
-			entity.ChannelId = channel.Id;
+				if (entity.FileUploads.Count > 0)
+				{
+					string awsPath = channel.GetUniqueName() + "_" + channel.Id + "/" +
+						MongoDBHelper.Hash(entity.FileUploads.First().Key + "_" + MongoDBHelper.GetRandomSalt());
 
-			var entities = MongoDBHelper.database.GetCollection<ChannelEntity>("entities");
-			entities.Insert(entity);
+					AWSHelper.EncryptAndUpload(entity.FileUploads.First().Value, awsPath, channel.Salt);
 
-			return entity;
+					entity.FileName = entity.FileUploads.First().Key.Replace("\"", "");
+					entity.FilePathS3 = awsPath;
+				}
+
+				entity.Id = null;
+				entity.Date = DateTime.Now;
+				entity.ChannelId = channel.Id;
+
+				var entities = MongoDBHelper.database.GetCollection<ChannelEntity>("entities");
+				entities.Insert(entity);
+
+				return entity;
+			}
+			finally
+			{
+				foreach (var file in entityRequest.Data.FileUploads)
+				{
+					try
+					{
+						// Make sure the temp files are removed...
+						System.IO.File.Delete(file.Value);
+					}
+					catch
+					{
+					}
+				}
+			}
 		}
 
 		[HttpGet]
 		[Route(Uri = "{channelName}/entities")]
-		public IEnumerable<ChannelEntity> ListEntities(HttpRequestMessage request, string channelName, AuthenticatedRequest<object> auth,
+		public IEnumerable<ChannelEntity> ListEntities(string channelName, AuthenticatedRequest<object> auth,
 			[FromUri] int start = 0,
 			[FromUri] int limit = 20,
 			[FromUri] string sort = "Date_desc"
 		)
 		{
-			var channel = GetChannelByName(request, channelName);
+			var channel = GetChannelByName(channelName);
 
 			if (auth.Verify(channel).Item2 == AccessLevel.None)
-				throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelAuth", "The channel authorization data is invalid")));
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelAuth", "The channel authorization data is invalid")));
 
 			var entities = MongoDBHelper.database.GetCollection<ChannelEntity>("entities");
 			var query = Query.EQ("ChannelId", channel.Id);
 
 			return entities.Find(query).SetSkip(start).SetLimit(limit).SetSortOrder(
-				APIHelp.GetSortOrder(request, sort, new string[] { "UserId", "Title", "Message", "Link", "Date", "Importance" })
+				APIHelp.GetSortOrder(this.Request, sort, new string[] { "UserId", "Title", "Message", "Link", "Date", "Importance" })
 			);
 		}
     }

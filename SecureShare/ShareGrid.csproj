@@ -39,6 +39,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AWSSDK, Version=1.4.14.0, Culture=neutral, PublicKeyToken=cd2d24cd2bace800, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AWSSDK.1.4.14.0\lib\AWSSDK.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="MongoDB.Bson, Version=1.4.2.4500, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -144,6 +148,7 @@
     <Compile Include="Helpers\ModelBinders\AuthenticatedRequestProvider.cs" />
     <Compile Include="Helpers\Route.cs" />
     <Compile Include="Models\AuthenticatedRequest.cs" />
+    <Compile Include="Helpers\AWSHelper.cs" />
     <Compile Include="Models\Channel.cs" />
     <Compile Include="Models\ChannelEntity.cs" />
     <Compile Include="Models\ChannelUpdate.cs" />

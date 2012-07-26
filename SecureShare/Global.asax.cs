@@ -26,6 +26,7 @@ namespace ShareGrid
 			GlobalConfiguration.Configuration.Filters.Add(new ValidationFilterAttribute());
 
 			MongoDBHelper.Initialize();
+			AWSHelper.Initialize();
 		} 
 	}
 }

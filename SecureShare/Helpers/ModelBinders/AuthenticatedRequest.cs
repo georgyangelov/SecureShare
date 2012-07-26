@@ -21,10 +21,40 @@ namespace ShareGrid.Helpers.ModelBinders
 	{
 		public bool BindModel(HttpActionContext actionContext, ModelBindingContext bindingContext)
 		{
+			var modelType = bindingContext.ModelType.GetGenericArguments()[0];
+			var properties = modelType.GetProperties();
+
+			var wrapperModel = Activator.CreateInstance(bindingContext.ModelType);
+			object model = Activator.CreateInstance(modelType);
+
 			NameValueCollection query;
 			if (actionContext.Request.Method == HttpMethod.Get)
 			{
 				query = HttpUtility.ParseQueryString(actionContext.Request.RequestUri.Query);
+			}
+			else if (actionContext.Request.Content.IsMimeMultipartContent())
+			{
+				var provider = new MultipartFormDataStreamProvider(System.IO.Path.GetTempPath());
+				var task = actionContext.Request.Content.ReadAsMultipartAsync(provider);
+				task.Wait();
+
+				if (!task.IsCompleted)
+					return false;
+
+				query = new NameValueCollection();
+				foreach (var content in task.Result)
+				{
+					if (content.Headers.ContentType != null && content.Headers.ContentType.MediaType != "text/plain")
+						continue;
+
+					query.Add(content.Headers.ContentDisposition.Name.Replace("\"", ""), content.ReadAsStringAsync().Result);
+				}
+
+				var filesProperty = modelType.GetProperty("FileUploads", typeof(IDictionary<string, string>));
+				if (filesProperty != null)
+				{
+					filesProperty.SetValue(model, provider.BodyPartFileNames, null);
+				}
 			}
 			else
 			{
@@ -36,11 +66,6 @@ namespace ShareGrid.Helpers.ModelBinders
 
 				query = HttpUtility.ParseQueryString(queryStringTask.Result);
 			}
-
-			var modelType = bindingContext.ModelType.GetGenericArguments()[0];
-			var properties = modelType.GetProperties();
-
-			var wrapperModel = Activator.CreateInstance(bindingContext.ModelType);
 
 			if (query.AllKeys.Contains("SessionKey"))
 			{
@@ -54,7 +79,6 @@ namespace ShareGrid.Helpers.ModelBinders
 				query.Remove("ChannelKey");
 			}
 
-			object model = Activator.CreateInstance(modelType);
 			foreach (var property in properties)
 			{
 				if (query.AllKeys.Contains(property.Name))

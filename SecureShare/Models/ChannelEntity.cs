@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -26,9 +27,36 @@ namespace ShareGrid.Models
 		public string Message { get; set; }
 		public string Link { get; set; }
 
+		[BsonIgnoreIfNull]
+		public string FileName { get; set; }
+		[JsonIgnore]
+		public string FilePathS3 { get; set; }
+
+		[BsonIgnore]
+		public string FileLink
+		{
+			get
+			{
+				return ConfigurationManager.AppSettings["ApplicationBaseUrl"] + "/api/channels/entity/" + Id + "/download";
+			}
+		}
+		[BsonIgnore]
+		public string FilePreview
+		{
+			get
+			{
+				return ConfigurationManager.AppSettings["ApplicationBaseUrl"] + "/api/channels/entity/" + Id + "/preview";
+			}
+		}
+
+
 		public DateTime Date { get; set; }
 
 		public Importance Importance { get; set; }
+
+		[JsonIgnore]
+		[BsonIgnore]
+		public IDictionary<string, string> FileUploads { get; set; }
 
 		public void ResetEmpty()
 		{
