@@ -142,6 +142,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="Helpers\APIHelp.cs" />
+    <Compile Include="Helpers\ImageResizer.cs" />
     <Compile Include="Helpers\ValidationFilterAttribute.cs" />
     <Compile Include="Controllers\API\ChannelsController.cs" />
     <Compile Include="Helpers\ModelBinders\AuthenticatedRequest.cs" />

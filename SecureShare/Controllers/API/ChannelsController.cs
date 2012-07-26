@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -211,6 +212,20 @@ namespace ShareGrid.Controllers.API
 					AWSHelper.EncryptAndUpload(entity.FileUploads.First().Value, awsPath, channel.Salt);
 
 					entity.FileName = entity.FileUploads.First().Key.Replace("\"", "");
+
+					if (entity.FileName.EndsWith(".png") || entity.FileName.EndsWith(".jpg") || entity.FileName.EndsWith(".jpeg"))
+					{
+						try
+						{
+							// Thumbnail
+							ImageResizer.Resize(new FileStream(entity.FileUploads.First().Value, FileMode.Open), entity.FileUploads.First().Value + "_thumb", 360, 268);
+							AWSHelper.EncryptAndUpload(entity.FileUploads.First().Value + "_thumb", awsPath + "_360x268", channel.Salt);
+
+							entity.FilePathPreviewS3 = awsPath + "_360x268";
+						}
+						catch { }
+					}
+
 					entity.FilePathS3 = awsPath;
 				}
 

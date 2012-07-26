@@ -31,6 +31,8 @@ namespace ShareGrid.Models
 		public string FileName { get; set; }
 		[JsonIgnore]
 		public string FilePathS3 { get; set; }
+		[JsonIgnore]
+		public string FilePathPreviewS3 { get; set; }
 
 		[BsonIgnore]
 		public string FileLink
