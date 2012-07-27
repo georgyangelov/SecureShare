@@ -32,8 +32,11 @@
 		return self.selectedFile() != null;
 	});
 
+	var selectedFileData = ko.observable(null);
+
 	/* Methods */
 	this.fileSelected = function (e, data) {
+		selectedFileData(data);
 		var file = data.files[0];
 
 		file.formattedSize = toReadableFileSize(file.size);
@@ -42,8 +45,49 @@
 	};
 
 	this.SubmitFile = function () {
-		//TODO: Actual file upload to 'resourceId: "uploadEntity"'
+		var data = selectedFileData();
+
+		data.formData = {
+			channelName: channel.Name(),
+			SessionKey: Application.user().SessionKey.Key(),
+			Title: self.Title(),
+			Message: self.Message()
+		};
+
+		self.isUploadInProgress(true);
+		self.uploadStatusText("Uploading...");
+		data.submit();
 	};
+
+	/* File upload progress callbacks */
+	this.isUploadInProgress = ko.observable(false);
+	this.uploadProgressPercent = ko.observable(0);
+	this.uploadStatusText = ko.observable("");
+
+	this.uploadProgress = function (e, data) {
+		var progress = Math.round(100 * data.loaded / data.total);
+
+		if (progress >= 95)
+			self.uploadStatusText("Processing, please wait...");
+
+		self.uploadProgressPercent(progress);
+	};
+	
+	this.uploadDone = function (e, data) {
+		self.uploadProgressPercent(100);
+		self.isUploadInProgress(false);
+
+		Application.alerts.push({ type: "success", title: "Wohoo!", text: "You uploaded a file to " + channel.Name() });
+
+		channel.hideUploadEntityPanel();
+	};
+
+	this.uploadFailed = function (e, data) {
+		self.isUploadInProgress(false);
+
+		Application.alerts.push({ type: "error", title: "Oops!", text: "The upload failed. Are you sure the file is less than 50MB ?" });
+	};
+	/* END File upload progress callbacks */
 
 	this.SubmitMessage = function () {
 		amplify.request({

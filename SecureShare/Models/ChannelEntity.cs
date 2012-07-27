@@ -31,15 +31,29 @@ namespace ShareGrid.Models
 		public string FileName { get; set; }
 		[JsonIgnore]
 		public string FilePathS3 { get; set; }
+		public long? FileLength { get; set; }
+
 		[JsonIgnore]
 		public string FilePathPreviewS3 { get; set; }
+		public long? FilePreviewLength { get; set; }
 
+		[BsonIgnore]
+		public bool IsFile
+		{
+			get
+			{
+				return FilePathS3 != null;
+			}
+		}
 		[BsonIgnore]
 		public string FileLink
 		{
 			get
 			{
-				return ConfigurationManager.AppSettings["ApplicationBaseUrl"] + "/api/channels/entity/" + Id + "/download";
+				if (IsFile)
+					return ConfigurationManager.AppSettings["ApplicationBaseUrl"] + "/api/channels/file/" + Id + "/download";
+				else
+					return null;
 			}
 		}
 		[BsonIgnore]
@@ -47,7 +61,10 @@ namespace ShareGrid.Models
 		{
 			get
 			{
-				return ConfigurationManager.AppSettings["ApplicationBaseUrl"] + "/api/channels/entity/" + Id + "/preview";
+				if (IsFile)
+					return ConfigurationManager.AppSettings["ApplicationBaseUrl"] + "/api/channels/file/" + Id + "/preview";
+				else
+					return null;
 			}
 		}
 

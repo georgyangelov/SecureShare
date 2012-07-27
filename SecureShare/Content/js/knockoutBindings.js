@@ -91,7 +91,7 @@
 					options.file(),
 					function (img) {
 						$element.append(img);
-						console.log(options.loaded);
+
 						if (typeof options.loaded !== "undefined") {
 							options.loaded($element);
 						}

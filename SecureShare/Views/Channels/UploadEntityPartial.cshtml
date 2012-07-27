@@ -64,15 +64,24 @@
 				Selected file: <span class="label label-info" data-bind="text: name"></span> <span class="label" data-bind="text: formattedSize"></span>
 			</div>
 
-			<span class="btn fileinput-button">
+			<div class="progress progress-striped active" data-bind="visible: isUploadInProgress">
+				<div class="bar" data-bind="style: {width: uploadProgressPercent() + '%'}"></div>
+				<div class="text" data-bind="text: uploadStatusText"></div>
+			</div>
+
+			<span class="btn fileinput-button" data-bind="visible: !isUploadInProgress()">
 				Choose file
 				<input type="file" name="files[]" data-bind="fileUpload: {
-					drop: fileSelected,
-					change: fileSelected
+					add: fileSelected,
+					progress: uploadProgress,
+					done: uploadDone,
+					fail: uploadFailed,
+					autoUpload: false,
+					url: 'api/channels/' + $parent.UniqueName() + '/entities'
 				}" />
 			</span>
 			
-			<button type="submit" class="btn btn-success pull-right" data-bind="click: SubmitFile, enable: hasSelectedFile"><i class="icon-upload-alt"></i> Submit</button>
+			<button type="submit" class="btn btn-success pull-right" data-bind="click: SubmitFile, enable: hasSelectedFile, visible: !isUploadInProgress()"><i class="icon-upload-alt"></i> Submit</button>
 		</div>
 
 	</div>

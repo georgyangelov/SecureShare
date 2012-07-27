@@ -5,9 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using Amazon.S3.Model;
 using MongoDB.Driver.Builders;
 using ShareGrid.Helpers;
 using ShareGrid.Models;
@@ -181,6 +183,111 @@ namespace ShareGrid.Controllers.API
 			return new Tuple<User, Channel, AccessLevel>(user, channel, accessLevel);
 		}
 
+		[HttpGet]
+		[Route(Uri = "file/{entityId}/download")]
+		public HttpResponseMessage DownloadFile(string entityId, AuthenticatedRequest<object> auth)
+		{
+			var entities = MongoDBHelper.database.GetCollection<ChannelEntity>("entities");
+			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
+
+			var entity = entities.FindOneById(entityId);
+
+			if (entity == null)
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.NotFound));
+
+			var channel = channels.FindOneById(entity.ChannelId);
+
+			var access = auth.Verify(channel);
+			User user = access.Item1;
+			AccessLevel accessLevel = access.Item2;
+
+			if (accessLevel == AccessLevel.None)
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.Forbidden));
+
+			if (channel == null)
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.InternalServerError));
+
+			Stream stream = AWSHelper.GetDecryptedFileStream(entity.FilePathS3, channel.Salt);
+
+			var response = this.Request.CreateResponse();
+			response.Content = new StreamContent(stream);
+
+			response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+			if (entity.FileLength != null)
+				response.Content.Headers.ContentLength = entity.FileLength;
+			response.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+			{
+				FileName = entity.FileName
+			};
+
+			return response;
+		}
+
+		[HttpGet]
+		[Route(Uri = "file/{entityId}/preview")]
+		public HttpResponseMessage PreviewFile(string entityId, AuthenticatedRequest<object> auth)
+		{
+			var entities = MongoDBHelper.database.GetCollection<ChannelEntity>("entities");
+			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
+
+			var entity = entities.FindOneById(entityId);
+
+			if (entity == null)
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.NotFound));
+
+			var channel = channels.FindOneById(entity.ChannelId);
+
+			var access = auth.Verify(channel);
+			User user = access.Item1;
+			AccessLevel accessLevel = access.Item2;
+
+			if (accessLevel == AccessLevel.None)
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.Forbidden));
+
+			if (channel == null)
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.InternalServerError));
+
+
+			var response = this.Request.CreateResponse();
+			Stream stream;
+			bool isIcon = false;
+
+			if (entity.FilePathPreviewS3 == null || entity.FilePathPreviewS3.Length == 0)
+			{
+				string extension = entity.FileName.Split('.').Last();
+				string iconPath;
+
+				if (!Regex.IsMatch(extension, "[^a-z0-9]", RegexOptions.IgnoreCase))
+				{
+					iconPath = HttpContext.Current.Server.MapPath("~/Content/icons/" + extension + ".png");
+
+					if (!File.Exists(iconPath))
+						iconPath = HttpContext.Current.Server.MapPath("~/Content/icons/unknown.png");
+				}
+				else
+					iconPath = HttpContext.Current.Server.MapPath("~/Content/icons/unknown.png");
+
+				stream = new FileStream(iconPath, FileMode.Open);
+				isIcon = true;
+			}
+			else
+			{
+				stream = AWSHelper.GetDecryptedFileStream(entity.FilePathPreviewS3, channel.Salt);
+				isIcon = false;
+			}
+
+			response.Content = new StreamContent(stream);
+
+			response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/png");
+
+			if (!isIcon && entity.FilePreviewLength != null)
+				response.Content.Headers.ContentLength = entity.FilePreviewLength;
+			else if (isIcon)
+				response.Content.Headers.ContentLength = stream.Length;
+
+			return response;
+		}
+
 		[HttpPost]
 		[Route(Uri = "{channelName}/entities")]
 		public ChannelEntity UploadEntity([FromUri] string channelName, AuthenticatedRequest<ChannelEntity> entityRequest)
@@ -201,7 +308,7 @@ namespace ShareGrid.Controllers.API
 
 				entity.ResetEmpty();
 
-				if (entity.Title == null && entity.Message == null)
+				if (entity.FileUploads.Count == 0 && entity.Title == null && entity.Message == null)
 					throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.BadRequest, new APIError("emptyTitleAndMessage", "At least one of 'Title' and 'Message' must be present")));
 
 				if (entity.FileUploads.Count > 0)
@@ -212,16 +319,28 @@ namespace ShareGrid.Controllers.API
 					AWSHelper.EncryptAndUpload(entity.FileUploads.First().Value, awsPath, channel.Salt);
 
 					entity.FileName = entity.FileUploads.First().Key.Replace("\"", "");
+					entity.FileLength = new FileInfo(entity.FileUploads.First().Value).Length;
 
 					if (entity.FileName.EndsWith(".png") || entity.FileName.EndsWith(".jpg") || entity.FileName.EndsWith(".jpeg"))
 					{
 						try
 						{
-							// Thumbnail
-							ImageResizer.Resize(new FileStream(entity.FileUploads.First().Value, FileMode.Open), entity.FileUploads.First().Value + "_thumb", 360, 268);
-							AWSHelper.EncryptAndUpload(entity.FileUploads.First().Value + "_thumb", awsPath + "_360x268", channel.Salt);
+							using (var fs = new FileStream(entity.FileUploads.First().Value, FileMode.Open))
+							{
+								// Thumbnail
+								ImageResizer.Resize(fs, entity.FileUploads.First().Value + "_thumb", 360, 268);
+								try
+								{
+									AWSHelper.EncryptAndUpload(entity.FileUploads.First().Value + "_thumb", awsPath + "_360x268", channel.Salt);
 
-							entity.FilePathPreviewS3 = awsPath + "_360x268";
+									entity.FilePathPreviewS3 = awsPath + "_360x268";
+									entity.FilePreviewLength = new FileInfo(entity.FileUploads.First().Value + "_thumb").Length;
+								}
+								finally
+								{
+									System.IO.File.Delete(entity.FileUploads.First().Value + "_thumb");
+								}
+							}
 						}
 						catch { }
 					}
