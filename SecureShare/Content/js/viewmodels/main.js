@@ -73,19 +73,19 @@ function ViewModel() {
 
 	this.init = function () {
 		Sammy(function () {
-			this.get('#home', function () {
+			this.get('/#home', function () {
 				self.ClearPageData();
 				// Home page
 				self.homeView({});
 			});
 
-			this.get('#:channel', function () {
+			this.get('/#:channel', function () {
 				self.ClearPageData();
 				// Channel page view for this.params.channel
 				self.channelView(new ChannelView(this.params.channel));
 			});
 
-			this.get('', function () {
+			this.get('/', function () {
 				this.app.runRoute('get', '#home');
 			});
 		}).run();

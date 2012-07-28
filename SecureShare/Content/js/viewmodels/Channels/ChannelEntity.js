@@ -5,21 +5,20 @@
 function ChannelEntity(data) {
 	var self = this;
 
-	/* Data reset */
-	if (typeof data.Title === "undefined")
-		data.Title = "";
-	if (typeof data.Message === "undefined")
-		data.Message = "";
-	if (typeof data.Link === "undefined")
-		data.Link = "";
-
 	/* Properties */
 	this.Id = ko.observable(data.Id);
-	this.Title = ko.observable(data.Title);
-	this.Message = ko.observable(data.Message);
-	this.Link = ko.observable(data.Link);
+	this.Title = ko.observable(data.Title || "");
+	this.Message = ko.observable(data.Message || "");
+	this.Link = ko.observable(data.Link || "");
 
-	this.Importance = ko.observable(data.Importance);
+	this.IsFile = ko.observable(data.IsFile || false);
+	this.FileName = ko.observable(data.FileName || "");
+	this.FileLink = ko.observable(data.FileLink + "?SessionKey=" + Application.user().SessionKey.Key() || "");
+	this.FileLength = ko.observable(data.FileLength || 0);
+	this.FilePreview = ko.observable(data.FilePreview + "?SessionKey=" + Application.user().SessionKey.Key() || "");
+	this.FilePreviewLength = ko.observable(data.FilePreviewLength || 0);
+
+	this.Importance = ko.observable(data.Importance || 1);
 
 	/* Helper properties */
 	this.isLink = ko.computed(function () {

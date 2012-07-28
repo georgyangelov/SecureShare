@@ -36,6 +36,18 @@
 			<!-- /ko -->
 
 			<!-- ko foreach: Entities -->
+			
+			<!-- ko if: IsFile -->
+			<li class="span2 span file" data-bind="attr: {'data-id': Id}">
+				<a class="thumbnail" data-bind="attr: {href: FileLink}">
+					<img data-bind="attr: {src: FilePreview}" style="height: 120px;" />
+			
+					<h4 data-bind="optionalText: Title"></h4>
+					<p data-bind="optionalText: Message"></p>
+				</a>
+			</li>
+			<!-- /ko -->
+			<!-- ko ifnot: IsFile -->
 			<li class="span4 span message" data-bind="
 				attr: {'data-id': Id},
 				css: {active: isExpandable, link: isLink}, 
@@ -47,28 +59,30 @@
 
 					return true;
 				}">
-				<!-- ko if: isLink -->
-				<a class="thumbnail" data-bind="attr: {href: Link}" target="_blank">
-					<div class="controlBox" data-bind="if: isExpandable">
-						<i class="icon-resize-full pull-right collapseBtn" href="#" data-bind="click: toggleExpanded"></i>
-					</div>
+				
+					<!-- ko if: isLink --> 
+					<a class="thumbnail" data-bind="attr: {href: Link}" target="_blank">
+						<div class="controlBox" data-bind="if: isExpandable">
+							<i class="icon-resize-full pull-right collapseBtn" href="#" data-bind="click: toggleExpanded"></i>
+						</div>
 
-					<i class="icon-link annotationIcon"></i>
-					<h4 data-bind="optionalText: Title"></h4>
-					<p data-bind="optionalText: currentMessage"></p>
-				</a>
-				<!-- /ko -->
-				<!-- ko ifnot: isLink -->
-				<div class="thumbnail">
-					<div class="controlBox" data-bind="if: isExpandable">
-						<i class="icon-resize-full pull-right collapseBtn" href="#" data-bind="click: toggleExpanded"></i>
-					</div>
+						<i class="icon-link annotationIcon"></i>
+						<h4 data-bind="optionalText: Title"></h4>
+						<p data-bind="optionalText: currentMessage"></p>
+					</a>
+					<!-- /ko -->
+					<!-- ko ifnot: isLink -->
+					<div class="thumbnail">
+						<div class="controlBox" data-bind="if: isExpandable">
+							<i class="icon-resize-full pull-right collapseBtn" href="#" data-bind="click: toggleExpanded"></i>
+						</div>
 
-					<h4 data-bind="optionalText: Title"></h4>
-					<p data-bind="optionalText: currentMessage"></p>
-				</div>
-				<!-- /ko -->
+						<h4 data-bind="optionalText: Title"></h4>
+						<p data-bind="optionalText: currentMessage"></p>
+					</div>
+					<!-- /ko -->
 			</li>
+			<!-- /ko -->
 			<!-- /ko -->
 
 			<!--li class="span2 span">

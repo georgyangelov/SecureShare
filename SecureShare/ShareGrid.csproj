@@ -314,6 +314,7 @@
     <Content Include="Content\js\libs\jquery-file-upload\vendor\jquery.ui.widget.js" />
     <Content Include="Content\js\libs\jquery.autosize.js" />
     <Content Include="Content\js\libs\jquery.cookie.js" />
+    <Content Include="Content\js\libs\jquery.resize.js" />
     <Content Include="Content\js\libs\jquery.masonry.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

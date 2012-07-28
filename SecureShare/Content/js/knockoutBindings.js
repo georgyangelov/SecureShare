@@ -47,6 +47,16 @@
 		}
 	};
 
+	ko.bindingHandlers.onResize = {
+		init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+			var throttle;
+			$(element).bind('resize', function () {
+				clearTimeout(throttle);
+				throttle = setTimeout(valueAccessor(), 300);
+			});
+		}
+	};
+
 	ko.bindingHandlers.fileDropZone = {
 		init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
 			var $element = $(element);
