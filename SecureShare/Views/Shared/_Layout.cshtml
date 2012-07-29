@@ -12,52 +12,11 @@
 
 	<!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script-->
 	<script src="@Url.Content("~/Content/js/libs/jquery-1.7.2.min.js")"></script>
-
-	<script src="@Url.Content("~/Content/bootstrap/js/bootstrap-button.js")"></script>
-	<script src="@Url.Content("~/Content/bootstrap/js/bootstrap-modal.js")"></script>
-	<script src="@Url.Content("~/Content/bootstrap/js/bootstrap-transition.js")"></script>
-	<script src="@Url.Content("~/Content/bootstrap/js/bootstrap-dropdown.js")"></script>
-	<script src="@Url.Content("~/Content/bootstrap/js/bootstrap-alert.js")"></script>
-	<script src="@Url.Content("~/Content/bootstrap/js/bootstrap-tab.js")"></script>
 	
-	<script src="@Url.Content("~/Content/js/libs/jquery.masonry.js")"></script>
-	<script src="@Url.Content("~/Content/js/libs/jquery.cookie.js")"></script>
-	<script src="@Url.Content("~/Content/js/textHelpers.js")"></script>
-	<script src="@Url.Content("~/Content/js/libs/amplify.min.js")"></script>
-	<script src="@Url.Content("~/Content/js/libs/knockout-2.1.0.js")"></script>
-	<script src="@Url.Content("~/Content/js/libs/knockout-mapping-2.2.0.js")"></script>
-	<script src="@Url.Content("~/Content/js/libs/sammy-0.7.1.min.js")"></script>
-	<script src="@Url.Content("~/Content/js/libs/jquery.autosize.js")"></script>
-	<script src="@Url.Content("~/Content/js/libs/load-image.min.js")"></script>
-	<script src="@Url.Content("~/Content/js/libs/jquery.resize.js")"></script>
-	
-	<!-- jQuery file upload plugin -->
-	
-	<script src="@Url.Content("~/Content/js/libs/jquery-file-upload/vendor/jquery.ui.widget.js")"></script>
-	<!--script src="@Url.Content("~/Content/js/libs/jquery-file-upload/cors/jquery.postmessage-transport.js")"></script>
-	<script src="@Url.Content("~/Content/js/libs/jquery-file-upload/cors/jquery.xdr-transport.js")"></script-->
-	<script src="@Url.Content("~/Content/js/libs/jquery-file-upload/jquery.iframe-transport.js")"></script>
-	<script src="@Url.Content("~/Content/js/libs/jquery-file-upload/jquery.fileupload.js")"></script>
-	<!--script src="@Url.Content("~/Content/js/libs/jquery-file-upload/jquery.fileupload-ui.js")"></!--script>
-	<script src="@Url.Content("~/Content/js/libs/jquery-file-upload/jquery.fileupload-fp.js")"></script-->
-	<!--[if gte IE 8]><script src="js/cors/jquery.xdr-transport.js"></script><![endif]-->
-	<!-- End jQuery file upload plugin -->
-
-	<script src="@Url.Content("~/Content/js/knockoutExtenders.js")"></script>
-	<script src="@Url.Content("~/Content/js/knockoutBindings.js")"></script>
-
-	<script src="@Url.Content("~/Content/js/apiroutes.js")"></script>
-	
-	<script src="@Url.Content("~/Content/js/viewmodels/RegisterPanel.js")"></script>
-	<script src="@Url.Content("~/Content/js/viewmodels/LoginPanel.js")"></script>
-	<script src="@Url.Content("~/Content/js/viewmodels/UserEmailPanel.js")"></script>
-	<script src="@Url.Content("~/Content/js/viewmodels/UserPasswordPanel.js")"></script>
-	<script src="@Url.Content("~/Content/js/viewmodels/RegisterChannelPanel.js")"></script>
-	<script src="@Url.Content("~/Content/js/viewmodels/SubscribeChannelPanel.js")"></script>
-	<script src="@Url.Content("~/Content/js/viewmodels/Channels/ChannelEntity.js")"></script>
-	<script src="@Url.Content("~/Content/js/viewmodels/Channels/ChannelView.js")"></script>
-	<script src="@Url.Content("~/Content/js/viewmodels/Channels/UploadEntityPanel.js")"></script>
-	<script src="@Url.Content("~/Content/js/viewmodels/main.js")"></script>
+	<script src="@BundleTable.Bundles.ResolveBundleUrl("~/bundles/js/bootstrap")"></script>
+	<script src="@BundleTable.Bundles.ResolveBundleUrl("~/bundles/js/jqueryPlugins")"></script>
+	<script src="@BundleTable.Bundles.ResolveBundleUrl("~/bundles/js/jqueryFileUpload")"></script>
+	<script src="@BundleTable.Bundles.ResolveBundleUrl("~/bundles/js/knockout")"></script>
 </head>
 
 <body>
