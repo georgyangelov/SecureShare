@@ -280,7 +280,7 @@ namespace ShareGrid.Controllers.API
 
 			response.Headers.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue()
 			{
-				Public = true
+				Private = true
 			};
 			response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/png");
 			response.Content.Headers.Expires = new DateTimeOffset(DateTime.Now.AddMonths(11));
