@@ -278,7 +278,12 @@ namespace ShareGrid.Controllers.API
 
 			response.Content = new StreamContent(stream);
 
+			response.Headers.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue()
+			{
+				Public = true
+			};
 			response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/png");
+			response.Content.Headers.Expires = new DateTimeOffset(DateTime.Now.AddMonths(11));
 
 			if (!isIcon && entity.FilePreviewLength != null)
 				response.Content.Headers.ContentLength = entity.FilePreviewLength;
