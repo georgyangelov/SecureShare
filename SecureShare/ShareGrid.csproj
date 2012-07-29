@@ -343,7 +343,7 @@
     </Content>
     <Content Include="Content\js\knockoutBindings.js" />
     <Content Include="Content\js\libs\amplify-vsdoc.js" />
-    <Content Include="Content\js\libs\amplify.js" />
+    <Content Include="Content\js\libs\amplify.min.js" />
     <Content Include="Content\js\libs\jquery-1.7.2.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

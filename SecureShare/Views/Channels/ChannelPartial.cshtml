@@ -40,8 +40,14 @@
 			<!-- ko if: IsFile -->
 			<li class="span2 span file" data-bind="attr: {'data-id': Id}">
 				<a class="thumbnail" data-bind="attr: {href: FileLink}">
-					<img data-bind="attr: {src: FilePreview}" style="height: 120px;" />
-			
+					<div class="imgBox">
+						<img data-bind="attr: {src: FilePreview}" />
+					</div>
+
+					<div class="controlBox" data-bind="if: isExpandable">
+						<i class="icon-resize-full pull-right collapseBtn" href="#" data-bind="click: toggleExpanded"></i>
+					</div>
+
 					<h4 data-bind="optionalText: Title"></h4>
 					<p data-bind="optionalText: Message"></p>
 				</a>

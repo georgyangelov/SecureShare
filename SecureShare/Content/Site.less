@@ -234,6 +234,50 @@ a.thumbnail
 		}
 	}
 }
+
+.file
+{
+	.imgBox
+	{
+		text-align: center;
+	}
+
+	&:not(.expanding)
+	{
+		.imgBox
+		{
+			height: 120px;
+	
+			img
+			{
+				max-height: 120px;
+			}
+		}
+
+		&.expanded
+		{
+			.imgBox
+			{
+				height: 268px;
+
+				img
+				{
+					max-height: 268px;
+				}
+			}
+		}
+	}
+}
+
+.file .controlBox
+{
+	position: absolute;
+	right: 5px;
+	top: 5px;
+
+	text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+
 .thumbnail
 {
 	position: relative;

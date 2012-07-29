@@ -31,7 +31,7 @@ function ChannelEntity(data) {
 	this.currentMessage = ko.observable(this.smallMessage());
 
 	this.isExpandable = ko.computed(function () {
-		return self.smallMessage() != self.Message();
+		return self.FilePreviewLength() > 0 || self.smallMessage() != self.Message();
 	});
 
 	var expanded = ko.observable(false);
@@ -45,39 +45,50 @@ function ChannelEntity(data) {
 
 			var $msg = $("[data-id='" + self.Id() + "']");
 
+			var smallClass = 'span4',
+				bigClass   = 'span8';
+			if ($msg.is('.file')) {
+				smallClass = 'span2';
+				bigClass   = 'span4';
+			}
+
 			if (value) {
 				var $thumbnail = $msg.find('.thumbnail');
 
-				if ($msg.hasClass('span4')) {
-					$thumbnail
-						.css('width', $thumbnail.width() + 'px')
-						.css('height', $thumbnail.height() + 'px');
+				$thumbnail
+					.css('width', $thumbnail.width() + 'px')
+					.css('height', $thumbnail.height() + 'px');
 
-					$msg.removeClass('span4').addClass('span8');
+				$msg.removeClass(smallClass).addClass(bigClass);
 
-					var newHeight = $thumbnail.find('p').parent().textHeight(self.Message(), $msg.width()) + (self.Title().length ? $msg.find('h4').height() : 0) + 5;
+				var newHeight = $thumbnail.find('p').parent().textHeight(self.Message(), $msg.width()) + (self.Title().length ? $msg.find('h4').height() : 0) + 5;
+				if (self.IsFile())
+					newHeight += 263;
 
-					$msg.height(newHeight + 10);
+				$msg.height(newHeight + 10);
 
-					setTimeout(function () {
-						$msg.addClass('expanded');
-						self.currentMessage(self.Message());
-						$thumbnail.find('.icon-resize-full').removeClass('icon-resize-full').addClass('icon-resize-small');
-						$thumbnail.animate({ width: $msg.width() - 10, height: newHeight }, 700, function () {
-							updateGrid();
+				setTimeout(function () {
+					$msg.addClass('expanded').addClass('expanding');
+					self.currentMessage(self.Message());
+					$thumbnail.find('.icon-resize-full').removeClass('icon-resize-full').addClass('icon-resize-small');
+					$thumbnail.animate({ width: $msg.width() - 10, height: newHeight }, 700, function () {
+						updateGrid();
+						$msg.removeClass('expanding');
 
-							expanded(true);
-						});
-					}, 700);
+						expanded(true);
+					});
+					if (self.IsFile()) {
+						$thumbnail.find('.imgBox').animate({ height: 268 }, 700);
+					}
+				}, 700);
 
-					updateGrid();
-				}
+				updateGrid();
 
 			}
 			else {
 				var $thumbnail = $msg.find('.thumbnail');
 
-				var $measure = $('<li><div class="thumbnail"></div></li>').addClass('span4');
+				var $measure = $('<li><div class="thumbnail"></div></li>').addClass(smallClass);
 				$msg.parent().append($measure);
 				var span4Width = $measure.find('.thumbnail').width();
 				$measure.remove();
@@ -87,17 +98,24 @@ function ChannelEntity(data) {
 						.css('height', $thumbnail.height() + 'px');
 
 				var newHeight = $msg.find('p').parent().textHeight(self.smallMessage(), span4Width) + (self.Title().length ? $msg.find('h4').height() : 0) + 5;
+				if (self.IsFile())
+					newHeight += 115;
 
+				$msg.addClass('expanding');
 				$thumbnail.find('.icon-resize-small').removeClass('icon-resize-small').addClass('icon-resize-full');
 				$thumbnail.animate({ width: span4Width, height: newHeight }, 700, function () {
-					$msg.addClass('span4').removeClass('span8');
+					$msg.addClass(smallClass).removeClass(bigClass);
 					self.currentMessage(self.smallMessage());
 					$msg.css('height', $thumbnail.outerHeight() + 'px');
+					$msg.removeClass('expanding');
 
 					updateGrid();
 
 					expanded(false);
 				});
+				if (self.IsFile()) {
+					$thumbnail.find('.imgBox').animate({ height: 120 }, 700);
+				}
 				$msg.removeClass('expanded');
 			}
 		}

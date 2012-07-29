@@ -115,4 +115,17 @@
 		}
 	};
 
+	ko.bindingHandlers.isHovering = {
+		update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+			var $element = $(element);
+
+			$element.hover(function () {
+				valueAccessor()(true);
+			},
+			function () {
+				valueAccessor()(false);
+			});
+		}
+	};
+
 })(jQuery);
