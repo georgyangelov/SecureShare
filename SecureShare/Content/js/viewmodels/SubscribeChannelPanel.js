@@ -40,6 +40,8 @@
 				Application.alerts.push({ type: "success", title: "Nice!", text: "You have subscribed to a new channel." });
 
 				Application.UpdateUserInfo();
+
+				window.location.hash = self.Name();
 			},
 			error: function (data, status) {
 				if (data != null && typeof data.error !== "undefined" && typeof data.message !== "undefined") {

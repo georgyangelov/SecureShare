@@ -15,6 +15,27 @@
 	this.uploadEntityPanel = ko.observable();
 
 	/* Methods */
+	this.unsubscribe = function () {
+		if (!confirm("Are you sure you want to unsubscribe from " + self.Name() + "?"))
+			return;
+
+		amplify.request({
+			resourceId: "unsubscribeFromChannel",
+			data: {
+				channelName: self.UniqueName(),
+				userId: Application.user().Id(),
+				SessionKey: Application.user().SessionKey.Key()
+			},
+			success: function (data) {
+				window.location.hash = "home";
+				Application.UpdateUserInfo();
+			},
+			error: function (data) {
+				Application.alerts.push({ type: "error", text: "We couldn't contact the server. Sorry about that!" });
+			}
+		});
+	};
+
 	this.updateGrid = function ($elements, reloadOrAppend) {
 		if (typeof $elements !== "undefined") {
 			if (typeof reloadOrAppend === "undefined")

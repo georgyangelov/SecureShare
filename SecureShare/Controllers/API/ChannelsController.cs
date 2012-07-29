@@ -158,6 +158,54 @@ namespace ShareGrid.Controllers.API
 			return new SuccessReport(true);
 		}
 
+		[HttpDelete]
+		[Route(Uri = "{channelName}/users/{userId}")]
+		public SuccessReport UnsubscribeUser(string channelName, string userId, AuthenticatedRequest<object> auth)
+		{
+			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
+
+			var channel = channels.FindOne(Query.EQ("UniqueName", Channel.GetUniqueName(channelName)));
+			if (channel == null)
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidChannelName", "There's no channel with this name")));
+
+			var users = MongoDBHelper.database.GetCollection<User>("users");
+			var user = users.FindOneById(userId);
+
+			if (user == null)
+				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.NotFound, new APIError("invalidUserId", "Invalid or non-existant user id")));
+
+			if (auth.AuthType == AuthType.SessionKey)
+			{
+				var userSession = auth.VerifySessionKey();
+				if (userSession == null)
+					throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidSessionKey", "Your session key is invalid or expired")));
+
+				var userSessionAccess = channel.Users.FirstOrDefault(x => x.Id == user.Id);
+
+				if (userSessionAccess.Id != user.Id && userSessionAccess.Access != AccessLevel.Admin)
+					throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidAccessLevel", "You must be admin to remove other user's")));
+			}
+			else
+			{
+				var accessLevel = auth.VerifyChannelPassword(channel);
+				if (accessLevel == AccessLevel.None)
+					throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelKey", "The channel password is invalid")));
+				else if (accessLevel != AccessLevel.Admin)
+					throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.Forbidden, new APIError("invalidChannelKey", "You must use the admin password to unsubscribe user only with channel authorization")));
+			}
+
+			if (channel.Users == null)
+				channel.Users = new List<ChannelUserAccess>();
+
+			var accessInChannel = channel.Users.FirstOrDefault(x => x.Id == user.Id);
+			if (accessInChannel != null)
+				channel.Users.Remove(accessInChannel);
+
+			channels.Save(channel);
+
+			return new SuccessReport(true);
+		}
+
 		private Channel GetChannelByName(string channelName)
 		{
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");

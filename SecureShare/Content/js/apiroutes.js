@@ -131,6 +131,17 @@ amplify.request.define(
 );
 
 amplify.request.define(
+	"unsubscribeFromChannel", "ajax",
+	{
+		url: "api/channels/{channelName}/users/{userId}",
+		type: "DELETE",
+		dataType: "json",
+		cache: false,
+		decoder: "errorDecoder"
+	}
+);
+
+amplify.request.define(
 	"uploadEntity", "ajax",
 	{
 		url: "api/channels/{channelName}/entities",
