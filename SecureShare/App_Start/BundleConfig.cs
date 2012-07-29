@@ -20,7 +20,6 @@ namespace ShareGrid
 				"~/Content/js/libs/jquery.masonry.js",
 				"~/Content/js/libs/jquery.cookie.js",
 				"~/Content/js/textHelpers.js",
-				"~/Content/js/libs/amplify.min.js",
 				"~/Content/js/libs/knockout-2.1.0.js",
 				"~/Content/js/libs/knockout-mapping-2.2.0.js",
 				"~/Content/js/libs/sammy-0.7.1.min.js",
