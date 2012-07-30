@@ -20,7 +20,7 @@ namespace ShareGrid.Helpers
 		public static void Initialize()
 		{
 			S3 = new AmazonS3Client(ConfigurationManager.AppSettings["AWSAccessKey"], ConfigurationManager.AppSettings["AWSSecretKey"], new AmazonS3Config());
-			appKey = HexStringToBytes(ConfigurationManager.AppSettings["ApplicationSecretKey"]);
+			appKey = Crypt.HexStringToBytes(ConfigurationManager.AppSettings["ApplicationSecretKey"]);
 		}
 
 		private static void CreateBuckets()
@@ -72,12 +72,6 @@ namespace ShareGrid.Helpers
 			}
 
 			var responce = S3.PutObject(request);
-		}
-
-		private static byte[] HexStringToBytes(string value)
-		{
-			SoapHexBinary shb = SoapHexBinary.Parse(value);
-			return shb.Value;
 		}
 
 		public static void EncryptAndUpload(string file, string awsPath, string key)

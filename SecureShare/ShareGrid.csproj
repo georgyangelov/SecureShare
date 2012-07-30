@@ -142,6 +142,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="Helpers\APIHelp.cs" />
+    <Compile Include="Helpers\Crypt.cs" />
     <Compile Include="Helpers\HoldReferenceStream.cs" />
     <Compile Include="Helpers\ImageResizer.cs" />
     <Compile Include="Helpers\ValidationFilterAttribute.cs" />
@@ -575,7 +576,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>52220</DevelopmentServerPort>
+          <DevelopmentServerPort>2924</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

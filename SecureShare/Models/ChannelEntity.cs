@@ -8,6 +8,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.IdGenerators;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using ShareGrid.Helpers;
 
 namespace ShareGrid.Models
 {
@@ -26,6 +27,9 @@ namespace ShareGrid.Models
 		public string Title { get; set; }
 		public string Message { get; set; }
 		public string Link { get; set; }
+
+		[JsonIgnore]
+		public bool IsEncrypted { get; set; }
 
 		[BsonIgnoreIfNull]
 		public string FileName { get; set; }
@@ -85,6 +89,38 @@ namespace ShareGrid.Models
 				Message = null;
 			if (Link == "")
 				Link = null;
+		}
+
+		public void EnsureEncrypted()
+		{
+			if (bool.Parse(ConfigurationManager.AppSettings["ManagedEncryption"]))
+			{
+				Title = Crypt.EncryptText(Title, ChannelId);
+				Message = Crypt.EncryptText(Message, ChannelId);
+				Link = Crypt.EncryptText(Link, ChannelId);
+
+				FileName = Crypt.EncryptText(FileName, ChannelId);
+				FilePathS3 = Crypt.EncryptText(FilePathS3, ChannelId);
+				FilePathPreviewS3 = Crypt.EncryptText(FilePathPreviewS3, ChannelId);
+
+				IsEncrypted = true;
+			}
+		}
+
+		public void EnsureDecrypted()
+		{
+			if (IsEncrypted)
+			{
+				Title = Crypt.DecryptText(Title, ChannelId);
+				Message = Crypt.DecryptText(Message, ChannelId);
+				Link = Crypt.DecryptText(Link, ChannelId);
+
+				FileName = Crypt.DecryptText(FileName, ChannelId);
+				FilePathS3 = Crypt.DecryptText(FilePathS3, ChannelId);
+				FilePathPreviewS3 = Crypt.DecryptText(FilePathPreviewS3, ChannelId);
+
+				IsEncrypted = false;
+			}
 		}
 	}
 

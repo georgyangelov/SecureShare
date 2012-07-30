@@ -239,6 +239,7 @@ namespace ShareGrid.Controllers.API
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
 
 			var entity = entities.FindOneById(entityId);
+			entity.EnsureDecrypted();
 
 			if (entity == null)
 				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.NotFound));
@@ -279,6 +280,7 @@ namespace ShareGrid.Controllers.API
 			var channels = MongoDBHelper.database.GetCollection<Channel>("channels");
 
 			var entity = entities.FindOneById(entityId);
+			entity.EnsureDecrypted();
 
 			if (entity == null)
 				throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.NotFound));
@@ -404,6 +406,7 @@ namespace ShareGrid.Controllers.API
 				entity.Id = null;
 				entity.Date = DateTime.Now;
 				entity.ChannelId = channel.Id;
+				entity.EnsureEncrypted();
 
 				var entities = MongoDBHelper.database.GetCollection<ChannelEntity>("entities");
 				entities.Insert(entity);
@@ -442,9 +445,16 @@ namespace ShareGrid.Controllers.API
 			var entities = MongoDBHelper.database.GetCollection<ChannelEntity>("entities");
 			var query = Query.EQ("ChannelId", channel.Id);
 
-			return entities.Find(query).SetSkip(start).SetLimit(limit).SetSortOrder(
+			var results = entities.Find(query).SetSkip(start).SetLimit(limit).SetSortOrder(
 				APIHelp.GetSortOrder(this.Request, sort, new string[] { "UserId", "Title", "Message", "Link", "Date", "Importance" })
-			);
+			).ToList();
+
+			foreach (var entity in results)
+			{
+				entity.EnsureDecrypted();
+			}
+
+			return results;
 		}
     }
 }
