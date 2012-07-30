@@ -13,14 +13,21 @@ function ChannelEntity(data) {
 
 	this.IsFile = ko.observable(data.IsFile || false);
 	this.FileName = ko.observable(data.FileName || "");
-	this.FileLink = ko.observable(data.FileLink + "?SessionKey=" + Application.user().SessionKey.Key() || "");
+	this.FileLink = ko.observable(data.FileLink || "");
 	this.FileLength = ko.observable(data.FileLength || 0);
-	this.FilePreview = ko.observable(data.FilePreview + "?SessionKey=" + Application.user().SessionKey.Key() || "");
+	this.FilePreview = ko.observable(data.FilePreview || "");
 	this.FilePreviewLength = ko.observable(data.FilePreviewLength || 0);
 
 	this.Importance = ko.observable(data.Importance || 1);
 
 	/* Helper properties */
+	this.AuthorizedFileLink = ko.computed(function () {
+		return self.FileLink() + "?SessionKey=" + Application.user().SessionKey.Key();
+	});
+	this.AuthorizedFilePreview = ko.computed(function () {
+		return self.FilePreview() + "?SessionKey=" + Application.user().SessionKey.Key();
+	});
+
 	this.isLink = ko.computed(function () {
 		return self.Link() != "";
 	});

@@ -139,9 +139,9 @@
 	this.loadEntities = function () {
 		//TODO: Load entities in portions with infinite scroll
 		var dataMappingOptions = {
-			/*key: function (data) {
+			key: function (data) {
 				return data.Id;
-			},*/
+			},
 			create: function (options) {
 				return new ChannelEntity(options.data);
 			}
@@ -168,4 +168,30 @@
 
 	this.loadInfo();
 	this.loadEntities();
+
+	// Subscribe to the pubnub channel
+	Application.pubnub.subscribe({
+		channel: "channel_" + self.UniqueName(),      // CONNECT TO THIS CHANNEL.
+
+		restore: false,              // STAY CONNECTED, EVEN WHEN BROWSER IS CLOSED
+		// OR WHEN PAGE CHANGES.
+
+		callback: function (message) { // RECEIVED A MESSAGE.
+			console.log("Received a notification from pubnub", message);
+			self.loadEntities();
+		},
+
+		disconnect: function () {        // LOST CONNECTION.
+			console.log("Disconnected from pubnub");
+		},
+
+		reconnect: function () {        // CONNECTION RESTORED.
+			console.log("Reconnected to pubnub");
+			self.loadEntities();
+		},
+
+		connect: function () {        // CONNECTION ESTABLISHED.
+			console.log("Connected to pubnub");
+		}
+	})
 }

@@ -321,7 +321,7 @@ namespace ShareGrid.Controllers.API
 
 				if (!Regex.IsMatch(extension, "[^a-z0-9]", RegexOptions.IgnoreCase))
 				{
-					iconPath = HttpContext.Current.Server.MapPath("~/Content/icons/" + extension + ".png");
+					iconPath = HttpContext.Current.Server.MapPath("~/Content/icons/" + extension.ToLower() + ".png");
 
 					if (!File.Exists(iconPath))
 						iconPath = HttpContext.Current.Server.MapPath("~/Content/icons/unknown.png");
@@ -388,7 +388,7 @@ namespace ShareGrid.Controllers.API
 					entity.FileName = entity.FileUploads.First().Key.Replace("\"", "");
 					entity.FileLength = new FileInfo(entity.FileUploads.First().Value).Length;
 
-					if (entity.FileName.EndsWith(".png") || entity.FileName.EndsWith(".jpg") || entity.FileName.EndsWith(".jpeg"))
+					if (entity.FileName.ToLower().EndsWith(".png") || entity.FileName.ToLower().EndsWith(".jpg") || entity.FileName.ToLower().EndsWith(".jpeg"))
 					{
 						try
 						{
@@ -422,6 +422,12 @@ namespace ShareGrid.Controllers.API
 
 				var entities = MongoDBHelper.database.GetCollection<ChannelEntity>("entities");
 				entities.Insert(entity);
+
+				// Notify pubnub subscribers
+				PubnubHelper.Publish(channel.UniqueName, new {
+					EntityId = entity.Id,
+					Date = entity.Date
+				});
 
 				return entity;
 			}

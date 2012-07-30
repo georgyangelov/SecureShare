@@ -2,34 +2,36 @@ function ViewModel() {
 	var self = this;
 
     /* Globals */
-	self.isLoggedIn = ko.observable(false);
-	self.user = ko.observable(null);
+	this.isLoggedIn = ko.observable(false);
+	this.user = ko.observable(null);
 
-	self.alerts = ko.observableArray([]).extend({ defaultItem: { title: "", text: "", type: "info" } });
+	this.alerts = ko.observableArray([]).extend({ defaultItem: { title: "", text: "", type: "info" } });
+
+	//self.pubnub = 
 
 	/* Components */
-	self.registerPanel = ko.observable(new RegisterPanel());
-	self.loginPanel = ko.observable(new LoginPanel());
-	self.userEmailPanel = ko.observable(new UserEmailPanel());
-	self.userPasswordPanel = ko.observable(new UserPasswordPanel());
-	self.registerChannelPanel = ko.observable(new RegisterChannelPanel());
-	self.subscribeChannelPanel = ko.observable(new SubscribeChannelPanel());
+	this.registerPanel = ko.observable(new RegisterPanel());
+	this.loginPanel = ko.observable(new LoginPanel());
+	this.userEmailPanel = ko.observable(new UserEmailPanel());
+	this.userPasswordPanel = ko.observable(new UserPasswordPanel());
+	this.registerChannelPanel = ko.observable(new RegisterChannelPanel());
+	this.subscribeChannelPanel = ko.observable(new SubscribeChannelPanel());
 
-	self.updateChannelInfoPanel = ko.observable();//new UpdateChannelInfoPanel());
-	self.updateChannelPasswordPanel = ko.observable();//new UpdateChannelPasswordPanel());
-	self.updateChannelAdminPasswordPanel = ko.observable();//new UpdateChannelAdminPasswordPanel());
+	this.updateChannelInfoPanel = ko.observable();
+	this.updateChannelPasswordPanel = ko.observable();
+	this.updateChannelAdminPasswordPanel = ko.observable();
 
 	/* Pages */
-	self.homeView = ko.observable(null);
-	self.channelView = ko.observable(null);
+	this.homeView = ko.observable(null);
+	this.channelView = ko.observable(null);
 
 	/* Methods */
-	self.ClearPageData = function () {
-		self.homeView(null);
-		self.channelView(null);
+	this.ClearPageData = function () {
+		this.homeView(null);
+		this.channelView(null);
 	};
 
-	self.LogOut = function () {
+	this.LogOut = function () {
 		amplify.request({
 			resourceId: "logout",
 			data: {
@@ -45,7 +47,7 @@ function ViewModel() {
 		return false;
 	};
 
-	self.UpdateUserInfo = function (userId, sessionKey, callback) {
+	this.UpdateUserInfo = function (userId, sessionKey, callback) {
 		if (typeof userId === "undefined" || typeof sessionKey === "undefined") {
 			if (!self.isLoggedIn()) {
 				return;
@@ -74,6 +76,13 @@ function ViewModel() {
 			}
 		});
 	};
+
+	// Initialize pubnub
+	this.pubnub = PUBNUB.init({
+		subscribe_key: 'sub-1ca14938-da3a-11e1-a5cb-ef7f404d78f2',
+		origin: 'pubsub.pubnub.com',
+		ssl: true
+	});
 
 	this.init = function () {
 		Sammy(function () {
@@ -115,82 +124,3 @@ $(function () {
 		Application.alerts.remove(ko.dataFor(this));
 	});
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*var testText = 'Message text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about hereMessage text right about here Message text right about here Message text right about here Message text right about here';
-$('.message.active:not(.expanded)').live('click', function (e) {
-	var text = '';
-	var $msg = $(this);
-	var $thumbnail = $msg.find('.thumbnail');
-	
-	if ($msg.hasClass('span4')) {
-		text = testText;
-
-		$thumbnail
-			.css('width', $thumbnail.width() + 'px')
-			.css('height', $thumbnail.height() + 'px');
-
-		$msg.removeClass('span4').addClass('span8');
-
-		var newHeight = $thumbnail.find('p').parent().textHeight(text, $msg.width()) + $msg.find('h4').height();
-
-		$msg.height(newHeight + 10);
-
-		setTimeout(function () {
-			$msg.addClass('expanded');
-			$thumbnail.find('p').text(text);
-			$thumbnail.find('.icon-resize-full').removeClass('icon-resize-full').addClass('icon-resize-small');
-			$thumbnail.animate({ width: $msg.width() - 10, height: newHeight }, 700, function () {
-				updateGrid();
-			});
-		}, 700);
-
-		updateGrid();
-	}
-
-	return false;
-	//else {
-	//	Handled by the icon click event
-	//}
-});
-$('.message.expanded .collapseBtn').live('click', function () {
-	var text = '';
-	$msg = $(this).parents('.message');
-	var $thumbnail = $msg.find('.thumbnail');
-
-	var $measure = $('<li><div class="thumbnail"></div></li>').addClass('span4');
-	$msg.parent().append($measure);
-	var span4Width = $measure.find('.thumbnail').width();
-	$measure.remove();
-
-	text = testText.cutToWord(200, ' ...');
-
-	$thumbnail
-			.css('width', $thumbnail.width() + 'px')
-			.css('height', $thumbnail.height() + 'px');
-
-	var newHeight = $msg.find('p').parent().textHeight(text, span4Width) + $msg.find('h4').height();
-
-	$thumbnail.find('.icon-resize-small').removeClass('icon-resize-small').addClass('icon-resize-full');
-	$thumbnail.animate({ width: span4Width, height: newHeight }, 700, function () {
-		$msg.addClass('span4').removeClass('span8');
-		$(this).find('p').text(text);
-		$msg.css('height', $thumbnail.outerHeight() + 'px');
-
-		updateGrid();
-	});
-	$msg.removeClass('expanded');
-
-	return false;
-});*/

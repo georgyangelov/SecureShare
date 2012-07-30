@@ -102,7 +102,6 @@
 				Application.alerts.push({ type: "success", title: "Wohoo!", text: "You uploaded a message to " + channel.Name() });
 
 				channel.hideUploadEntityPanel();
-				channel.loadEntities();
 			},
 			error: function (data) {
 				Application.alerts.push({ type: "error", title: "Oops!", text: "Something went completely wrong. Please try again in a few moments" });
@@ -126,7 +125,6 @@
 				Application.alerts.push({ type: "success", title: "Wohoo!", text: "You uploaded a link to " + channel.Name() });
 
 				channel.hideUploadEntityPanel();
-				channel.loadEntities();
 			},
 			error: function (data) {
 				Application.alerts.push({ type: "error", title: "Oops!", text: "Something went completely wrong. Please try again in a few moments" });

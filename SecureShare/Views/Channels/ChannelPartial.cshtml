@@ -63,9 +63,9 @@
 			
 			<!-- ko if: IsFile -->
 			<li class="span2 span file" data-bind="attr: {'data-id': Id}">
-				<a class="thumbnail" data-bind="attr: {href: FileLink}">
+				<a class="thumbnail" data-bind="attr: {href: AuthorizedFileLink}">
 					<div class="imgBox">
-						<img data-bind="attr: {src: FilePreview}" />
+						<img data-bind="attr: {src: AuthorizedFilePreview}" />
 					</div>
 
 					<div class="controlBox" data-bind="if: isExpandable">
