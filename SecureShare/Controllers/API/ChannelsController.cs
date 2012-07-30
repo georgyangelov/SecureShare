@@ -375,10 +375,10 @@ namespace ShareGrid.Controllers.API
 
 				entity.ResetEmpty();
 
-				if (entity.FileUploads.Count == 0 && entity.Title == null && entity.Message == null)
+				if ((entity.FileUploads == null || entity.FileUploads.Count == 0) && entity.Title == null && entity.Message == null)
 					throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.BadRequest, new APIError("emptyTitleAndMessage", "At least one of 'Title' and 'Message' must be present")));
 
-				if (entity.FileUploads.Count > 0)
+				if (entity.FileUploads != null && entity.FileUploads.Count > 0)
 				{
 					string awsPath = channel.GetUniqueName() + "_" + channel.Id + "/" +
 						MongoDBHelper.Hash(entity.FileUploads.First().Key + "_" + MongoDBHelper.GetRandomSalt());
@@ -427,6 +427,7 @@ namespace ShareGrid.Controllers.API
 			}
 			finally
 			{
+				if (entityRequest.Data.FileUploads != null)
 				foreach (var file in entityRequest.Data.FileUploads)
 				{
 					try

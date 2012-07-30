@@ -139,9 +139,9 @@
 	this.loadEntities = function () {
 		//TODO: Load entities in portions with infinite scroll
 		var dataMappingOptions = {
-			key: function (data) {
+			/*key: function (data) {
 				return data.Id;
-			},
+			},*/
 			create: function (options) {
 				return new ChannelEntity(options.data);
 			}
