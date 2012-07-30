@@ -377,6 +377,9 @@
     <Content Include="Content\js\libs\sammy-0.7.1.min.js" />
     <Content Include="Content\js\viewmodels\Channels\ChannelEntity.js" />
     <Content Include="Content\js\viewmodels\Channels\ChannelView.js" />
+    <Content Include="Content\js\viewmodels\Channels\Panels\UpdateChannelAdminPasswordPanel.js" />
+    <Content Include="Content\js\viewmodels\Channels\Panels\UpdateChannelInfoPanel.js" />
+    <Content Include="Content\js\viewmodels\Channels\Panels\UpdateChannelPasswordPanel.js" />
     <Content Include="Content\js\viewmodels\Channels\UploadEntityPanel.js" />
     <Content Include="Content\js\viewmodels\RegisterChannelPanel.js" />
     <Content Include="Content\js\viewmodels\LoginPanel.js" />
@@ -559,6 +562,9 @@
     <Content Include="Views\Users\PasswordPartial.cshtml" />
     <Content Include="Views\Users\RegisterPartial.cshtml" />
     <Content Include="Views\Channels\UploadEntityPartial.cshtml" />
+    <Content Include="Views\Channels\Admin\UpdatePartial.cshtml" />
+    <Content Include="Views\Channels\Admin\UpdatePasswordPartial.cshtml" />
+    <Content Include="Views\Channels\Admin\UpdateAdminPasswordPartial.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

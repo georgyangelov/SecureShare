@@ -49,6 +49,9 @@ namespace ShareGrid
 				"~/Content/js/viewmodels/Channels/ChannelEntity.js",
 				"~/Content/js/viewmodels/Channels/ChannelView.js",
 				"~/Content/js/viewmodels/Channels/UploadEntityPanel.js",
+				"~/Content/js/viewmodels/Channels/Panels/UpdateChannelInfoPanel.js",
+				"~/Content/js/viewmodels/Channels/Panels/UpdateChannelPasswordPanel.js",
+				"~/Content/js/viewmodels/Channels/Panels/UpdateChannelAdminPasswordPanel.js",
 				"~/Content/js/viewmodels/main.js"
 			));
 			/*

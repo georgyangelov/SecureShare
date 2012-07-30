@@ -28,7 +28,7 @@
 	<div class="container">
 
 		<header class="row-fluid">
-			<div class="span4" id="header"><h1><a href="#"><span class="color">Share</span>Grid</h1></a></div>
+			<div class="span4" id="header"><h1><a href="#home"><span class="color">Share</span>Grid</h1></a></div>
 			
 			<div class="span4" id="alertsContainer" data-bind="foreach: alerts">
 				<div class="alert fade in" data-bind="css: {'alert-success': type == 'success', 'alert-info': type == 'info', 'alert-error': type == 'error'}">
@@ -77,7 +77,7 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li><a href="#userEmail" data-toggle="modal"><i class="icon-envelope-alt"></i> Change email</a></li>
-							<li><a href="#userPassword" data-toggle="modal"><i class="icon-user"></i> Change password</a></li>
+							<li><a href="#userPassword" data-toggle="modal"><i class="icon-key"></i> Change password</a></li>
 							<li class="divider"></li>
 							<li><a href="#logout" data-bind="click: LogOut"><i class="icon-signout"></i> Logout</a></li>
 						</ul>
@@ -107,9 +107,19 @@
 		<div id="userEmail" class="modal fade hide" data-bind="with: userEmailPanel">
 			@Html.Partial("../Users/EmailPartial")
 		</div>
-
+		
 		<div id="userPassword" class="modal fade hide" data-bind="with: userPasswordPanel">
 			@Html.Partial("../Users/PasswordPartial")
+		</div>
+		
+		<div id="updateChannelInfo" class="modal fade hide" data-bind="with: updateChannelInfoPanel">
+			@Html.Partial("../Channels/Admin/UpdatePartial")
+		</div>
+		<div id="updateChannelPassword" class="modal fade hide" data-bind="with: updateChannelPasswordPanel">
+			@Html.Partial("../Channels/Admin/UpdatePasswordPartial")
+		</div>
+		<div id="updateChannelAdminPassword" class="modal fade hide" data-bind="with: updateChannelAdminPasswordPanel">
+			@Html.Partial("../Channels/Admin/UpdateAdminPasswordPartial")
 		</div>
 
 		<div id="content">

@@ -28,7 +28,7 @@
 	this.Password = ko.observable("").extend({
 		validation: {
 			required: true,
-			message: "Please enter a channel password",
+			message: "Please enter a strong channel password",
 			func: function (value) {
 				return value.length >= 5 && value.length <= 50;
 			}
@@ -37,7 +37,7 @@
 	this.AdminPassword = ko.observable("").extend({
 		validation: {
 			required: true,
-			message: "Please enter a channel password for admins",
+			message: "Please enter a strong channel password for admins",
 			func: function (value) {
 				return value.length >= 5 && value.length <= 50;
 			}

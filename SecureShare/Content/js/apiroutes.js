@@ -109,6 +109,28 @@ amplify.request.define(
 );
 
 amplify.request.define(
+	"updateChannel", "ajax",
+	{
+		url: "api/channels/{channelName}",
+		type: "PUT",
+		dataType: "json",
+		cache: false,
+		decoder: "errorDecoder"
+	}
+);
+
+amplify.request.define(
+	"deleteChannel", "ajax",
+	{
+		url: "api/channels/{channelName}",
+		type: "DELETE",
+		dataType: "json",
+		cache: false,
+		decoder: "errorDecoder"
+	}
+);
+
+amplify.request.define(
 	"getChannelInfo", "ajax",
 	{
 		url: "api/channels/{channelName}",

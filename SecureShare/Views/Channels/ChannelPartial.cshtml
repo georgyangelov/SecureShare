@@ -2,14 +2,35 @@
 	<div class="span6">
 		<h1 data-bind="text: Name" class="pull-left">Loading...</h1>
 
-		<ul id="channelControls" class="nav nav-pills pull-left">
-			<li data-bind="css: {active: uploadEntityPanel() != null}">
-				<a href="#" data-bind="click: toggleUploadEntityPanel">Upload item</a>
-			</li>
-			<li>
-				<a href="#" data-bind="click: unsubscribe">Unsubscribe</a>
-			</li>
-		</ul>
+		<nav>
+			<ul id="channelControls" class="nav nav-pills pull-left">
+				<li data-bind="css: {active: uploadEntityPanel() != null}">
+					<a href="#" data-bind="click: toggleUploadEntityPanel">Upload item</a>
+				</li>
+
+				<!-- ko if: isAdmin -->
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+						Admin
+						<b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a href="#updatechannelinfo" data-bind="click: showUpdateInfoPanel"><i class="icon-pencil"></i> Update info</a></li>
+						<li><a href="#changechannelpassword" data-bind="click: showUpdatePasswordPanel"><i class="icon-user"></i> Change user password</a></li>
+						<li><a href="#changechanneladminpassword" data-bind="click: showUpdateAdminPasswordPanel"><i class="icon-key"></i> Change admin password</a></li>
+									
+						<li class="divider"></li>
+
+						<li><a href="#deletechannel" data-bind="click: deleteChannel"><i class="icon-remove-sign"></i> Delete channel</a></li>
+					</ul>
+				</li>
+				<!-- /ko -->
+
+				<li>
+					<a href="#" data-bind="click: unsubscribe">Unsubscribe</a>
+				</li>
+			</ul>
+		</nav>
 	</div>
 	<div class="span6" data-bind="if: Description">
 		<blockquote class="pull-right"><p data-bind="text: Description"></p></blockquote>
@@ -52,7 +73,7 @@
 					</div>
 
 					<h4 data-bind="optionalText: Title"></h4>
-					<p data-bind="optionalText: Message"></p>
+					<p data-bind="optionalText: currentMessage"></p>
 				</a>
 			</li>
 			<!-- /ko -->

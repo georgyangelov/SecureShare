@@ -92,3 +92,22 @@ ko.extenders.defaultItem = function (target, obj) {
 
 	return target;
 };
+
+ko.extenders.activated = function (target, options) {
+	var last = false;
+
+	function onChange(value) {
+		if (value && !last) {
+			if (typeof options.activated === "function")
+				options.activated();
+		}
+		else if (!value && last) {
+			if (typeof options.deactivated === "function")
+				options.deactivated();
+		}
+
+		last = !!value;
+	}
+
+	target.subscribe(onChange);
+};

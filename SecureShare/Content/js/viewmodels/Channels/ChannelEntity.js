@@ -61,7 +61,7 @@ function ChannelEntity(data) {
 
 				$msg.removeClass(smallClass).addClass(bigClass);
 
-				var newHeight = $thumbnail.find('p').parent().textHeight(self.Message(), $msg.width()) + (self.Title().length ? $msg.find('h4').height() : 0) + 5;
+				var newHeight = $thumbnail.find('p').parent().textHeight(self.Message(), $msg.width() - 10) + (self.Title().length ? $msg.find('h4').height() : 0) + 5;
 				if (self.IsFile())
 					newHeight += 263;
 

@@ -15,6 +15,10 @@ function ViewModel() {
 	self.registerChannelPanel = ko.observable(new RegisterChannelPanel());
 	self.subscribeChannelPanel = ko.observable(new SubscribeChannelPanel());
 
+	self.updateChannelInfoPanel = ko.observable();//new UpdateChannelInfoPanel());
+	self.updateChannelPasswordPanel = ko.observable();//new UpdateChannelPasswordPanel());
+	self.updateChannelAdminPasswordPanel = ko.observable();//new UpdateChannelAdminPasswordPanel());
+
 	/* Pages */
 	self.homeView = ko.observable(null);
 	self.channelView = ko.observable(null);

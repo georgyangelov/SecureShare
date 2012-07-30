@@ -40,6 +40,7 @@
 				Application.alerts.push({ type: "success", title: "Nice!", text: "You have subscribed to a new channel." });
 
 				Application.UpdateUserInfo();
+				self.clear();
 
 				window.location.hash = self.Name();
 			},

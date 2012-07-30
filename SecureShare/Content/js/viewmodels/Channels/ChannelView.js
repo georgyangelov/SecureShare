@@ -11,6 +11,8 @@
 		return self.Name().toLowerCase().replace(/[^a-z0-9\-]/i, '');
 	});
 
+	this.isAdmin = ko.observable(false);
+
 	/* Panels */
 	this.uploadEntityPanel = ko.observable();
 
@@ -34,6 +36,39 @@
 				Application.alerts.push({ type: "error", text: "We couldn't contact the server. Sorry about that!" });
 			}
 		});
+	};
+
+	this.deleteChannel = function () {
+		if (!confirm("Are you sure you want to permanently remove " + self.Name() + "?"))
+			return;
+
+		amplify.request({
+			resourceId: "deleteChannel",
+			data: {
+				channelName: self.UniqueName(),
+				SessionKey: Application.user().SessionKey.Key()
+			},
+			success: function (data) {
+				window.location.hash = "home";
+				Application.UpdateUserInfo();
+			},
+			error: function (data) {
+				Application.alerts.push({ type: "error", text: "We couldn't contact the server. Sorry about that!" });
+			}
+		});
+	};
+
+	this.showUpdateInfoPanel = function () {
+		Application.updateChannelInfoPanel(new UpdateChannelInfoPanel(this));
+		$('#updateChannelInfo').modal();
+	};
+	this.showUpdatePasswordPanel = function () {
+		Application.updateChannelPasswordPanel(new UpdateChannelPasswordPanel(this));
+		$('#updateChannelPassword').modal();
+	};
+	this.showUpdateAdminPasswordPanel = function () {
+		Application.updateChannelAdminPasswordPanel(new UpdateChannelAdminPasswordPanel(this));
+		$('#updateChannelAdminPassword').modal();
 	};
 
 	this.updateGrid = function ($elements, reloadOrAppend) {
@@ -67,6 +102,16 @@
 			return self.hideUploadEntityPanel();
 	};
 
+
+	function findOne(array, func) {
+		for (var i = 0; i < array.length; i++) {
+			if (func(array[i], i))
+				return array[i];
+		}
+
+		return null;
+	}
+
 	this.loadInfo = function () {
 		amplify.request({
 			resourceId: "getChannelInfo",
@@ -77,6 +122,13 @@
 			success: function (data) {
 				self.Name(data.Name);
 				self.Description(data.Description);
+
+				var userAccess = findOne(data.Users, function (value, index) {
+					return value.Id == Application.user().Id();
+				});
+
+				if (userAccess.Access == 0)
+					self.isAdmin(true);
 			},
 			error: function (data) {
 				Application.alerts.push({ type: "error", text: "We couldn't contact the server. Sorry about that!" });

@@ -99,7 +99,19 @@ namespace ShareGrid.Controllers.API
 			if (newData.Password != null)
 				channel.Password = MongoDBHelper.Hash(newData.Password, channel.Salt);
 			if (newData.Name != null)
+			{
 				channel.Name = newData.Name;
+				channel.UpdateUniqueName();
+
+				if (channel.UniqueName != Channel.GetUniqueName(channelName))
+				{
+					var query = Query.EQ("UniqueName", channel.UniqueName);
+					if (channels.FindOne(query) != null)
+					{
+						throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.Conflict, new APIError("duplicateName", "There is already a channel with this name")));
+					}
+				}
+			}	
 			if (newData.Description != null)
 				channel.Description = newData.Description;
 
