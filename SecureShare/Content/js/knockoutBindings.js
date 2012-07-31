@@ -128,4 +128,17 @@
 		}
 	};
 
+	ko.bindingHandlers.infiniteScroll = {
+		init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+			var $element = $(element);
+
+			$(window).on('scroll.infiniteScroll', function (e) {
+				var scrollDiff = $element.offset().top + $element.height() - ($(window).scrollTop() + $(window).height());
+
+				if (scrollDiff < 300)
+					valueAccessor()();
+			});
+		}
+	};
+
 })(jQuery);

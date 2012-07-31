@@ -5,7 +5,17 @@
 	this.Name = ko.observable(channelName);
 	this.Description = ko.observable("Loading channel data...");
 
-	this.Entities = ko.observableArray([]);
+	this.UnsortedEntities = ko.observableArray([]);
+	this.Entities = ko.computed({
+		read: function () {
+			return self.UnsortedEntities().sort(function (a, b) {
+				return new Date(ko.utils.unwrapObservable(b.Date)).getTime() - new Date(ko.utils.unwrapObservable(a.Date)).getTime();
+			});
+		},
+		write: function (value) {
+			self.UnsortedEntities(value);
+		}
+	});
 
 	this.UniqueName = ko.computed(function () {
 		return self.Name().toLowerCase().replace(/[^a-z0-9\-]/i, '');
@@ -136,8 +146,19 @@
 		});
 	};
 
-	this.loadEntities = function () {
-		//TODO: Load entities in portions with infinite scroll
+	var loading = false;
+	var reachedEnd = false;
+	var rawEntities = [];
+	this.loadEntities = function (offset, count, append) {
+		loading = true;
+
+		if (typeof offset === "undefined")
+			offset = 0;
+		if (typeof count === "undefined")
+			count = 0;
+		if (typeof append === "undefined")
+			append = false;
+
 		var dataMappingOptions = {
 			key: function (data) {
 				return data.Id;
@@ -152,46 +173,65 @@
 			data: {
 				channelName: self.UniqueName(),
 				SessionKey: Application.user().SessionKey.Key(),
-				start: 0,
-				limit: 0
+				start: offset,
+				limit: count
 			},
 			success: function (data) {
-				ko.mapping.fromJS(data, dataMappingOptions, self.Entities);
+
+				if (append) {
+					rawEntities = rawEntities.concat(data);
+
+					if (data.length == 0)
+						reachedEnd = true;
+
+					ko.mapping.fromJS(rawEntities, dataMappingOptions, self.Entities);
+				}
+				else {
+					rawEntities = data;
+
+					ko.mapping.fromJS(data, dataMappingOptions, self.Entities);
+				}
 
 				self.updateGrid();
+				loading = false;
 			},
 			error: function (data) {
 				Application.alerts.push({ type: "error", text: "We couldn't contact the server. Sorry about that!" });
+				loading = false;
 			}
 		});
 	};
 
+	this.loadMoreEntities = function () {
+		if (loading || reachedEnd)
+			return;
+
+		var offset = self.UnsortedEntities().length;
+
+		self.loadEntities(offset, 40, true);
+	};
+
 	this.loadInfo();
-	this.loadEntities();
+	this.loadEntities(0, 40);
 
 	// Subscribe to the pubnub channel
 	Application.pubnub.subscribe({
-		channel: "channel_" + self.UniqueName(),      // CONNECT TO THIS CHANNEL.
+		channel: "channel_" + self.UniqueName(),
+		restore: false,
 
-		restore: false,              // STAY CONNECTED, EVEN WHEN BROWSER IS CLOSED
-		// OR WHEN PAGE CHANGES.
-
-		callback: function (message) { // RECEIVED A MESSAGE.
-			console.log("Received a notification from pubnub", message);
-			self.loadEntities();
+		callback: function (message) {
+			//console.log("Received a notification from pubnub", message);
+			self.loadEntities(0, 2);
 		},
 
-		disconnect: function () {        // LOST CONNECTION.
-			console.log("Disconnected from pubnub");
+		/*disconnect: function () {
+		},*/
+
+		reconnect: function () {
+			self.loadEntities(0, 5);
 		},
 
-		reconnect: function () {        // CONNECTION RESTORED.
-			console.log("Reconnected to pubnub");
-			self.loadEntities();
-		},
-
-		connect: function () {        // CONNECTION ESTABLISHED.
-			console.log("Connected to pubnub");
-		}
+		/*connect: function () {
+		}*/
 	})
 }

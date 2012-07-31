@@ -18,6 +18,7 @@ function ChannelEntity(data) {
 	this.FilePreview = ko.observable(data.FilePreview || "");
 	this.FilePreviewLength = ko.observable(data.FilePreviewLength || 0);
 
+	this.Date = ko.observable(data.Date);
 	this.Importance = ko.observable(data.Importance || 1);
 
 	/* Helper properties */
