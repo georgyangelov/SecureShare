@@ -381,6 +381,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\js\libs\load-image.min.js" />
+    <Content Include="Content\js\libs\mapData.js" />
     <Content Include="Content\js\libs\sammy-0.7.1.min.js" />
     <Content Include="Content\js\viewmodels\Channels\ChannelEntity.js" />
     <Content Include="Content\js\viewmodels\Channels\ChannelView.js" />

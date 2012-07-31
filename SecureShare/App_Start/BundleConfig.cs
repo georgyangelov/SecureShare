@@ -25,7 +25,8 @@ namespace ShareGrid
 				"~/Content/js/libs/sammy-0.7.1.min.js",
 				"~/Content/js/libs/jquery.autosize.js",
 				"~/Content/js/libs/load-image.min.js",
-				"~/Content/js/libs/jquery.resize.js"
+				"~/Content/js/libs/jquery.resize.js",
+				"~/Content/js/libs/mapData.js"
 			));
 
 			bundles.Add(new ScriptBundle("~/bundles/js/jqueryFileUpload").Include(

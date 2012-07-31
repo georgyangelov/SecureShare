@@ -18,7 +18,7 @@
 	});
 
 	this.UniqueName = ko.computed(function () {
-		return self.Name().toLowerCase().replace(/[^a-z0-9\-]/i, '');
+		return self.Name().toLowerCase().replace(/[^a-z0-9\-]/i, '').replace(' ', '');
 	});
 
 	this.isAdmin = ko.observable(false);
@@ -148,7 +148,6 @@
 
 	var loading = false;
 	var reachedEnd = false;
-	var rawEntities = [];
 	this.loadEntities = function (offset, count, append) {
 		loading = true;
 
@@ -158,15 +157,6 @@
 			count = 0;
 		if (typeof append === "undefined")
 			append = false;
-
-		var dataMappingOptions = {
-			key: function (data) {
-				return data.Id;
-			},
-			create: function (options) {
-				return new ChannelEntity(options.data);
-			}
-		};
 
 		amplify.request({
 			resourceId: "getEntities",
@@ -178,19 +168,13 @@
 			},
 			success: function (data) {
 
-				if (append) {
-					rawEntities = rawEntities.concat(data);
-
-					if (data.length == 0)
-						reachedEnd = true;
-
-					ko.mapping.fromJS(rawEntities, dataMappingOptions, self.Entities);
-				}
-				else {
-					rawEntities = data;
-
-					ko.mapping.fromJS(data, dataMappingOptions, self.Entities);
-				}
+				//ko.mapping.fromJS(data, dataMappingOptions, self.Entities);
+				mapArray(data, self.UnsortedEntities, function (object) {
+					return ko.utils.unwrapObservable(object.Id);
+				},
+				function (data) {
+					return new ChannelEntity(data);
+				}, append);
 
 				self.updateGrid();
 				loading = false;
@@ -224,14 +208,14 @@
 			self.loadEntities(0, 2, true);
 		},
 
-		/*disconnect: function () {
-		},*/
+		disconnect: function () {
+		},
 
 		reconnect: function () {
 			self.loadEntities(0, 5, true);
 		},
 
-		/*connect: function () {
-		}*/
+		connect: function () {
+		}
 	})
 }
