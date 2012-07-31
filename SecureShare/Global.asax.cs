@@ -24,6 +24,7 @@ namespace ShareGrid
 			RouteConfig.RegisterRoutes(RouteTable.Routes);
 			BundleConfig.RegisterBundles(BundleTable.Bundles);
 			GlobalConfiguration.Configuration.Filters.Add(new ValidationFilterAttribute());
+			//GlobalConfiguration.Configuration.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 
 			MongoDBHelper.Initialize();
 			AWSHelper.Initialize();

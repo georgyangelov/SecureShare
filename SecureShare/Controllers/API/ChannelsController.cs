@@ -329,7 +329,7 @@ namespace ShareGrid.Controllers.API
 				else
 					iconPath = HttpContext.Current.Server.MapPath("~/Content/icons/unknown.png");
 
-				stream = new FileStream(iconPath, FileMode.Open);
+				stream = new FileStream(iconPath, FileMode.Open, FileAccess.Read);
 				isIcon = true;
 			}
 			else

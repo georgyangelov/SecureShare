@@ -221,14 +221,14 @@
 
 		callback: function (message) {
 			//console.log("Received a notification from pubnub", message);
-			self.loadEntities(0, 2);
+			self.loadEntities(0, 2, true);
 		},
 
 		/*disconnect: function () {
 		},*/
 
 		reconnect: function () {
-			self.loadEntities(0, 5);
+			self.loadEntities(0, 5, true);
 		},
 
 		/*connect: function () {
