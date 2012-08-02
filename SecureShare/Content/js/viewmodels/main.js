@@ -32,6 +32,12 @@ function ViewModel() {
 	};
 
 	this.LogOut = function () {
+
+		self.isLoggedIn(false);
+		self.user({});
+		$.cookie('userId', null);
+		$.cookie('sessionKey', null);
+
 		amplify.request({
 			resourceId: "logout",
 			data: {
@@ -39,10 +45,9 @@ function ViewModel() {
 			}
 		});
 
-		self.isLoggedIn(false);
-		self.user({});
-		$.cookie('userId', null);
-		$.cookie('sessionKey', null);
+		self.ClearPageData();
+		// Home page
+		self.homeView({});
 
 		return false;
 	};
