@@ -61,7 +61,7 @@ namespace ShareGrid.Models
 
 		public static string GetUniqueName(string channelName)
 		{
-			return Regex.Replace(channelName.ToLower(), @"[^a-z0-9\-]", "");
+			return Regex.Replace(channelName.ToLower(), @"[^a-zа-я0-9\-]", "");
 		}
 	}
 }

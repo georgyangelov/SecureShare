@@ -48,7 +48,7 @@
 		var data = selectedFileData();
 
 		data.formData = {
-			channelName: channel.Name(),
+			channelName: channel.UniqueName(),
 			SessionKey: Application.user().SessionKey.Key(),
 			Title: self.Title(),
 			Message: self.Message()
@@ -93,7 +93,7 @@
 		amplify.request({
 			resourceId: "uploadEntity",
 			data: {
-				channelName: channel.Name(),
+				channelName: channel.UniqueName(),
 				SessionKey: Application.user().SessionKey.Key(),
 				Title: self.Title(),
 				Message: self.Message()
@@ -115,7 +115,7 @@
 		amplify.request({
 			resourceId: "uploadEntity",
 			data: {
-				channelName: channel.Name(),
+				channelName: channel.UniqueName(),
 				SessionKey: Application.user().SessionKey.Key(),
 				Title: self.Title(),
 				Message: self.Message(),

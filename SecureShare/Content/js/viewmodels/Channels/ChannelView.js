@@ -18,7 +18,7 @@
 	});
 
 	this.UniqueName = ko.computed(function () {
-		return self.Name().toLowerCase().replace(/[^a-z0-9\-]/i, '').replace(' ', '');
+		return self.Name().toLowerCase().replace(/[^a-zа-я0-9\-]/ig, '');
 	});
 
 	this.isAdmin = ko.observable(false);
