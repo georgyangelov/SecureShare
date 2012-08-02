@@ -1,5 +1,51 @@
-﻿@{
-    ViewBag.Title = "Index";
-}
+﻿<header class="index-panel hero-unit">
+	<div class="inner">
+		<h1><span class="white">Share</span>Grid</h1>
+		<p>The smart and secure way to distribute files and messages</p>
 
-<h1>Index</h1>
+		<!-- ko ifnot: $root.isLoggedIn -->
+		<p>
+			<a class="btn btn-large pull-right" href="#register" data-toggle="modal">
+				Register now!
+			</a>
+		</p>
+		<!-- /ko -->
+	</div>
+</header>
+
+<div class="row index-help">
+	<div class="span4">
+		<h2><i class="icon-share"></i> Why <i>"share"</i>?</h2>
+		<p>ShareGrid allows you to securely distribute files in channels. A common use case would be sharing information
+			between a company's employees or students sharing lectures/homeworks for a subject.
+		</p>
+	</div>
+	<div class="span4">
+		<h2><i class="icon-table"></i> Why <i>"grid"</i>?</h2>
+		<p>The items in each channel are presented to the user as elements resembling bubbles.
+			They are smart enough to entirely fill your screen in spite of their different size.</p>
+	</div>
+	<div class="span4">
+		<h2><i class="icon-lock"></i> Why <i>"secure"</i>?</h2>
+		<p>Each channel is locked with a password and its contents are encrypted. 
+			Only users that know the channel's name and password can see and download the files, links and messages it contains.</p>
+	</div>
+	<div class="span4">
+		<h2><i class="icon-cloud"></i> Built on cloud technologies</h2>
+		<p>ShareGrid is built using highly-scalable, risk-free and secure cloud technologies. This means that your files are guaranteed
+			to be available 24/7 as backups are stored all over the world.
+		</p>
+	</div>
+	<div class="span4">
+		<h2><i class="icon-cogs"></i> Open application interface</h2>
+		<p>ShareGrid exposes a public API which makes it possible to programatically manage and view everything you have access to
+			as a user. You are allowed to publish, read and download files and messages without even using our main web interface.
+		</p>
+	</div>
+	<div class="span4">
+		<h2><i class="icon-money"></i> Absolutely free</h2>
+		<p>No limitations except the 10MB upload limit. Free for life!
+			Register and start using ShareGrid now!
+		</p>
+	</div>
+</div>

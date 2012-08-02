@@ -99,7 +99,7 @@ function ViewModel() {
 			});
 
 			this.get('/', function () {
-				this.app.runRoute('get', '#home');
+				this.app.runRoute('get', '/#home');
 			});
 		}).run();
 	};

@@ -303,6 +303,7 @@
     <Content Include="Content\icons\zip.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\img\indexBack.png" />
     <Content Include="Content\js\apiroutes.js" />
     <Content Include="Content\bootstrap\img\glyphicons-halflings-white.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
