@@ -21,7 +21,8 @@ namespace ShareGrid.Models
 		{
 			var url = new MongoUrl(ConfigurationManager.AppSettings["MONGOLAB_URI"]);
 			server = MongoServer.Create(url);
-			database = server.GetDatabase(url.DatabaseName, new SafeMode(true));
+            //server.Connect();
+			database = server.GetDatabase(url.DatabaseName, new WriteConcern());
 
 			EnsureIndexes();
 		}
