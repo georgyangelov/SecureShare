@@ -121,7 +121,9 @@ $(function () {
 		Application.UpdateUserInfo(userId, sessionKey, Application.init);
 	}
 	else {
-		Application.init();
+	    Application.init();
+
+	    Application.alerts.push({ type: "info", title: "Hey! Want a demo?", text: "Just click on the login button and demo account details will be auto-filled" });
 	}
 
 	// Remove closed alerts from the Application.alerts array

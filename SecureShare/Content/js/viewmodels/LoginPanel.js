@@ -1,14 +1,14 @@
 ﻿function LoginPanel() {
 	var self = this;
 
-	this.Email = ko.observable("").extend({
+	this.Email = ko.observable("test@test.test").extend({
 		validation: {
 			required: true,
 			regex: /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/,
 			message: "Please enter your email"
 		}
 	});
-	this.Password = ko.observable("").extend({
+	this.Password = ko.observable("testtest").extend({
 		validation: {
 			required: true,
 			message: "Please enter your password"
@@ -35,7 +35,7 @@
 
 				Application.isLoggedIn(true);
 				$('#login').modal('hide');
-				Application.alerts.push({ type: "success", title: "Welcome back, " + data.FirstName + "!", text: "You have successfully logged in." });
+				Application.alerts.push({ type: "success", title: "Welcome back, " + data.FirstName + "!", text: "You have successfully logged in. Now you can browse through your subscribed channels using the menu on the right." });
 
 				var options = {path: '/'};
 				if (self.RememberMe()) {
